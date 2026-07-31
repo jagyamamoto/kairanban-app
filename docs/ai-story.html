@@ -173,6 +173,28 @@
   }
   .appeal-card p:last-child { margin-bottom: 0; }
 
+  /* 個人的な余談・背景説明用。fail/win/appealのどれでもない中立トーン */
+  .aside-card {
+    background: var(--paper-deep);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px 24px;
+    margin: 24px 0;
+    font-family: var(--font-display);
+    font-size: 15.5px;
+    line-height: 1.75;
+  }
+  .aside-card .tag {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    font-weight: 700;
+    color: var(--muted);
+    letter-spacing: 0.06em;
+    display: block;
+    margin-bottom: 10px;
+  }
+  .aside-card p:last-child { margin-bottom: 0; }
+
   table.data {
     width: 100%;
     border-collapse: collapse;
@@ -359,6 +381,49 @@
       <span class="tag">LESSON</span>
       <p>AIは「指示されたものを上手に作る」。指示そのものが間違っていると、上手に失敗する。</p>
     </div>
+
+    <h3>なぜPWAにこだわったか — ネイティブアプリでも、ただのWebページでもなく</h3>
+    <p>
+      「アプリ」を作るなら、App Store/Google Playで配る<strong>ネイティブアプリ</strong>という
+      選択肢もありました。それでも今回PWA(ホーム画面に追加して使うWebアプリ)を選んだのには、
+      3つの実務的な理由があります。
+    </p>
+    <ul>
+      <li><strong>通知が出せる。</strong> ただのWebページのままでは、回覧が来たことをスマホに知らせる方法がありません。PWA化して初めて、通知の入り口が開きます(仕組みは次の項で詳しく書きます)。</li>
+      <li><strong>Appleへの課金が要らない。</strong> ネイティブアプリはApp Storeで配るために年間の登録料がかかり、更新のたびに審査も必要です。PWAならその費用も手間もゼロ。町内会が払える予算はゼロなので、これは選ぶ余地のない条件でした。</li>
+      <li><strong>アイコンに未読バッジが出せる。</strong> ホーム画面に置いたアイコンの上に、未読件数の赤い数字を出せます。開かなくても「回覧が来ている」ことが一目で分かります。</li>
+    </ul>
+    <p>
+      つまりPWA化した瞬間に、「通知」「バッジ」という<strong>スマホアプリらしい体験</strong>が
+      追加費用ゼロで手に入ります。今回の開発で「ホーム画面に追加」の案内(インストーラー)に
+      これほど時間をかけたのは、この入り口を確実に通ってもらうためでした。
+    </p>
+
+    <div class="aside-card">
+      <span class="tag">余談 — 30年前にも同じ壁があった</span>
+      <p>
+        「導入部が使えなければ、道具は存在しないのと同じ」という考え方は、実は今回が初めてではありません。
+        昔、CD-ROMのエンターテインメント作品をプロデュースしていた頃、<strong>Onetouch</strong>という
+        導入アプリ(当時は「ティーザーアプリ」と呼ばれるカテゴリでした)を企画・設計したことがあります。
+      </p>
+      <p>
+        当時はCD-ROMドライブの読み込み速度が日進月歩で、動画のコーデックには今のような
+        スケーラビリティ(通信環境に応じて画質を変える仕組み)がありませんでした(MPEG1普及前夜の時代です)。
+        4倍速ドライブのユーザーはきれいな動画を見たい、2倍速のユーザーはカクついたら困る——
+        そこで同じ映像を解像度違いで2種類ディスクに入れておき、Onetouchが
+        <strong>インストール時に計測用の重い動画データを実際に読み込ませて速度を実測し</strong>、
+        その結果に応じて見せるものを自動的に振り分けていました。
+      </p>
+      <p style="margin-bottom: 0;">
+        仕組みは30年前と今でまるで違います。でも「使い始める最初の一歩でつまずかせない」という
+        設計の勘所は、CD-ROMドライブでもiPhoneでも同じでした。
+      </p>
+    </div>
+
+    <p>
+      道具は<strong>「使い始められなければ意味がない」</strong>のです。
+      今回、PWAのインストール案内の部分だけでも、価値のあるものができたと考えています。
+    </p>
 
     <h3>PWA化の技術的な格闘 — なぜここまでこだわったか</h3>
     <p>
