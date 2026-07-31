@@ -6,14 +6,16 @@ set -u
 cd "$(dirname "$0")/.."
 NG='亀戸|kameido|Kameido|KAMEIDO|香取|松柏|shochiku|jagyamamoto|jagproject|京葉道路|江東|墨田|江戸川|ktaiwork|sugumail|水神小学校|中央学院'
 echo "=== 1. 地域固有の語が残っていないか ==="
+# github.com/jagyamamoto/kairanban-app はこのプロジェクト自身のURLなので除外する
 hit=$(grep -rniE "$NG" --include="*.ts" --include="*.tsx" --include="*.html" --include="*.jsonc" \
   --include="*.js" --include="*.webmanifest" --include="*.sql" --include="*.mjs" --include="*.json" --include="*.md" \
-  src public migrations tools index.html wrangler.jsonc package.json 2>/dev/null | grep -v node_modules)
+  src public migrations tools index.html wrangler.jsonc package.json 2>/dev/null \
+  | grep -v node_modules | grep -v 'jagyamamoto/kairanban-app')
 if [ -n "$hit" ]; then echo "$hit"; echo "  ⚠ 残っています"; else echo "  なし ✅"; fi
 
 echo "=== 2. 実在しそうな電話番号 ==="
 tel=$(grep -rnoE '0[789]0[0-9]{8}' --include="*.ts" --include="*.tsx" --include="*.html" src public 2>/dev/null \
-  | grep -vE '09012345678|09000000000')
+  | grep -vE '09012345678|090000000[0-9][0-9]')  # 09012345678=入力例, 0900000000x=デモの架空データ
 if [ -n "$tel" ]; then echo "$tel"; echo "  ⚠ 確認してください"; else echo "  例示用のみ ✅"; fi
 
 echo "=== 3. 鍵・IDの実値 ==="
