@@ -72,6 +72,8 @@ export type Me = {
     appName: string;
     liffId: string | null;
     devMode: boolean;
+    /** デモサイトのときだけ true(画面に「お試しです」の帯を出す) */
+    demoMode?: boolean;
     vapidPublicKey: string | null;
     googleClientId: string | null;
     lineLoginEnabled: boolean;

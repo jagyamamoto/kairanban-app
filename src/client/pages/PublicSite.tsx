@@ -1769,6 +1769,24 @@ export default function PublicSite() {
 
       <div className="container">
 
+        {me?.config.demoMode && (
+          <div className="demo-banner">
+            <strong>これは「お試し」の画面です</strong>
+            <p>
+              架空の町会・架空の会員のデータが入っています。自由に触っていただけます。
+              入力した内容は24時間ごとに消え、元に戻ります。
+            </p>
+            <p className="demo-banner-how">
+              会員として入るには「ログイン」を押し、電話番号に
+              <strong> 09000000001 </strong>(管理者)か
+              <strong> 09000000008 </strong>(ふつうの会員)を入れてください。
+            </p>
+            <a href="https://github.com/jagyamamoto/kairanban-app">
+              このアプリについて(GitHub)
+            </a>
+          </div>
+        )}
+
         {/* ホーム画面追加の一画面マニュアル(表示条件はコンポーネント側で判定) */}
         <InstallGuide openNow={openInstall} onOpened={() => setOpenInstall(false)} />
 

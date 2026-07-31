@@ -10,6 +10,10 @@ export type Env = {
   IMAGES: R2Bucket;
   APP_NAME: string;
   DEV_MODE: string;
+  // ⚠ 「触って試せるデモ」用。**本物の町会では設定しないこと**(毎晩データを全消しします)。
+  //    詳しくは src/server/demo.ts
+  DEMO_MODE?: string;
+  DEMO_DB_NAME?: string;
   LINE_LOGIN_CHANNEL_ID?: string;
   LIFF_ID: string;
   SESSION_SECRET?: string;

@@ -21,6 +21,7 @@ import {
   requireUser,
   validatePhone,
 } from "../core";
+import { resetDemoData } from "../demo";
 
 const auth = new Hono<AppEnv>();
 
@@ -328,6 +329,12 @@ export const meApp = new Hono<AppEnv>();
 
 meApp.get("/me", async (c) => {
   const u = c.get("user");
+  // デモサイトのときだけ、24時間ごとに架空データへ戻す。
+  // ⚠ Cronが使えない環境でも動くよう、画面を開いたついでに判定する。
+  //   本物の町会(DEMO_MODEなし)では resetDemoData が即座に何もせず返る。
+  if (c.env.DEMO_MODE === "1") {
+    c.executionCtx.waitUntil(resetDemoData(c.env).catch(() => {}));
+  }
   // ホーム画面に追加済みか(監査ログに pwa.installed があるか)。
   // これが true の間は「最初の設定」の案内を出さない。
   let pwaInstalled = false;
@@ -363,6 +370,8 @@ meApp.get("/me", async (c) => {
       appName: c.env.APP_NAME,
       liffId: c.env.LIFF_ID || null,
       devMode: c.env.DEV_MODE === "1",
+      // デモサイトかどうか(画面に「お試しです」の帯を出すため)
+      demoMode: c.env.DEMO_MODE === "1",
       vapidPublicKey: c.env.VAPID_PUBLIC_KEY || null,
       googleClientId: c.env.GOOGLE_CLIENT_ID || null,
       // ⚠ LINEの導線は「メールアドレス取得権限」が有効になるまで画面に出さない(オーナー指示 2026-07-29)。

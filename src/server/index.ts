@@ -22,6 +22,7 @@ import { runDailyReminders } from "./cron";
 import { runReservationNotices } from "./reservationnotices";
 import { runCircularEventNotices } from "./circularnotices";
 import { ingestAreaAlerts } from "./areaalerts";
+import { resetDemoData } from "./demo";
 
 const app = new Hono<AppEnv>();
 
@@ -88,6 +89,8 @@ export default {
         await runCircularEventNotices(env);
         if (jstMin % 15 < 5) await ingestAreaAlerts(env);
         await runDailyReminders(env);
+        // デモサイトのときだけ、毎晩データを作り直す(本物の町会では何も起きない)
+        await resetDemoData(env);
       })(),
     );
   },

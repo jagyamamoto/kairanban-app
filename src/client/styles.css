@@ -979,3 +979,16 @@ table.simple th { background: #eef2ee; font-size: 14px; }
   font-size: 14px;
   text-decoration: underline;
 }
+
+/* デモサイトの帯。DEMO_MODE=1 のときだけ出る(本物の町会では出ない) */
+.demo-banner {
+  background: #fff8e1;
+  border: 3px solid #b26a00;
+  border-radius: 12px;
+  padding: 14px;
+  margin-bottom: 14px;
+}
+.demo-banner strong { font-size: 18px; color: #8a5200; display: block; margin-bottom: 6px; }
+.demo-banner p { margin: 6px 0; font-size: 15px; line-height: 1.7; }
+.demo-banner-how { background: #fff; border-radius: 8px; padding: 10px; }
+.demo-banner a { display: inline-block; margin-top: 8px; font-weight: 700; min-height: 44px; line-height: 44px; }

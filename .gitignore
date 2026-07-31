@@ -5,3 +5,4 @@
 .wrangler/
 dist/
 node_modules/
+wrangler.demo.jsonc
