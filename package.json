@@ -1,0 +1,34 @@
+{
+  "name": "kairanban-app",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "dev:worker": "wrangler dev --port 8787",
+    "build": "vite build",
+    "check": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.server.json --noEmit",
+    "icons": "node tools/gen-icons.mjs",
+    "db:local": "wrangler d1 migrations apply kairanban --local",
+    "db:remote": "wrangler d1 migrations apply kairanban --remote",
+    "deploy": "npm run build && wrangler deploy"
+  },
+  "dependencies": {
+    "hono": "^4.6.0",
+    "leaflet": "^1.9.4",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.26.0"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^5.20260722.1",
+    "@types/leaflet": "^1.9.21",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "typescript": "^5.5.4",
+    "vite": "^6.0.0",
+    "wrangler": "^4.0.0"
+  },
+  "description": "回覧板・会館予約・会合出欠・防災情報。町内会のための無料アプリ(Cloudflare Workers)"
+}

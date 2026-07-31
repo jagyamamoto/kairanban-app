@@ -1,0 +1,64 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  // ⚠ あなたの町会の名前に変える(Workerの名前。URLの一部になる)
+  "name": "kairanban",
+  "main": "src/server/index.ts",
+  "compatibility_date": "2026-07-01",
+  "assets": {
+    "directory": "dist/client",
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application",
+    // ⚠ SPAフォールバックは「ブラウザが画面として開いたリクエスト(Accept: text/html)」を
+    //   Workerより先に横取りして index.html を返してしまう。
+    //   メール内の「確認しました」(/api/e/...)や資料の共有リンク(/s/...)は
+    //   まさに画面として開かれるので、必ずWorkerを先に通す。
+    //   これを外すと、メールの確認ボタンと共有リンクが黙ってトップページになる。
+    "run_worker_first": ["/api/*", "/s/*"]
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "kairanban",
+      // ⚠ `npx wrangler d1 create kairanban` の結果のIDに置き換える
+      "database_id": "YOUR_D1_DATABASE_ID",
+      "migrations_dir": "migrations"
+    }
+  ],
+  // 多言語翻訳(Workers AI)。使わない場合も残して問題ない
+  "ai": { "binding": "AI" },
+  "r2_buckets": [
+    // ⚠ `npx wrangler r2 bucket create kairanban-images` を実行してから使う
+    { "binding": "IMAGES", "bucket_name": "kairanban-images" }
+  ],
+  "vars": {
+    // ⚠ あなたの町会の名前(画面とメールに表示される)
+    "APP_NAME": "みどり町三丁目町会",
+    // 1=開発用ログインを有効化(本番では必ず0)
+    "DEV_MODE": "0",
+    // LIFF ID(LINEミニアプリを使う場合のみ。LINE Developersで発行)
+    "LIFF_ID": "",
+    // Web Push(VAPID)公開鍵。`node tools/gen-vapid.mjs` で作る。
+    // 秘密鍵は `npx wrangler secret put VAPID_PRIVATE_KEY` で設定する
+    "VAPID_PUBLIC_KEY": "YOUR_VAPID_PUBLIC_KEY",
+    "VAPID_SUBJECT": "mailto:you@example.com",
+    // 回覧メールの送信元(Resendでドメイン認証が済んだアドレス)。
+    // 返信先は実在するメールボックスにする
+    "MAIL_FROM": "みどり町三丁目町会 <noreply@example.com>",
+    "MAIL_REPLY_TO": "reply@example.com",
+    // メール内リンクの絶対URL(デプロイ後のURLに置き換える)
+    "APP_URL": "https://kairanban.YOUR_ACCOUNT.workers.dev"
+  },
+  "observability": { "enabled": true },
+  // 5分ごと: 会館予約のお知らせ(「終了10分前」を出すため細かく回す)。
+  // 日次リマインドは内部の20時間ガードで1日1回だけ動く。
+  "triggers": { "crons": ["*/5 * * * *"] }
+  // Secrets(`npx wrangler secret put 名前` で設定):
+  //   SESSION_SECRET            セッション署名鍵(長いランダム文字列)
+  //   SETUP_CODE                初回管理者登録コード
+  //   VAPID_PRIVATE_KEY         Web Push秘密鍵
+  //   RESEND_API_KEY            メール送信(Resend)のAPIキー(メールを使う場合)
+  //   LINE_CHANNEL_ACCESS_TOKEN LINE通知用(使う場合のみ)
+  //   LINE_CHANNEL_SECRET       LINE Webhook署名検証用(使う場合のみ)
+  //   LINE_LOGIN_CHANNEL_ID     LINEログイン用(使う場合のみ)
+  //   LINE_LOGIN_CHANNEL_SECRET LINEログイン用(使う場合のみ)
+}

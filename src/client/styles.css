@@ -1,0 +1,981 @@
+/* 高齢者にも読みやすい: 大きな文字・大きなボタン・高コントラスト */
+:root {
+  --green: #0a7a3d;
+  --green-dark: #075c2e;
+  --red: #c62828;
+  --orange: #b26a00;
+  --bg: #f5f6f4;
+  --card: #ffffff;
+  --text: #1c1c1c;
+  --muted: #5f6660;
+  --border: #d9ded9;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+
+/* キーボードやスイッチで操作する人に「いまどこを触っているか」を必ず見せる。
+   :focus-visible なので、指でタップしたときには出ない(高齢の方の画面がうるさくならない) */
+:focus-visible {
+  outline: 3px solid #1565c0;
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+/* 画面が緑のヘッダー上では青い枠が沈むので白にする */
+.header :focus-visible,
+.btn-primary:focus-visible,
+.tab.active:focus-visible { outline-color: #ffffff; }
+
+/* 「スクロールして見せる」動きを、動きが苦手な人には出さない */
+@media (prefers-reduced-motion: reduce) {
+  * { scroll-behavior: auto !important; animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+body {
+  font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", Meiryo, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 18px;
+  line-height: 1.7;
+  -webkit-text-size-adjust: 100%;
+}
+h1, h2, h3 { line-height: 1.4; }
+h2 { font-size: 21px; margin: 20px 0 10px; }
+h3 { font-size: 18px; margin: 14px 0 8px; }
+a { color: var(--green-dark); }
+p { margin: 8px 0; }
+
+.header {
+  background: var(--green);
+  color: #fff;
+  padding: 12px 16px;
+  padding-top: calc(12px + env(safe-area-inset-top));
+}
+.header h1 { font-size: 19px; margin: 0; font-weight: 700; line-height: 1.25; }
+.header .sub { font-size: 14px; opacity: 0.95; }
+.header-brand { display: flex; align-items: center; gap: 12px; }
+.header-logo {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #fff;
+  padding: 5px;
+  object-fit: contain;
+  flex-shrink: 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+}
+
+.container { max-width: 640px; margin: 0 auto; padding: 16px 16px 110px; }
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+}
+
+.area-card {
+  background: #e3f2e8;
+  border: 1px solid #bfe3cc;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+.area-card h2 { margin: 0 0 6px; color: var(--green-dark); font-size: 19px; }
+.area-card p { margin: 0 0 12px; }
+.area-map-frame {
+  width: 100%;
+  height: 280px;
+  border-radius: 10px;
+  overflow: hidden;
+}
+.area-map-caption { margin: 8px 0 0; font-size: 13px; color: var(--muted); }
+.area-map-tooltip {
+  background: rgba(211, 47, 47, 0.92);
+  color: #fff;
+  border: none;
+  font-weight: 700;
+  font-size: 13px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  box-shadow: none;
+}
+.area-map-tooltip::before { display: none; }
+
+.btn {
+  display: block;
+  width: 100%;
+  padding: 16px;
+  font-size: 19px;
+  font-weight: 700;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  font-family: inherit;
+  margin: 8px 0;
+}
+.btn:disabled { opacity: 0.5; cursor: default; }
+.btn-primary { background: var(--green); color: #fff; }
+.btn-secondary { background: #fff; color: var(--green-dark); border: 2px solid var(--green); }
+.btn-danger { background: #fff; color: var(--red); border: 2px solid var(--red); }
+/* 資料の共有リンク作成パネル(管理画面) */
+.share-box {
+  border: 2px solid #c8d6e0;
+  border-radius: 12px;
+  padding: 12px;
+  margin: 10px 0;
+  background: #f7f9fb;
+}
+.share-made {
+  background: #fff;
+  border-radius: 8px;
+  padding: 10px;
+  margin: 8px 0;
+}
+.share-row { padding: 6px 0; border-top: 1px solid #e2e8ee; gap: 8px; }
+.share-row .btn-sm { margin: 0; flex: none; }
+
+/* 箇条書きを記号なしで詰めて出す(繰り返し予約の結果など) */
+.plain-list { list-style: none; padding: 0; margin: 6px 0; }
+.plain-list li { padding: 4px 0; border-bottom: 1px solid #eee; }
+
+/* 「強くおすすめ」の入力欄をまとめる枠(会員登録のメールアドレスなど) */
+.recommend-box {
+  border: 2px solid var(--green);
+  border-radius: 12px;
+  padding: 12px;
+  margin: 14px 0;
+  background: #f6fbf7;
+}
+.recommend-box > label:first-child { margin-top: 0; }
+
+/* 同意ダイアログ(LINE連携の説明など) */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 16px;
+  overflow-y: auto;
+  z-index: 1000;
+}
+.modal {
+  max-width: 520px;
+  width: 100%;
+  margin: 24px 0;
+}
+.consent-h {
+  font-size: 16px;
+  margin: 16px 0 4px;
+  color: var(--green-dark);
+}
+.consent-list {
+  margin: 0;
+  padding-left: 1.25em;
+}
+.consent-list li { line-height: 1.7; margin-bottom: 4px; }
+
+/* 規約類の長文ページ。読みやすさ優先で行間を広く、見出しを小さめに */
+.doc h3 { font-size: 17px; margin: 20px 0 6px; }
+.doc p { line-height: 1.85; margin: 6px 0; }
+.doc ul { padding-left: 1.2em; margin: 6px 0; }
+.doc li { line-height: 1.85; margin-bottom: 6px; }
+
+/* ページ末尾のフッタ(プライバシーポリシーへの導線) */
+.site-footer {
+  margin: 28px 0 12px;
+  padding-top: 16px;
+  border-top: 1px solid #e2e2e2;
+  text-align: center;
+}
+.linklike {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  color: var(--green-dark);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* LINEログイン。LINEのブランドカラー(#06C755)。認証だけに使うボタン */
+.btn-line { background: #06c755; color: #fff; }
+/* 連携済みの表示と解除ボタンを1行に並べる */
+.linked-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin: 8px 0;
+}
+.linked-row .btn-sm { margin: 0; flex: none; }
+.btn-sm {
+  display: inline-block;
+  width: auto;
+  padding: 9px 14px;
+  font-size: 16px;
+  margin: 4px 6px 4px 0;
+  /* 小さいボタンでも指で押せる高さ(44px)を確保する */
+  min-height: 44px;
+}
+
+.chip {
+  display: inline-block;
+  padding: 2px 12px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.chip-green { background: #e3f2e8; color: var(--green-dark); }
+.chip-gray { background: #ececec; color: #555; }
+.chip-red { background: #fdecea; color: var(--red); }
+.chip-orange { background: #fff3e0; color: var(--orange); }
+
+.bottom-nav {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: #fff;
+  border-top: 1px solid var(--border);
+  display: flex;
+  padding-bottom: env(safe-area-inset-bottom);
+  z-index: 10;
+}
+.bottom-nav a {
+  flex: 1;
+  text-align: center;
+  padding: 8px 4px 10px;
+  font-size: 13px;
+  color: var(--muted);
+  text-decoration: none;
+  font-weight: 700;
+}
+.bottom-nav a.active { color: var(--green); }
+.nav-icon { font-size: 24px; display: block; line-height: 1.3; }
+
+label { display: block; font-weight: 700; margin: 14px 0 6px; font-size: 17px; }
+/* チェックボックスやラジオのまとまりに付ける見出し。
+   ⚠ <label> にしてはいけない。ラベルは1つの入力欄を指すものなので、
+     まとまりの見出しに使うと「押しても何も起きないラベル」になり、
+     読み上げでも欄の名前として誤って読まれる */
+.group-label {
+  display: block;
+  font-weight: 700;
+  margin: 14px 0 6px;
+  font-size: 17px;
+}
+input, select, textarea {
+  width: 100%;
+  font-size: 18px;
+  padding: 12px;
+  border: 1px solid #b8bfb8;
+  border-radius: 10px;
+  background: #fff;
+  font-family: inherit;
+}
+textarea { min-height: 140px; }
+input[type="checkbox"] { width: auto; padding: 0; }
+.checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 400;
+  font-size: 16px;
+  margin: 8px 0;
+}
+/* ラジオも同じ見た目にする(指定が checkbox だけだと input の width:100% を拾って潰れる) */
+.checkbox-row input[type="checkbox"],
+.checkbox-row input[type="radio"] {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  margin: 0;
+}
+.field-note { font-size: 14px; color: var(--muted); margin-top: 4px; }
+/* 入力もれの欄。赤枠＋薄い赤で「ここを直す」を色以外(枠の太さ)でも示す */
+.field-bad {
+  border: 2px solid var(--red) !important;
+  background: #fff7f6;
+}
+.error { color: var(--red); font-weight: 700; }
+/* 入力もれの案内。目に入りやすいよう帯にする(下に小さな赤文字が1行出るだけでは気づけない) */
+.error-box {
+  background: #fdecea;
+  border: 2px solid var(--red);
+  border-radius: 10px;
+  padding: 12px;
+  margin: 12px 0;
+  color: var(--red);
+  font-weight: 700;
+  line-height: 1.6;
+}
+.ok-note { color: var(--green-dark); font-weight: 700; }
+
+.muted { color: var(--muted); font-size: 15px; }
+.center { text-align: center; }
+.pre { white-space: pre-wrap; word-break: break-word; }
+.row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.spread { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
+
+.tabbar { display: flex; gap: 6px; overflow-x: auto; margin: 12px 0; }
+.tab {
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: #fff;
+  border: 1px solid var(--border);
+  white-space: nowrap;
+  font-size: 16px;
+  cursor: pointer;
+  font-family: inherit;
+  font-weight: 700;
+  color: var(--text);
+  /* タブは <button> と <a>(会館予約) の両方があるので、リンクの下線を消して見た目を揃える */
+  text-decoration: none;
+  display: inline-block;
+}
+.tab.active { background: var(--green); color: #fff; border-color: var(--green); }
+
+.list-item { padding: 14px 2px; border-bottom: 1px solid var(--border); }
+.list-item:last-child { border-bottom: none; }
+
+.lang-chips { display: flex; gap: 6px; flex-wrap: wrap; margin: 12px 0; }
+.lang-chips button {
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: #fff;
+  font-size: 15px;
+  cursor: pointer;
+  font-family: inherit;
+  font-weight: 700;
+  color: var(--text);
+}
+.lang-chips button.active { background: var(--green); color: #fff; border-color: var(--green); }
+
+.big-icon { font-size: 52px; text-align: center; margin: 12px 0 0; }
+
+table.simple { width: 100%; border-collapse: collapse; font-size: 15px; }
+table.simple th, table.simple td {
+  border-bottom: 1px solid var(--border);
+  padding: 8px 6px;
+  text-align: left;
+  vertical-align: top;
+}
+table.simple th { background: #eef2ee; font-size: 14px; }
+
+/* 会館予約カレンダー(月グリッド) */
+/* 月送りのボタンが本文より目立って主従が逆になっていたので、脇役の大きさに固定する。
+   折り返すと縦に膨らんで「2026年7月」より大きく見えてしまうため nowrap */
+.cal-nav { flex-wrap: nowrap; margin-bottom: 10px; gap: 10px; }
+.cal-nav .btn-sm {
+  margin: 0;
+  flex: none;
+  white-space: nowrap;
+  padding: 10px 12px;
+  font-size: 15px;
+  min-height: 44px;
+}
+.cal-title { font-size: 20px; white-space: nowrap; }
+.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; }
+.cal-head {
+  text-align: center;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--muted);
+  padding: 4px 0;
+}
+.cal-head.sun { color: var(--red); }
+.cal-head.sat { color: #1565c0; }
+.cal-cell {
+  /* 指で押せる大きさを確保する(アクセシビリティの目安は44px以上)。
+     aspect-ratio だけだと狭い画面で37pxまで縮んで押しにくかった */
+  min-height: 46px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #fff;
+  font-family: inherit;
+  font-size: 15px;
+  padding: 2px 0;
+  cursor: pointer;
+}
+.cal-cell.empty { border: none; background: none; cursor: default; }
+/* 過去の日。#aaa だとコントラスト2.1で見分けづらかったので濃くする */
+.cal-cell.past { background: #f0f0f0; color: #767676; cursor: default; }
+.cal-cell.today { border-color: var(--green); border-width: 2px; }
+.cal-cell.picked { background: var(--green); color: #fff; border-color: var(--green); }
+.cal-day { font-weight: 700; line-height: 1; }
+/* ⚠ 予約の状態を「色だけ」で区別しない。色覚特性のある方や、
+   白内障などで色の差が分かりにくい方にも伝わるよう、必ず記号を併記する */
+.cal-marks { display: flex; gap: 3px; min-height: 14px; align-items: center; }
+.cal-mark {
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0;
+}
+.cal-mark.free { color: #8a938a; }
+.cal-mark.provisional { color: #9a5b00; }
+.cal-mark.confirmed { color: var(--green-dark); }
+.cal-cell.picked .cal-mark { color: #fff; }
+.cal-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 14px;
+  margin-top: 10px;
+  font-size: 14px;
+  color: var(--text);
+}
+.cal-legend span { display: inline-flex; align-items: center; gap: 5px; }
+
+.map-link {
+  /* 「地図で見る」は独立したボタンとして押すものなので、
+     文中のリンクではなく指で押せる大きさ(44px)を確保する */
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  margin-top: 4px;
+  padding: 4px 0;
+  font-size: 15px;
+  font-weight: 700;
+  text-decoration: none;
+  color: var(--green-dark);
+}
+
+.detail-box {
+  margin-top: 10px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #fafbfa;
+}
+.detail-box h3 { margin: 0 0 6px; font-size: 16px; }
+.hr-soft { border: none; border-top: 1px solid var(--border); margin: 12px 0; }
+
+/* 公開トップの「自分のメニュー」(ログインすると項目が増える導線) */
+.mymenu { border: 2px solid var(--green); }
+.mymenu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.mymenu-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #fff;
+  text-decoration: none;
+  color: var(--text);
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 1.35;
+}
+.mymenu-item.officer { border-color: var(--green); background: #eef7f0; }
+.mymenu-icon { font-size: 24px; flex-shrink: 0; }
+@media (max-width: 420px) {
+  .mymenu-grid { grid-template-columns: 1fr; }
+}
+
+/* 未確認の回覧(トップ・最優先表示) */
+.unread-card { border: 2px solid var(--red); }
+.unread-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: flex-start;
+  padding: 14px 12px;
+  margin-bottom: 8px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #fff;
+  text-decoration: none;
+  color: var(--text);
+}
+.unread-title { font-weight: 700; font-size: 18px; line-height: 1.4; }
+.unread-go { color: var(--green-dark); font-weight: 700; font-size: 15px; }
+
+/* ヘッダー右のログイン/メニュー(オーナー指摘: ログインが一番下では分かりづらい) */
+.header-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.header-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+.header-btn {
+  display: inline-block;
+  padding: 9px 14px;
+  border-radius: 10px;
+  border: 2px solid #fff;
+  background: transparent;
+  color: #fff;
+  font-weight: 700;
+  font-size: 15px;
+  text-decoration: none;
+  font-family: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.header-btn.primary { background: #fff; color: var(--green-dark); }
+/* 指で押せる大きさ(44px)を下回らないようにする */
+.header-btn { min-height: 44px; }
+.header-btn.icon { font-size: 22px; line-height: 1; padding: 7px 12px; min-width: 48px; }
+
+/* ハンバーガーの中身(言語切替・会員/管理導線) */
+.drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 50;
+  display: flex;
+  justify-content: flex-end;
+}
+.drawer {
+  background: var(--bg);
+  width: min(92vw, 420px);
+  height: 100%;
+  overflow-y: auto;
+  padding: 16px;
+  padding-top: calc(16px + env(safe-area-inset-top));
+  box-shadow: -2px 0 12px rgba(0, 0, 0, 0.2);
+}
+.drawer h3 { margin: 18px 0 6px; font-size: 17px; }
+.mymenu-compact .mymenu-grid { grid-template-columns: 1fr; }
+
+/* 狭い画面ではヘッダーの文字を詰めて、ログイン/メニューの場所を確保する */
+@media (max-width: 430px) {
+  .header h1 { font-size: 17px; }
+  .header .sub { display: none; }
+  .header-logo { width: 38px; height: 38px; }
+  .header-btn { padding: 8px 11px; font-size: 14px; }
+}
+
+/* 管理画面にも下部ナビを出すため、下端に余白を確保する */
+.admin-with-nav { padding-bottom: 110px; }
+/* 下部ナビが6個になっても崩れないように */
+.bottom-nav a { min-width: 0; }
+.bottom-nav .nav-icon { font-size: 22px; }
+@media (max-width: 420px) {
+  .bottom-nav a { font-size: 11px; padding: 6px 2px 8px; }
+  .bottom-nav .nav-icon { font-size: 20px; }
+}
+
+/* 広告募集中バナー */
+.ad-recruit {
+  border: 2px dashed var(--green);
+  border-radius: 12px;
+  background: #f2f8f3;
+  padding: 16px;
+  margin-bottom: 12px;
+}
+.ad-recruit strong { font-size: 17px; color: var(--green-dark); }
+.ad-recruit p { margin: 6px 0 0; font-size: 15px; }
+
+/* 不足がある登録内容を目立たせる枠(オーナー指示: 赤く表示) */
+.card-warn { border: 2px solid var(--red); }
+
+/* 「あなたの登録内容」の項目一覧 */
+.profile-list { margin: 4px 0 12px; display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; }
+.profile-list dt { color: var(--muted); font-size: 14px; }
+.profile-list dd { margin: 0; font-size: 16px; word-break: break-all; }
+
+/* 写真アルバム。1枚目を表紙に、詳細は格子で並べる */
+.album-cover {
+  width: 100%;
+  max-height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-top: 8px;
+  display: block;
+}
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 8px;
+}
+.photo-cell { position: relative; }
+.photo-cell img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 8px;
+  display: block;
+  background: #eee;
+}
+.photo-del {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+/* 「誰が見られるか」の複数選択 */
+.level-row { align-items: flex-start; margin: 10px 0; }
+.level-row input { margin-top: 4px; }
+.level-row .field-note { margin: 0; }
+.level-warn {
+  background: #fdecea;
+  border: 2px solid var(--red);
+  border-radius: 8px;
+  padding: 10px;
+  margin: 10px 0 0;
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+/* ===== ホーム画面追加の一画面マニュアル(InstallGuide) ===== */
+/* 高齢者向け推奨値: 見出し28px+太字 / 手順22px+太字 / 本文20px / ボタン高さ56px以上 */
+.ig-card {
+  border: 3px solid var(--green, #0a7a3d);
+  background: #fff;
+}
+.ig-title {
+  font-size: 26px;
+  font-weight: 800;
+  margin: 0 0 8px;
+  line-height: 1.4;
+}
+.ig-body {
+  font-size: 19px;
+  line-height: 1.8;
+  margin: 8px 0;
+}
+.ig-small {
+  font-size: 15px;
+  color: #555;
+  margin: 6px 0 0;
+}
+.ig-step {
+  border-top: 2px solid #e3e8e3;
+  margin-top: 18px;
+  padding-top: 14px;
+}
+.ig-step-title {
+  font-size: 22px;
+  font-weight: 800;
+  margin: 0 0 10px;
+}
+.ig-step img {
+  max-width: 100%;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  display: block;
+  margin: 0 auto;
+}
+.ig-done {
+  text-align: center;
+}
+.ig-done-icon {
+  width: 110px;
+  height: auto;
+  border-radius: 20px;
+  display: block;
+  margin: 8px auto;
+  border: 1px solid #ddd;
+}
+.ig-big-btn {
+  min-height: 56px;
+  font-size: 20px;
+  width: 100%;
+}
+.ig-close {
+  margin: 0;
+  white-space: nowrap;
+}
+.ig-welcome {
+  text-align: center;
+}
+.ig-steps-list {
+  font-size: 18px;
+  line-height: 1.9;
+  padding-left: 1.3em;
+}
+.ig-steps-list li {
+  margin-bottom: 8px;
+  list-style-position: outside;
+}
+
+/* ===== ホーム画面追加の案内(GuideBand) =====
+   共有シート表示中も画面上部43%は隠れない(実機検証済み)。帯はその範囲に収める。
+   ⚠ アプリ本体は緑。案内は「指示」だと一目で分かるよう黄色地+黒文字にしている
+      (オーナー指摘: 同じ緑だと指示に見えない)。ここを緑に戻さないこと。 */
+.ig-band-spacer {
+  height: 300px;
+}
+.ig-band {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  background: #ffd400;
+  color: #111;
+  border-bottom: 5px solid #111;
+  padding: 5px 8px 8px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+}
+.ig-band-head {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  column-gap: 8px;
+}
+.ig-band-title {
+  grid-column: 1;
+  /* ⚠ 画面の高さに追従させる。固定pxだと iPhone SE で帯が48%まで伸び、
+     手順4・5が共有の画面に隠れた(2026-07-30 実測) */
+  font-size: clamp(17px, 2.4vh, 21px);
+  font-weight: 900;
+  line-height: 1.2;
+}
+.ig-band-label {
+  grid-column: 1;
+  font-size: clamp(12px, 1.8vh, 15px);
+  font-weight: 700;
+  line-height: 1.3;
+}
+.ig-band-close {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+}
+.ig-band-close {
+  background: #111;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 20px;
+  line-height: 1;
+  padding: 8px 12px;
+  flex: 0 0 auto;
+}
+/* 4手順を常時ぜんぶ出す(自動で進めない)。利用者は画面と写真を見比べて選ぶ。 */
+.ig-steps {
+  list-style: none;
+  margin: 6px 0 0;
+  padding: 0;
+}
+.ig-step-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 2px;
+}
+.ig-step-num {
+  flex: 0 0 auto;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #111;
+  color: #fff;
+  font-size: 17px;
+  font-weight: 900;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+/* 写真は本来の縦横比のまま、行の高さに合わせる。
+   flex:1 にすると小さなボタンの写真が白い余白だらけになるので伸ばさない。 */
+.ig-step-img {
+  flex: 0 0 auto;
+  /* ⚠ vh で縮ませる。ここを固定pxに戻すと iPhone SE で手順が隠れる */
+  height: clamp(24px, 3.8vh, 38px);
+  /* 幅を抑えないと、横長の写真(ホーム画面に追加の行など)が説明文を押し出す */
+  max-width: 44%;
+  width: auto;
+  object-fit: contain;
+  object-position: left center;
+  background: #fff;
+  border-radius: 8px;
+}
+.ig-step-where {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: clamp(13px, 1.9vh, 15px);
+  font-weight: 900;
+  line-height: 1.25;
+}
+/* 帯の脚注(退避手段)。共有シートの安全域に収めるため小さく1行で。 */
+.ig-band-foot {
+  margin: 3px 0 0;
+  font-size: 12.5px;
+  line-height: 1.4;
+  font-weight: 700;
+}
+/* 設定の入口(黄色)。アプリ本体の緑と混ざらないよう帯と同じ配色にする。 */
+.ig-intro {
+  background: #ffd400;
+  color: #111;
+  border: 4px solid #111;
+  border-radius: 14px;
+  padding: 14px;
+  margin-bottom: 14px;
+}
+.ig-intro-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+.ig-intro-title {
+  font-size: 24px;
+  font-weight: 900;
+  line-height: 1.35;
+  margin: 0;
+}
+.ig-intro-body {
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.6;
+  margin: 10px 0 0;
+}
+.ig-intro-note {
+  background: #fff;
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 15px;
+  line-height: 1.6;
+  margin: 10px 0 0;
+}
+.ig-intro-btn {
+  display: block;
+  width: 100%;
+  min-height: 62px;
+  margin-top: 12px;
+  background: #111;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-size: 22px;
+  font-weight: 900;
+}
+/* 通知の「許可」の見本。実物のダイアログと同じ形にして、押す場所を見比べられるようにする。
+   ⚠ 見本であって押せるものではないので、button ではなく span で作っている。 */
+.ig-notify-mock {
+  border: 2px solid #111;
+  border-radius: 14px;
+  background: #f2f2f2;
+  overflow: hidden;
+  margin: 12px 0;
+}
+.ig-notify-text {
+  margin: 0;
+  padding: 14px 12px;
+  text-align: center;
+  font-size: 16px;
+  line-height: 1.5;
+  font-weight: 700;
+}
+.ig-notify-btns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-top: 1px solid #b9b9b9;
+}
+.ig-notify-no,
+.ig-notify-yes {
+  padding: 12px 6px;
+  text-align: center;
+  font-size: 17px;
+  color: #0a63c9;
+}
+.ig-notify-no { border-right: 1px solid #b9b9b9; }
+/* 押してほしい側だけ強調する(赤枠=ここを押す) */
+.ig-notify-yes {
+  font-weight: 900;
+  box-shadow: inset 0 0 0 3px var(--red);
+}
+.ig-notify-why {
+  background: #fdecea;
+  border: 2px solid var(--red);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 16px;
+  line-height: 1.6;
+  margin: 0 0 12px;
+}
+
+/* 「さいしょの画面にもどる」。押せる場所を目に見えるボタンにしておく。 */
+.ig-band-back {
+  display: block;
+  width: 100%;
+  /* 指で押せる高さ(44px)はここが下限。これ以上は縮めない */
+  min-height: 44px;
+  margin-top: 3px;
+  background: #111;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: clamp(13px, 1.8vh, 15px);
+  font-weight: 800;
+}
+/* 設定中は背景(ふだんの画面)を完全に覆う。
+   ⚠ 後ろに通常画面が見えていると、高齢の方が「どちらを操作するのか」で迷う
+     (オーナー指摘 2026-07-30)。ここを半透明に戻さないこと。 */
+.ig-fullscreen {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  background: #ffd400;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.ig-fullscreen-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+.ig-fullscreen-center .ig-intro {
+  width: 100%;
+  max-width: 560px;
+  margin: 0;
+  background: #fff;
+  border-color: #111;
+}
+/* 全画面の中では帯の影は不要(境目が無いため) */
+.ig-fullscreen .ig-band {
+  box-shadow: none;
+  border-bottom: none;
+}
+/* 設定を閉じたあとの小さな入口。目立ちすぎず、しかし必ず見つかる位置に置く。
+   ⚠ これを消すと、間違って閉じた人が設定に戻れなくなる(オーナー指摘 2026-07-30)。 */
+.ig-reopen {
+  display: block;
+  width: 100%;
+  min-height: 52px;
+  margin: 0 0 12px;
+  background: #ffd400;
+  color: #111;
+  border: 3px solid #111;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 800;
+  text-align: center;
+}
+.ig-reopen-wrap {
+  margin-bottom: 12px;
+}
+.ig-reopen-wrap .ig-reopen {
+  margin-bottom: 6px;
+}
+/* 「設定は済んでいます」。押すとこの案内を出さなくなる。
+   iOSではSafariから追加済みか判定できないため、本人の申告で消す。 */
+.ig-reopen-done {
+  display: block;
+  width: 100%;
+  min-height: 44px;
+  background: transparent;
+  color: var(--muted);
+  border: none;
+  font-size: 14px;
+  text-decoration: underline;
+}
