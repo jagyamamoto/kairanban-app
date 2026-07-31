@@ -1,0 +1,633 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>kairanban-app — 町内会・自治会のための無料アプリ</title>
+<meta name="description" content="回覧・会館予約・会合出欠・防災情報。スマホに詳しくない会員が使えることを最優先に設計した、町内会・自治会のための無料アプリ。MITライセンスで公開中。">
+<meta property="og:title" content="kairanban-app — 町内会・自治会のための無料アプリ">
+<meta property="og:description" content="紙の回覧板を待たずにお知らせを読める。スマホに詳しくない会員が自力で使えることを最優先に設計。Cloudflareの無料枠で月0円から動きます。">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#0a7a3d">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230a7a3d'/%3E%3Cmask id='m'%3E%3Crect x='24' y='26' width='52' height='56' rx='8' fill='white'/%3E%3Crect x='38' y='12' width='24' height='18' rx='6' fill='white'/%3E%3Crect x='32' y='42' width='36' height='6' rx='3'/%3E%3Crect x='32' y='56' width='36' height='6' rx='3'/%3E%3Crect x='32' y='70' width='24' height='6' rx='3'/%3E%3C/mask%3E%3Crect width='100' height='100' fill='white' mask='url(%23m)'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+<style>
+  /* ==== このページだけのスタイル ==== */
+
+  .hero { padding: 56px 0 40px; }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 48px;
+    align-items: center;
+  }
+  @media (max-width: 780px) {
+    .hero-grid { grid-template-columns: 1fr; gap: 40px; }
+  }
+  .hero-title {
+    font-family: var(--font-jp);
+    font-weight: 800;
+    font-size: clamp(30px, 4.6vw, 46px);
+    letter-spacing: -0.01em;
+    margin: 18px 0 20px;
+  }
+  .hero-title .accent {
+    color: var(--pine-deep);
+    position: relative;
+  }
+  .hero-lead {
+    font-size: 18px;
+    color: var(--ink-soft);
+    margin-bottom: 28px;
+    max-width: 46ch;
+  }
+  .hero-stats {
+    display: flex;
+    gap: 28px;
+    margin-top: 34px;
+    flex-wrap: wrap;
+  }
+  .hero-note {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+    font-size: 13.5px;
+    color: var(--muted);
+    max-width: 46ch;
+    line-height: 1.7;
+  }
+  .hero-note a { color: var(--pine-deep); font-weight: 700; }
+  .hero-stat b {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 27px;
+    font-weight: 700;
+    color: var(--pine-deep);
+  }
+  .hero-stat span { font-size: 13px; color: var(--muted); }
+
+  /* 回覧板モチーフの電話モックアップ */
+  .mock-wrap { position: relative; display: flex; justify-content: center; }
+  .mock-clip {
+    position: absolute;
+    top: -14px; left: 50%;
+    transform: translateX(-50%) rotate(-3deg);
+    width: 64px; height: 26px;
+    background: var(--gold);
+    border-radius: 4px;
+    box-shadow: var(--shadow);
+    z-index: 3;
+  }
+  .mock-clip::before {
+    content: "";
+    position: absolute; inset: 6px 6px auto 6px;
+    height: 4px; border-radius: 2px;
+    background: rgba(0,0,0,0.15);
+  }
+  .phone {
+    width: min(300px, 82vw);
+    background: #fff;
+    border-radius: 30px;
+    border: 8px solid #1c1d16;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    transform: rotate(1.5deg);
+  }
+  .phone-head {
+    /* 電話モックアップは実物のアプリ画面の再現なので常に固定色(#phone-body等と同じ理由) */
+    background: #0a7a3d;
+    color: #fff;
+    padding: 14px 16px 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .phone-head-badge {
+    width: 30px; height: 30px; border-radius: 50%;
+    background: #fff; color: #0a7a3d;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 13px; flex-shrink: 0;
+  }
+  .phone-head-title { font-weight: 800; font-size: 14.5px; line-height: 1.3; }
+  /* ⚠ 電話モックアップは「実際のアプリ画面」の再現なので、サイトのテーマ(明暗)に
+     関わらず常に固定の色にする(実物のアプリは常にライトな配色のため)。 */
+  .phone-body { padding: 14px; background: #efe8d8; }
+  .phone-tabs { display: flex; gap: 6px; margin-bottom: 12px; }
+  .phone-tab {
+    font-size: 11.5px; font-weight: 700; padding: 6px 10px; border-radius: 8px;
+    background: #fff; color: #52544a; border: 1px solid #e2dbc7;
+  }
+  .phone-tab.active { background: #0a7a3d; color: #fff; border-color: #0a7a3d; }
+  .phone-card {
+    background: #fff; border-radius: 12px; padding: 12px; margin-bottom: 10px;
+    border: 1px solid #e2dbc7;
+  }
+  .phone-card b { font-size: 13.5px; display: block; margin-bottom: 6px; line-height: 1.4; color: #23241d; }
+  .phone-chip {
+    display: inline-block; font-size: 10.5px; font-weight: 700; padding: 3px 9px;
+    border-radius: 999px; background: #fbf1dc; color: #b3811f;
+  }
+  .phone-card.alt .phone-chip { background: #e3f2e8; color: #075c2e; }
+
+  /* ---------- セクション共通 ---------- */
+  section { padding: 56px 0; }
+  .section-head { max-width: 60ch; margin-bottom: 34px; }
+  .section-head h2 {
+    font-size: clamp(24px, 3vw, 30px);
+    font-weight: 800;
+    margin: 14px 0 12px;
+  }
+  .section-head p { color: var(--ink-soft); font-size: 16px; }
+
+  /* ---------- 困りごと→機能 ---------- */
+  .pain-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+  @media (max-width: 640px) { .pain-grid { grid-template-columns: 1fr; } }
+  .pain-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px;
+  }
+  .pain-before {
+    font-size: 14px; color: var(--muted); text-decoration: line-through;
+    margin-bottom: 6px;
+  }
+  .pain-after { font-size: 16.5px; font-weight: 700; line-height: 1.6; }
+  .pain-after .arrow { color: var(--pine-deep); margin-right: 4px; }
+
+  /* ---------- 機能グリッド ---------- */
+  .feature-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  @media (max-width: 780px) { .feature-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 480px) { .feature-grid { grid-template-columns: 1fr; } }
+  .feature-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px;
+  }
+  .feature-icon {
+    width: 42px; height: 42px; border-radius: 11px;
+    background: var(--pine-pale); color: var(--pine-deep);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 21px; margin-bottom: 14px;
+  }
+  .feature-card h3 { font-size: 16.5px; font-weight: 800; margin-bottom: 8px; }
+  .feature-card p { font-size: 14.5px; color: var(--ink-soft); margin: 0; }
+
+  /* ---------- スマホに詳しくない会員ファースト ---------- */
+  .elder-section {
+    /* --pine-pale は style.css 側で明暗テーマごとに定義済みなので、ここでは参照するだけでよい */
+    background: var(--pine-pale);
+    border-radius: 24px;
+    padding: 44px clamp(20px, 5vw, 48px);
+  }
+  .elder-quote {
+    font-family: var(--font-display);
+    font-size: clamp(20px, 2.6vw, 26px);
+    font-weight: 600;
+    line-height: 1.6;
+    color: var(--pine-deep);
+    border-left: 4px solid var(--pine);
+    padding-left: 20px;
+    margin: 0 0 28px;
+  }
+  .fact-strip {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 28px;
+  }
+  @media (max-width: 700px) { .fact-strip { grid-template-columns: 1fr; } }
+  .fact {
+    background: var(--card);
+    border-radius: 14px;
+    padding: 18px 20px;
+    border: 1px solid var(--border);
+  }
+  .fact b {
+    font-family: var(--font-mono);
+    font-size: 22px;
+    color: var(--pine-deep);
+    display: block;
+    margin-bottom: 4px;
+  }
+  .fact span { font-size: 13.5px; color: var(--ink-soft); }
+
+  /* ---------- 費用 ---------- */
+  .cost-row {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    padding: 18px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .cost-row:last-child { border-bottom: none; }
+  .cost-row .amount {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 22px;
+    color: var(--pine-deep);
+    min-width: 90px;
+  }
+  .cost-row .label { font-weight: 700; }
+  .cost-row .note { color: var(--muted); font-size: 14px; }
+
+  /* ---------- デモ導線 ---------- */
+  /* ⚠ 常に「濃い地に白文字」の固定配色にする。var(--ink)/var(--paper) を使うと、
+     ダークモードではこの2つの意味が入れ替わり(ink=明るい/paper=暗い)、
+     中の rgba(255,255,255,*) の白文字が明るいカードの上に乗って読めなくなる。 */
+  .demo-box {
+    background: #1c1d16;
+    color: #f6f2e7;
+    border-radius: 24px;
+    padding: clamp(28px, 5vw, 48px);
+  }
+  .demo-box .eyebrow { background: rgba(255,255,255,0.12); color: #fff; border-color: rgba(255,255,255,0.2); }
+  .demo-box h2 { color: #fff; margin: 16px 0 10px; font-size: clamp(22px, 3vw, 28px); }
+  .demo-box p { color: rgba(255,255,255,0.75); margin-bottom: 24px; }
+  .demo-codes { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 26px; }
+  .demo-code {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 12px;
+    padding: 14px 18px;
+  }
+  .demo-code .num { font-family: var(--font-mono); font-size: 18px; font-weight: 700; color: #fff; }
+  .demo-code .role { font-size: 13px; color: rgba(255,255,255,0.7); }
+  .demo-box .btn-primary { background: var(--pine-solid); }
+  .demo-box .btn-primary:hover { background: var(--pine-solid-deep); }
+
+  /* ---------- 導入ステップ ---------- */
+  .step-list { counter-reset: step; }
+  .step {
+    display: flex;
+    gap: 18px;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .step:last-child { border-bottom: none; }
+  .step-num {
+    counter-increment: step;
+    flex-shrink: 0;
+    width: 36px; height: 36px; border-radius: 50%;
+    background: var(--pine-solid); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-mono); font-weight: 700; font-size: 15px;
+  }
+  .step-num::before { content: counter(step); }
+  .step h3 { font-size: 16px; font-weight: 800; margin-bottom: 4px; }
+  .step p { color: var(--ink-soft); font-size: 14.5px; margin: 0; }
+
+  /* ---------- 提案募集 ---------- */
+  .callout {
+    border: 2px solid var(--gold);
+    background: var(--gold-pale);
+    border-radius: var(--radius);
+    padding: 26px 28px;
+  }
+  .callout h3 { font-size: 17px; font-weight: 800; margin-bottom: 8px; color: var(--ink); }
+  .callout p { margin: 0 0 14px; color: var(--ink-soft); }
+  .callout p:last-of-type { margin-bottom: 20px; }
+  /* 「育てていくプロジェクト」用の緑バリアント。gold(未解決の論点)と役割を分ける */
+  .callout.callout-pine { border-color: var(--pine); background: var(--pine-pale); }
+  .callout .support-list { margin: 0 0 18px; padding-left: 1.2em; color: var(--ink-soft); }
+  .callout .support-list li { margin-bottom: 6px; }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html">
+      <span class="brand-mark"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><mask id="kb-mask-header"><rect x="5" y="5" width="14" height="15" rx="2" fill="white"/><rect x="9" y="2.2" width="6" height="4.4" rx="1.3" fill="white"/><rect x="7.5" y="10" width="9" height="1.4" rx="0.7"/><rect x="7.5" y="13.4" width="9" height="1.4" rx="0.7"/><rect x="7.5" y="16.8" width="6" height="1.4" rx="0.7"/></mask><rect width="24" height="24" fill="currentColor" mask="url(#kb-mask-header)"/></svg></span>
+      kairanban-app
+    </a>
+    <nav class="site-nav">
+      <a href="ai-story.html">AI開発の裏側</a>
+      <a href="ai-coding-beginners.html">AI入門</a>
+      <a href="https://github.com/jagyamamoto/kairanban-app">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <span class="eyebrow hanko">無料 &middot; MITライセンス &middot; OSS</span>
+        <h1 class="hero-title">紙の回覧板を、<br><span class="accent">待たなくていい</span>形に。</h1>
+        <p class="hero-lead">
+          町内会・自治会のための無料の<strong>Webアプリ(PWA)</strong>です。
+          回覧・会館予約・会合の出欠・防災情報をスマホで。
+          <strong>スマホに詳しくない会員が自力で使えること</strong>を最優先に設計しました。
+          サーバー代は、ふつうの町会の規模なら月0円です。
+        </p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="https://kairanban-demo.jagyamamoto.workers.dev">🖐 さわって試す</a>
+          <a class="btn btn-ghost" href="https://github.com/jagyamamoto/kairanban-app">GitHubで見る</a>
+        </div>
+        <div class="hero-stats">
+          <div class="hero-stat"><b>¥0</b><span>月々のサーバー代</span></div>
+          <div class="hero-stat"><b>MIT</b><span>改変・商用利用も自由</span></div>
+          <div class="hero-stat"><b>4</b><span>書き換えるだけの設定ファイル</span></div>
+        </div>
+        <p class="hero-note">
+          🌱 パッケージ化された完成品ではなく、GitHub上で公開・改良を続けている
+          <strong>gitベースのオープンソースプロジェクト</strong>です。サポートについては
+          <a href="#grow">下記</a>をご覧ください。
+        </p>
+      </div>
+      <div class="mock-wrap">
+        <div class="mock-clip"></div>
+        <div class="phone">
+          <div class="phone-head">
+            <div class="phone-head-badge"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><mask id="kb-mask-phone"><rect x="5" y="5" width="14" height="15" rx="2" fill="white"/><rect x="9" y="2.2" width="6" height="4.4" rx="1.3" fill="white"/><rect x="7.5" y="10" width="9" height="1.4" rx="0.7"/><rect x="7.5" y="13.4" width="9" height="1.4" rx="0.7"/><rect x="7.5" y="16.8" width="6" height="1.4" rx="0.7"/></mask><rect width="24" height="24" fill="currentColor" mask="url(#kb-mask-phone)"/></svg></div>
+            <div class="phone-head-title">みどり町三丁目<br>町会</div>
+          </div>
+          <div class="phone-body">
+            <div class="phone-tabs">
+              <span class="phone-tab active">お知らせ</span>
+              <span class="phone-tab">生活情報</span>
+              <span class="phone-tab">会館予約</span>
+            </div>
+            <div class="phone-card">
+              <b>夏まつり 出店のお手伝い募集</b>
+              <span class="phone-chip">確認期限: 8/14</span>
+            </div>
+            <div class="phone-card alt">
+              <b>資源回収の日程が変わります</b>
+              <span class="phone-chip">確認期限: 8/20</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">なぜ作ったか</span>
+        <h2>町内会の困りごとは、だいたい同じです。</h2>
+        <p>紙の回覧板・電話連絡網・貼り紙。仕組みは何十年も変わっていません。</p>
+      </div>
+      <div class="pain-grid">
+        <div class="pain-card">
+          <div class="pain-before">回覧板が一周するのに1週間かかる</div>
+          <div class="pain-after"><span class="arrow">→</span>配信した瞬間に全員へ通知</div>
+        </div>
+        <div class="pain-card">
+          <div class="pain-before">誰が読んだか分からない</div>
+          <div class="pain-after"><span class="arrow">→</span>「確認しました」の一覧が自動で残る</div>
+        </div>
+        <div class="pain-card">
+          <div class="pain-before">会館の予約は電話で、空き状況が分からない</div>
+          <div class="pain-after"><span class="arrow">→</span>カレンダーで空きを見て、その場で申込</div>
+        </div>
+        <div class="pain-card">
+          <div class="pain-before">スマホに詳しくない会員はアプリの導入を諦めてしまう</div>
+          <div class="pain-after"><span class="arrow">→</span>押すものを写真つきで、画面の上に出し続ける</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">できること</span>
+        <h2>町会運営に必要なものを、ひととおり。</h2>
+      </div>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <div class="feature-icon">📋</div>
+          <h3>回覧</h3>
+          <p>お知らせを配信し、確認状況を把握。メールでも同じ内容が届きます。</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🏢</div>
+          <h3>会館予約</h3>
+          <p>空き状況カレンダーから申込。ログイン不要なので会員以外も使えます。</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">👥</div>
+          <h3>会合の出欠</h3>
+          <p>出欠と人数・食事の数を集計。未回答の方へまとめてお知らせ。</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📄</div>
+          <h3>町会資料</h3>
+          <p>規約・議事録を置けます。誰に見せるかを細かく設定可能。</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📷</div>
+          <h3>ブログ</h3>
+          <p>行事の写真を共有。<strong>一般公開は一切できない</strong>設計です。</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🔔</div>
+          <h3>通知・バッジ</h3>
+          <p>
+            新着をプッシュ通知。アイコンには未読の数を表示します。
+            <strong>ホーム画面に追加(PWA化)して初めて使える機能</strong>なので、
+            その設定をスマホに詳しくない方でも迷わず終えられるかに、いちばん力を入れました。
+          </p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🌏</div>
+          <h3>多言語</h3>
+          <p>日本語・やさしい日本語・英語・中国語・ベトナム語をAIが自動翻訳。</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🌀</div>
+          <h3>防災情報</h3>
+          <p>ごみの日・避難所の情報を掲載。自治体のRSS取り込みにも対応。</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">⚙️</div>
+          <h3>管理画面</h3>
+          <p>未読・未処理をひとつの画面に集約。役員の見落としを防ぎます。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="elder-section">
+        <span class="eyebrow gold">設計の作法</span>
+        <p class="elder-quote">
+          「スマホに詳しくない層は、見たものを記憶して操作することは無理」<br>
+          — この前提で設計をやり直しました。
+        </p>
+        <p style="max-width: 60ch; color: var(--ink-soft);">
+          iPhoneの「ホーム画面に追加」は、操作の途中でOSの共有画面が現れて説明が隠れます。
+          記憶を頼りにする案内は、原理的に失敗します。実機で測って作り直しました。
+          <strong>この設定を終えないと通知(プッシュ通知)が届かない</strong>ため、
+          単なる見栄えの問題ではなく機能の入口そのものでした。
+          技術的な試行錯誤は <a href="ai-story.html" style="color: var(--pine-deep); font-weight: 700;">AI開発の裏側</a> で詳しく書いています。
+        </p>
+        <div class="fact-strip">
+          <div class="fact">
+            <b>42.7%</b>
+            <span>共有画面の上端の位置(実測)。案内の帯はここに収める</span>
+          </div>
+          <div class="fact">
+            <b>44px</b>
+            <span>指で押すものすべての最小の高さ</span>
+          </div>
+          <div class="fact">
+            <b>0秒</b>
+            <span>時間で自動的に手順を進める演出。実機テストで撤廃した</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap-narrow">
+      <div class="section-head">
+        <span class="eyebrow">費用</span>
+        <h2>月0円から。</h2>
+        <p>Cloudflare Workers の無料枠に収まる規模を想定しています。</p>
+      </div>
+      <div class="card" style="padding: 8px 24px;">
+        <div class="cost-row">
+          <span class="amount">¥0</span>
+          <span class="label">サーバー・データベース</span>
+          <span class="note">— Cloudflare Workers / D1 / R2 の無料枠</span>
+        </div>
+        <div class="cost-row">
+          <span class="amount">¥0〜</span>
+          <span class="label">通知(Web Push)</span>
+          <span class="note">— 追加費用なし</span>
+        </div>
+        <div class="cost-row">
+          <span class="amount">実費</span>
+          <span class="label">メール配信</span>
+          <span class="note">— Resend など(使う場合のみ・無料枠あり)</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="demo-box">
+        <span class="eyebrow">今すぐ試せます</span>
+        <h2>🖐 架空の町会で、実際に触れます。</h2>
+        <p>本物のデータは一切入っていません。入力した内容は24時間ごとに元へ戻ります。</p>
+        <div class="demo-codes">
+          <div class="demo-code"><div class="num">09000000001</div><div class="role">管理者としてログイン</div></div>
+          <div class="demo-code"><div class="num">09000000008</div><div class="role">ふつうの会員としてログイン</div></div>
+        </div>
+        <a class="btn btn-primary" href="https://kairanban-demo.jagyamamoto.workers.dev">デモサイトを開く →</a>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap-narrow">
+      <div class="section-head">
+        <span class="eyebrow">はじめかた</span>
+        <h2>立ち上げは、これだけです。</h2>
+      </div>
+      <div class="step-list">
+        <div class="step"><div class="step-num"></div><div><h3>Cloudflareの無料アカウントを作る</h3><p>クレジットカードの登録は不要です。</p></div></div>
+        <div class="step"><div class="step-num"></div><div><h3>このリポジトリをそのまま使う</h3><p>プログラムを書く必要はありません。</p></div></div>
+        <div class="step"><div class="step-num"></div><div><h3>町会名・会館の場所を1ファイルに書く</h3><p><code>src/shared/org.ts</code> を書き換えるだけ。</p></div></div>
+        <div class="step"><div class="step-num"></div><div><h3>コマンドを1つ実行して公開</h3><p>1〜2時間ほどで、あなたの町会のURLができます。</p></div></div>
+      </div>
+      <div class="btn-row" style="margin-top: 28px;">
+        <a class="btn btn-primary" href="https://github.com/jagyamamoto/kairanban-app/blob/main/docs/%E3%82%BB%E3%83%83%E3%83%88%E3%82%A2%E3%83%83%E3%83%97%E6%89%8B%E9%A0%86.md">セットアップ手順を見る →</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="grow">
+    <div class="wrap-narrow">
+      <div class="callout callout-pine">
+        <h3>🌱 「完成品」ではなく、育てていくプロジェクトです</h3>
+        <p>
+          kairanban-app は、パッケージ化された完成品のソフトウェアではありません。
+          この<a href="https://github.com/jagyamamoto/kairanban-app">GitHubリポジトリ</a>のコードを
+          そのまま動かして使う、<strong>gitベースのオープンソースのWebアプリ(PWA)</strong>です。
+          インストーラーやアプリストアの配布はなく、今もIssueやPull Requestを通じて
+          改良を続けている、発展途上のプロジェクトです。
+        </p>
+        <ul class="support-list">
+          <li><strong>サポート・動作保証は一切ありません。</strong>導入の代行や障害対応の約束もできません</li>
+          <li>個人が空いた時間で管理しています。Issue・PRへの返信は必ずしも早くありません</li>
+          <li>各町会での運用や個人情報の取り扱いの責任は、<strong>導入した町会が負う</strong>ことになります</li>
+        </ul>
+        <p>
+          その代わり、コードはすべて公開されています。<strong>「使うだけ」でなく、
+          育てるのに力を貸してください。</strong>気づいた不具合、改善のアイデア、
+          「うちの町会ではここが違う」という実例。どんな小さなことでも構いません。
+          一人で作ったものを、みんなで育てていくプロジェクトにできたら嬉しいです。
+        </p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="https://github.com/jagyamamoto/kairanban-app/issues">Issueを立てる →</a>
+          <a class="btn btn-ghost" href="https://github.com/jagyamamoto/kairanban-app/blob/main/CONTRIBUTING.md">貢献のしかたを見る →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap-narrow">
+      <div class="callout">
+        <h3>🙋 ログイン方式は「解決済み」ではありません</h3>
+        <p>
+          このアプリは<strong>電話番号だけでログイン</strong>できます。パスワードを覚えられない
+          スマホに詳しくない会員のための、意図的なトレードオフです。得られる利便性と、
+          引き受けているリスクの両方を正直に書いています。より良い方法を募集中です。
+        </p>
+        <a class="btn btn-ghost" href="https://github.com/jagyamamoto/kairanban-app/blob/main/docs/%E3%83%AD%E3%82%B0%E3%82%A4%E3%83%B3%E6%96%B9%E5%BC%8F%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6.md">背景を読む →</a>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap-narrow" style="text-align: center;">
+      <span class="eyebrow hanko">もうひとつの話</span>
+      <h2 style="font-size: clamp(22px, 3vw, 28px); font-weight: 800; margin: 16px 0 14px;">
+        これは、開発統括・プロデュースは手がけても<br>コーディングは長年ブランクがあった町会役員が、AIに指示して作ったアプリです。
+      </h2>
+      <p style="color: var(--ink-soft); max-width: 52ch; margin: 0 auto 24px;">
+        20点の評価をもらって作り直した話、実機で見つかった不具合、
+        個人情報の点検で分かったこと。うまくいったことも失敗したことも書きました。
+      </p>
+      <a class="btn btn-primary" href="ai-story.html">AI開発の裏側を読む →</a>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-links">
+      <a href="https://github.com/jagyamamoto/kairanban-app">GitHub</a>
+      <a href="https://kairanban-demo.jagyamamoto.workers.dev">デモサイト</a>
+      <a href="ai-story.html">AI開発の裏側</a>
+      <a href="ai-coding-beginners.html">AI入門</a>
+      <a href="https://github.com/jagyamamoto/kairanban-app/issues/1">ログイン方式の議論</a>
+      <a href="https://github.com/jagyamamoto/kairanban-app/blob/main/LICENSE">MIT License</a>
+    </div>
+    <p>kairanban-app は、個人が空いた時間で管理しているオープンソースプロジェクトです。動作の保証や導入代行はできません。</p>
+  </div>
+</footer>
+
+</body>
+</html>

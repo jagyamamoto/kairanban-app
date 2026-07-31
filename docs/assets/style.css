@@ -1,0 +1,210 @@
+/* kairanban-app 紹介サイト 共通スタイル
+   実際のアプリの配色(緑 #0a7a3d)を引き継ぎつつ、回覧板らしい紙と朱印のモチーフを添える。 */
+
+:root {
+  --paper: #f6f2e7;
+  --paper-deep: #efe8d8;
+  --card: #fffdf8;
+  --ink: #23241d;
+  --ink-soft: #52544a;
+  --muted: #6f6d5e;
+  --border: #e2dbc7;
+  --pine: #0a7a3d;
+  --pine-deep: #075c2e;
+  --pine-pale: #e3f2e8;
+  --hanko: #b3372c;
+  --hanko-pale: #fbeae7;
+  --gold: #866017;
+  --gold-pale: #fbf1dc;
+  --shadow: 0 1px 2px rgba(35, 36, 29, 0.06), 0 8px 24px rgba(35, 36, 29, 0.08);
+  --radius: 16px;
+  /* ⚠ 常に一定の値(明暗テーマで変えない)。白文字を乗せるボタンや丸バッジの背景専用。
+     --pine は明暗で色味が変わるため、白文字の背景に使うとダークモードでコントラスト不足になる。 */
+  --pine-solid: #0a7a3d;
+  --pine-solid-deep: #075c2e;
+  --font-jp: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", "Noto Sans JP", sans-serif;
+  --font-display: "Fraunces", var(--font-jp), serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+
+:root[data-theme="dark"] {
+  --paper: #17190f;
+  --paper-deep: #1e2013;
+  --card: #20221a;
+  --ink: #eeeadb;
+  --ink-soft: #c7c3ac;
+  --muted: #8d8a76;
+  --border: #34351f;
+  --pine: #4caf7d;
+  --pine-deep: #7cd3a6;
+  --pine-pale: #1c2b1f;
+  --hanko: #e2685a;
+  --hanko-pale: #2c1c19;
+  --gold: #e0b656;
+  --gold-pale: #2c2413;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 12px 32px rgba(0, 0, 0, 0.35);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #17190f;
+    --paper-deep: #1e2013;
+    --card: #20221a;
+    --ink: #eeeadb;
+    --ink-soft: #c7c3ac;
+    --muted: #8d8a76;
+    --border: #34351f;
+    --pine: #4caf7d;
+    --pine-deep: #7cd3a6;
+    --pine-pale: #1c2b1f;
+    --hanko: #e2685a;
+    --hanko-pale: #2c1c19;
+    --gold: #e0b656;
+    --gold-pale: #2c2413;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 12px 32px rgba(0, 0, 0, 0.35);
+  }
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-jp);
+  font-size: 17px;
+  line-height: 1.85;
+  -webkit-font-smoothing: antialiased;
+  background-image:
+    radial-gradient(circle at 15% 8%, rgba(10, 122, 61, 0.05), transparent 40%),
+    radial-gradient(circle at 85% 92%, rgba(179, 55, 44, 0.04), transparent 45%);
+}
+
+img { max-width: 100%; display: block; }
+a { color: var(--pine-deep); }
+
+.wrap {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+.wrap-narrow {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* ---------- ヘッダー ---------- */
+.site-header {
+  padding: 18px 0;
+  border-bottom: 1px solid var(--border);
+}
+.site-header .wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--ink);
+  font-weight: 800;
+  font-size: 17px;
+}
+.brand-mark {
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  background: var(--pine-solid);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 15px;
+  flex-shrink: 0;
+}
+.site-nav {
+  display: flex;
+  gap: 18px;
+  font-size: 14.5px;
+  font-weight: 700;
+}
+.site-nav a { color: var(--ink-soft); text-decoration: none; }
+.site-nav a:hover { color: var(--pine-deep); }
+
+/* ---------- 見出し ---------- */
+h1, h2, h3 { line-height: 1.4; text-wrap: balance; margin: 0; }
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+  color: var(--pine-deep);
+  background: var(--pine-pale);
+  border: 1px solid var(--border);
+  padding: 5px 12px;
+  border-radius: 999px;
+}
+.eyebrow.hanko { color: var(--hanko); background: var(--hanko-pale); }
+.eyebrow.gold { color: var(--gold); background: var(--gold-pale); }
+
+/* ---------- ボタン ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 15px 26px;
+  border-radius: 12px;
+  font-weight: 800;
+  font-size: 16px;
+  text-decoration: none;
+  border: 2px solid transparent;
+  cursor: pointer;
+  min-height: 52px;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.btn:hover { transform: translateY(-1px); }
+.btn-primary { background: var(--pine-solid); color: #fff; box-shadow: var(--shadow); }
+.btn-primary:hover { background: var(--pine-solid-deep); }
+.btn-ghost { background: transparent; color: var(--ink); border-color: var(--border); }
+.btn-ghost:hover { border-color: var(--pine); color: var(--pine-deep); }
+.btn-row { display: flex; gap: 12px; flex-wrap: wrap; }
+
+/* ---------- カード ---------- */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+/* ---------- フッター ---------- */
+.site-footer {
+  border-top: 1px solid var(--border);
+  padding: 40px 0 60px;
+  margin-top: 60px;
+  color: var(--muted);
+  font-size: 14.5px;
+}
+.site-footer a { color: var(--ink-soft); }
+.footer-links {
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+  font-weight: 700;
+}

@@ -10,7 +10,7 @@
 //   防災マップ https://www.example.com/
 import type { PubLang } from "./i18n";
 
-export const KOTO_LINKS = {
+export const LIFE_LINKS = {
   gomiSchedule: "https://www.example.com/",
   gomiSortPdf: "https://www.example.com/",
   // 「ごみ分別ナビ(サンプル)」(AI分別検索・6言語)は**LINE専用**。以前リンクしていた

@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AIコーディング初心者向け・最初に用意するもの | kairanban-app</title>
+<meta name="description" content="GitHub・Claude Code・Cloudflareの3つのアカウント、「ファイルを読ませる」の正体、gitをDropboxに置いていいのか。AIに指示してアプリを作り始める前に知っておきたいことをまとめました。">
+<meta property="og:title" content="AIコーディング初心者向け・最初に用意するもの">
+<meta property="og:type" content="article">
+<meta name="theme-color" content="#0a7a3d">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230a7a3d'/%3E%3Cmask id='m'%3E%3Crect x='24' y='26' width='52' height='56' rx='8' fill='white'/%3E%3Crect x='38' y='12' width='24' height='18' rx='6' fill='white'/%3E%3Crect x='32' y='42' width='36' height='6' rx='3'/%3E%3Crect x='32' y='56' width='36' height='6' rx='3'/%3E%3Crect x='32' y='70' width='24' height='6' rx='3'/%3E%3C/mask%3E%3Crect width='100' height='100' fill='white' mask='url(%23m)'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+<style>
+  .article-hero { padding: 52px 0 20px; }
+  .article-hero h1 {
+    font-size: clamp(28px, 4.4vw, 42px);
+    font-weight: 800;
+    margin: 18px 0 20px;
+    letter-spacing: -0.01em;
+  }
+  .article-hero .lead { font-size: 18px; color: var(--ink-soft); max-width: 58ch; }
+  .article-meta {
+    display: flex; gap: 18px; margin-top: 26px; font-size: 13.5px;
+    color: var(--muted); font-family: var(--font-mono); flex-wrap: wrap;
+  }
+
+  article { padding: 30px 0 60px; }
+  .prose { max-width: 680px; margin: 0 auto; padding: 0 20px; }
+  .prose h2 {
+    font-size: clamp(22px, 3vw, 28px); font-weight: 800; margin: 56px 0 18px; padding-top: 4px;
+  }
+  .prose h2 .num {
+    font-family: var(--font-mono); font-size: 15px; color: var(--pine-deep);
+    background: var(--pine-pale); border-radius: 8px; padding: 3px 9px;
+    margin-right: 10px; vertical-align: middle;
+  }
+  .prose h3 { font-size: 18px; font-weight: 800; margin: 32px 0 12px; color: var(--pine-deep); }
+  .prose p { margin: 0 0 18px; color: var(--ink); }
+  .prose p.lede { font-size: 17.5px; color: var(--ink-soft); }
+  .prose strong { color: var(--ink); }
+  .prose ul, .prose ol { padding-left: 1.3em; margin: 0 0 18px; }
+  .prose li { margin-bottom: 8px; }
+  .prose hr { border: none; border-top: 1px solid var(--border); margin: 48px 0; }
+  .prose code {
+    font-family: var(--font-mono); font-size: 0.88em; background: var(--pine-pale);
+    color: var(--pine-deep); padding: 2px 6px; border-radius: 5px;
+  }
+
+  table.data { width: 100%; border-collapse: collapse; margin: 20px 0 26px; font-size: 14.5px; }
+  table.data th, table.data td {
+    text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: top;
+  }
+  table.data th { color: var(--muted); font-weight: 700; font-size: 13px; width: 28%; }
+
+  /* 勘違い/正解の対比カード */
+  .myth-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 20px 22px; margin: 20px 0;
+  }
+  .myth-row { display: flex; gap: 12px; align-items: flex-start; padding: 8px 0; }
+  .myth-row .icon { font-size: 18px; flex-shrink: 0; line-height: 1.5; }
+  .myth-row.myth p { color: var(--muted); text-decoration: line-through; margin: 0; }
+  .myth-row.truth p { color: var(--ink); font-weight: 700; margin: 0; }
+
+  .win-card {
+    background: var(--pine-pale); border-radius: var(--radius); padding: 20px 22px; margin: 24px 0;
+  }
+  .win-card .tag {
+    font-family: var(--font-mono); font-size: 11.5px; font-weight: 700; color: var(--pine-deep);
+    letter-spacing: 0.06em; display: block; margin-bottom: 8px;
+  }
+  .win-card p:last-child { margin-bottom: 0; }
+
+  .fail-card {
+    background: var(--card); border: 1px solid var(--border); border-left: 4px solid var(--hanko);
+    border-radius: 0 var(--radius) var(--radius) 0; padding: 20px 22px; margin: 24px 0;
+  }
+  .fail-card .tag {
+    font-family: var(--font-mono); font-size: 11.5px; font-weight: 700; color: var(--hanko);
+    letter-spacing: 0.06em; display: block; margin-bottom: 8px;
+  }
+  .fail-card p:last-child { margin-bottom: 0; }
+
+  /* フォルダの階層を絵で見せる */
+  .tree {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    line-height: 2;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    margin: 20px 0;
+    overflow-x: auto;
+    white-space: pre;
+    color: var(--ink-soft);
+  }
+  .tree .here { color: var(--pine-deep); font-weight: 700; }
+  .tree .file { color: var(--muted); }
+
+  .step-list { counter-reset: step; margin: 20px 0; }
+  .step { display: flex; gap: 18px; padding: 18px 0; border-bottom: 1px solid var(--border); }
+  .step:last-child { border-bottom: none; }
+  .step-num {
+    counter-increment: step; flex-shrink: 0; width: 34px; height: 34px; border-radius: 50%;
+    background: var(--pine-solid); color: #fff; display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-mono); font-weight: 700; font-size: 14px;
+  }
+  .step-num::before { content: counter(step); }
+  .step h3 { font-size: 16px; font-weight: 800; margin: 0 0 4px; }
+  .step p { color: var(--ink-soft); font-size: 14.5px; margin: 0; }
+
+  .end-cta { text-align: center; padding: 50px 20px 10px; }
+  .end-cta p { color: var(--ink-soft); max-width: 46ch; margin: 14px auto 24px; }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html">
+      <span class="brand-mark"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><mask id="kb-mask-header"><rect x="5" y="5" width="14" height="15" rx="2" fill="white"/><rect x="9" y="2.2" width="6" height="4.4" rx="1.3" fill="white"/><rect x="7.5" y="10" width="9" height="1.4" rx="0.7"/><rect x="7.5" y="13.4" width="9" height="1.4" rx="0.7"/><rect x="7.5" y="16.8" width="6" height="1.4" rx="0.7"/></mask><rect width="24" height="24" fill="currentColor" mask="url(#kb-mask-header)"/></svg></span>
+      kairanban-app
+    </a>
+    <nav class="site-nav">
+      <a href="index.html">サービス紹介</a>
+      <a href="ai-story.html">AI開発の裏側</a>
+      <a href="https://github.com/jagyamamoto/kairanban-app">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<div class="article-hero">
+  <div class="prose">
+    <span class="eyebrow hanko">はじめての方へ</span>
+    <h1>AIコーディング初心者向け。<br>最初に用意するもの。</h1>
+    <p class="lead">
+      「AIにアプリを作ってもらう」と聞くと、チャットにファイルをドラッグして
+      「作って」と頼むところを想像しがちです。実際はかなり違います。
+      始める前に知っておくと迷わないことを、順番にまとめました。
+    </p>
+    <div class="article-meta">
+      <span>🎯 対象: これからAIコーディングを始める方</span>
+      <span>⏱ 読む時間: 約8分</span>
+    </div>
+  </div>
+</div>
+
+<article>
+  <div class="prose">
+
+    <p class="lede">
+      このアプリ(kairanban-app)は、コーディングから長く離れていた町内会役員が、
+      Claude Code というAIに指示を出して作りました。同じように「自分でも作ってみたい」と
+      思った方に向けて、最初につまずきやすいところをまとめておきます。
+    </p>
+
+    <hr>
+
+    <h2><span class="num">01</span>まず用意するもの: アカウント3つ</h2>
+    <p>
+      道具は多くありません。次の3つがあれば始められます(いずれも無料の範囲で始められます)。
+    </p>
+    <table class="data">
+      <tr>
+        <th>GitHub</th>
+        <td>
+          作ったコードを置いておく場所。多くのAIコーディングツールが、
+          ここを「作業の土台」として使います。<a href="https://github.com/signup" target="_blank" rel="noopener">github.com</a> で登録
+        </td>
+      </tr>
+      <tr>
+        <th>Claude Code</th>
+        <td>
+          実際に指示を出すAI本体。<a href="https://claude.ai" target="_blank" rel="noopener">claude.ai</a> の
+          アカウントで使えます(パソコンにインストールして使うCLIツールです。
+          ブラウザのチャット画面だけの Claude.ai とは別物なので注意)
+        </td>
+      </tr>
+      <tr>
+        <th>ホスティング先</th>
+        <td>
+          作ったアプリを実際に世の中で動かす場所。このプロジェクトは
+          Cloudflare(無料枠あり)を使っていますが、何を作るかによって変わります
+        </td>
+      </tr>
+    </table>
+
+    <hr>
+
+    <h2><span class="num">02</span>「AIに読ませる」の正体</h2>
+    <p>
+      ここが一番の勘違いポイントです。多くの人は、AIにファイルを見せるとき
+      <strong>チャット画面にファイルをドラッグ&amp;ドロップする</strong>ところを想像します。
+      それは一枚の写真や書類を見せるときのやり方で、Claude Codeの使い方としては違います。
+    </p>
+
+    <div class="myth-card">
+      <div class="myth-row myth"><span class="icon">❌</span><p>ファイルを1つずつドラッグしてチャットに渡す</p></div>
+      <div class="myth-row truth"><span class="icon">✅</span><p>パソコンの「フォルダ」を1つ、まるごとAIに開かせる</p></div>
+    </div>
+
+    <p>
+      Claude Codeは、パソコンの中の<strong>指定したフォルダに直接アクセスして</strong>
+      動きます。ターミナル(黒い画面のアプリ)でそのフォルダに移動してから
+      <code>claude</code> と打って起動すると、そのフォルダの中のファイルを
+      AIが自由に読み書きできるようになります。一度そうしてしまえば、
+      「このファイルを直して」「新しい画面を作って」と言葉で頼むだけで、
+      AIが実際にファイルを開いて書き換えてくれます。<strong>毎回ファイルを渡し直す必要はありません。</strong>
+    </p>
+
+    <div class="win-card">
+      <span class="tag">POINT</span>
+      <p>
+        「ファイルを渡す」のではなく、「作業する部屋(フォルダ)に、
+        AIを一緒に入れる」とイメージすると分かりやすいです。
+      </p>
+    </div>
+
+    <h3>「階層(フォルダの入れ子構造)」が分かると迷わない</h3>
+    <p>
+      パソコンの中のファイルは、フォルダの中にフォルダがあり、その中にファイルがある
+      ―という<strong>入れ子の構造</strong>になっています。これを「階層」「ディレクトリ構造」と呼びます。
+      AIに「このプロジェクトを見て」と頼むときは、<strong>どの階層のどのフォルダか</strong>を
+      指定する必要があります。
+    </p>
+    <div class="tree">ホーム(あなたの名前のフォルダ)
+├─ デスクトップ
+├─ 書類
+│  └─ myapp/              ← <span class="here">これがプロジェクトのフォルダ</span>
+│     ├─ <span class="file">index.html</span>
+│     ├─ <span class="file">style.css</span>
+│     └─ 画像/
+│        └─ <span class="file">logo.png</span>
+└─ ダウンロード</div>
+    <p>
+      Macなら Finder、Windowsなら エクスプローラー で、いま自分がどのフォルダを
+      見ているかを確認する癖をつけておくと、AIとのやり取りが一気に楽になります。
+      ターミナルでは <code>pwd</code>(Mac)で「いまどこのフォルダにいるか」を確認できます。
+    </p>
+
+    <hr>
+
+    <h2><span class="num">03</span>プロジェクトはどこに置く? — Dropbox / iCloud と git の相性</h2>
+    <p>
+      「作業したフォルダを、あとで他のパソコンからも見たい」という理由で、
+      Dropbox や iCloud、Google Drive の中にプロジェクトを置きたくなります。
+      <strong>実際、このアプリも Dropbox の中で開発しました。</strong>
+      できなくはありませんが、知っておくべき癖があります。
+    </p>
+    <div class="fail-card">
+      <span class="tag">CAVEAT</span>
+      <p>
+        git(変更履歴を記録する仕組み)は、ファイルを高速かつ大量に書き換えます。
+        Dropbox等の同期サービスは「ファイルが変わるたびにクラウドへ送ろうとする」ため、
+        <strong>同期中に競合し、ファイルが2つに分かれてしまう</strong>
+        (「(競合コピー)」という名前のファイルが増える)ことがあります。
+        複数の端末から同時に同じプロジェクトを触ると特に起きやすくなります。
+      </p>
+    </div>
+    <p>安全に使うための考え方は、次の3つです。</p>
+    <ul>
+      <li><strong>1台のパソコンだけで作業している間は、実用上は問題になりにくい</strong>(このプロジェクトもその状態でした)</li>
+      <li><strong>複数の端末やAIセッションを同時に動かすときは、Dropbox内を避けるほうが安全</strong>。
+        ローカルの同期対象外フォルダ(例: <code>~/projects/</code>)に置くのが確実です</li>
+      <li>
+        <strong>本当の同期・バックアップは GitHub に任せる。</strong>
+        こまめに「コミット」して GitHub へ「プッシュ」しておけば、
+        Dropbox が無くても作業内容は失われません。Dropbox/iCloudは
+        「保険」であって「本番の同期手段」ではない、と考えると安全です
+      </li>
+    </ul>
+
+    <hr>
+
+    <h2><span class="num">04</span>実際にはじめる5手順</h2>
+    <div class="step-list">
+      <div class="step"><div class="step-num"></div><div>
+        <h3>Claude Code をインストールする</h3>
+        <p>公式の手順に沿って、ターミナルから使えるようにします。</p>
+      </div></div>
+      <div class="step"><div class="step-num"></div><div>
+        <h3>作業用のフォルダを1つ決める</h3>
+        <p>新規でも、既存のプロジェクトでも構いません。場所を把握しておくことが大事です。</p>
+      </div></div>
+      <div class="step"><div class="step-num"></div><div>
+        <h3>ターミナルでそのフォルダに移動する</h3>
+        <p><code>cd</code> コマンドで、目的のフォルダまで移動します。</p>
+      </div></div>
+      <div class="step"><div class="step-num"></div><div>
+        <h3><code>claude</code> と打って起動する</h3>
+        <p>そのフォルダを土台にAIが動き始めます。以後はフォルダの中のファイルを自由に読み書きできます。</p>
+      </div></div>
+      <div class="step"><div class="step-num"></div><div>
+        <h3>日本語で頼む</h3>
+        <p>「〇〇の機能がほしい」「このエラーを直して」など、話し言葉で構いません。</p>
+      </div></div>
+    </div>
+
+    <hr>
+
+    <h2><span class="num">05</span>よくある勘違いトップ3</h2>
+
+    <h3>1. 「ファイルを渡せば、それで終わり」ではない</h3>
+    <p>
+      渡した(読み込ませた)あとも、AIとの<strong>会話は続きます。</strong>
+      一度で完璧なものはできません。動かしてみて、直してもらって、を繰り返します。
+    </p>
+
+    <h3>2. 「AIは全部覚えている」わけではない</h3>
+    <p>
+      会話(セッション)が変わると、AIは前回の経緯を忘れます。
+      「なぜこう決めたか」を<strong>ファイルに書き残しておく</strong>癖をつけると、
+      あとで別のAIセッションが親切心で元に戻してしまう事故を防げます。
+      (詳しくは <a href="ai-story.html">AI開発の裏側</a> にも書きました)
+    </p>
+
+    <h3>3. 「見せて」と「触らせて」は別のこと</h3>
+    <p>
+      claude.ai のブラウザチャットにファイルを添付するのは「見せる」だけです。
+      Claude Codeのようにフォルダを丸ごと開かせるのは「触らせる」ことで、
+      実際にファイルを新規作成したり書き換えたりできます。<strong>できることが大きく違う</strong>と
+      知っておくと、道具選びで迷いません。
+    </p>
+
+    <hr>
+
+    <h2><span class="num">06</span>実例: 自分の地域の情報に差し替える</h2>
+    <p>
+      最後に、このアプリ自体を例にした実践編です。kairanban-app は、ある町会の
+      アプリから地域固有の情報を取り除いた「ひな形」なので、<strong>ごみの日や避難所の情報は
+      架空のサンプルのまま</strong>になっています。自分の地域のものに差し替えないと、
+      そのままでは実際には使えません。ここでよく詰まる「どこを」「何に」「どうやって探すか」を
+      具体例として書いておきます。
+    </p>
+
+    <h3>どこを差し替えるか</h3>
+    <p>
+      生活情報(ごみの日・分別・避難所・防災マップ)は
+      <code>src/shared/lifeinfo.ts</code> という<strong>1つのファイル</strong>にまとまっています。
+      防災メールの取り込み設定を使う場合は <code>src/server/areaalerts.ts</code> も対象です。
+      ファイルの先頭に「⚠ 全て架空のサンプルデータ」という注記があるので、
+      それが目印になります。
+    </p>
+
+    <h3>何に差し替えるか</h3>
+    <ul>
+      <li>お住まいの自治体の「ごみの収集日・分別」の公式ページURL</li>
+      <li>避難所・広域避難場所の名称と住所の一覧</li>
+      <li>防災マップ・ハザードマップのURL</li>
+      <li>(使う場合)防災・安全メールの配信元情報</li>
+    </ul>
+
+    <h3>自分の自治体のどこを探せばいいか分からないとき</h3>
+    <p>
+      ここが一番詰まりやすいところです。<strong>「情報がどこにあるか分からない」という相談自体を、
+      そのままAIに投げてしまって構いません。</strong>探し方が分からないことも、
+      立派な依頼のひとつです。
+    </p>
+    <div class="win-card">
+      <span class="tag">実際に頼んでみる例</span>
+      <p>
+        「〇〇市の、ごみの収集日と分別方法が載っている公式ページを探してください。
+        見つかったら、<code>src/shared/lifeinfo.ts</code> の中身を、その内容に
+        合わせて書き換えてください。」
+      </p>
+    </div>
+    <p>
+      Claude Codeはウェブ検索も行えるので、自治体名から公式サイトを探し出し、
+      該当ページの内容を読み取って、実際にファイルまで書き換えてくれます。
+      「これはAIに聞いていい範囲だろうか」と迷うような、あいまいで手間のかかる相談ほど、
+      実際に聞いてみる価値があります。
+    </p>
+
+  </div>
+
+  <div class="end-cta">
+    <span class="eyebrow">読んでいただき、ありがとうございます</span>
+    <h2 style="font-size: 24px; font-weight: 800; margin-top: 14px;">実際に動いているものを見てみませんか。</h2>
+    <p>このアプリ自体が、いま説明した方法で作られています。</p>
+    <div class="btn-row" style="justify-content: center;">
+      <a class="btn btn-primary" href="https://kairanban-demo.jagyamamoto.workers.dev">🖐 デモを試す</a>
+      <a class="btn btn-ghost" href="ai-story.html">AI開発の裏側を読む →</a>
+    </div>
+  </div>
+</article>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-links">
+      <a href="index.html">サービス紹介</a>
+      <a href="ai-story.html">AI開発の裏側</a>
+      <a href="https://github.com/jagyamamoto/kairanban-app">GitHub</a>
+      <a href="https://kairanban-demo.jagyamamoto.workers.dev">デモサイト</a>
+    </div>
+    <p>kairanban-app は、個人が空いた時間で管理しているオープンソースプロジェクトです。</p>
+  </div>
+</footer>
+
+</body>
+</html>

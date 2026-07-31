@@ -22,7 +22,7 @@ import {
   HAZARD_PDF,
   GOMI_GUIDE_PDF,
   HINANBASHO,
-  KOTO_LINKS,
+  LIFE_LINKS,
   LIFE_INFO,
   mapUrl,
 } from "../../shared/lifeinfo";
@@ -583,7 +583,7 @@ function LifeInfoPage({ lang }: { lang: PubLang }) {
         <p className="field-note">⏰ {d.gomiTimeNote}</p>
         <p className="field-note">⚠️ {d.gomiCaution}</p>
         {ext(GOMI_CALENDAR_PDF[lang], d.sortCalendarLink)}
-        {ext(KOTO_LINKS.gomiSchedule, d.gomiScheduleLink)}
+        {ext(LIFE_LINKS.gomiSchedule, d.gomiScheduleLink)}
       </div>
 
       <div className="card">
@@ -614,8 +614,8 @@ function LifeInfoPage({ lang }: { lang: PubLang }) {
       <div className="card">
         <h2 style={{ marginTop: 0 }}>🔎 {d.naviTitle}</h2>
         <p>{d.naviDesc}</p>
-        {ext(KOTO_LINKS.gomiNaviLine, d.naviLineLink)}
-        {lang === "ja" && ext(KOTO_LINKS.gomiChatbotJa, d.naviChatbotLink)}
+        {ext(LIFE_LINKS.gomiNaviLine, d.naviLineLink)}
+        {lang === "ja" && ext(LIFE_LINKS.gomiChatbotJa, d.naviChatbotLink)}
       </div>
 
       <div className="card">
@@ -652,7 +652,7 @@ function LifeInfoPage({ lang }: { lang: PubLang }) {
             </a>
           </div>
         ))}
-        {ext(KOTO_LINKS.hinanjo, d.hinanjoLink)}
+        {ext(LIFE_LINKS.hinanjo, d.hinanjoLink)}
 
         <h3>{d.hazardLabel}</h3>
         <p className="muted">{d.hazardNote}</p>
@@ -662,7 +662,7 @@ function LifeInfoPage({ lang }: { lang: PubLang }) {
         {ext(HAZARD_PDF[lang].surge, d.hzSurge)}
         {ext(HAZARD_PDF[lang].booklet, d.hzBooklet)}
         {ext(BOSAI_MAP_PDF[lang].map, d.bosaiMapLink)}
-        {ext(KOTO_LINKS.hazardMap, d.hazardMapLink)}
+        {ext(LIFE_LINKS.hazardMap, d.hazardMapLink)}
       </div>
 
       <div className="card">

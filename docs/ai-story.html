@@ -1,0 +1,599 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI開発の裏側 — 開発統括はしてもコードは書かない町会役員が、AIと作ったもの | kairanban-app</title>
+<meta name="description" content="20点の評価をもらって作り直した話、実機で見つかった不具合、複数AIセッションの事故、目視では足りなかった個人情報点検。うまくいったことも失敗したことも書きました。">
+<meta property="og:title" content="AI開発の裏側 — 開発統括はしてもコードは書かない町会役員が、AIと作ったもの">
+<meta property="og:type" content="article">
+<meta name="theme-color" content="#0a7a3d">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230a7a3d'/%3E%3Cmask id='m'%3E%3Crect x='24' y='26' width='52' height='56' rx='8' fill='white'/%3E%3Crect x='38' y='12' width='24' height='18' rx='6' fill='white'/%3E%3Crect x='32' y='42' width='36' height='6' rx='3'/%3E%3Crect x='32' y='56' width='36' height='6' rx='3'/%3E%3Crect x='32' y='70' width='24' height='6' rx='3'/%3E%3C/mask%3E%3Crect width='100' height='100' fill='white' mask='url(%23m)'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+<style>
+  .article-hero { padding: 52px 0 20px; }
+  .article-hero h1 {
+    font-size: clamp(28px, 4.4vw, 42px);
+    font-weight: 800;
+    margin: 18px 0 20px;
+    letter-spacing: -0.01em;
+  }
+  .article-hero .lead {
+    font-size: 18px;
+    color: var(--ink-soft);
+    max-width: 56ch;
+  }
+  .article-meta {
+    display: flex;
+    gap: 18px;
+    margin-top: 26px;
+    font-size: 13.5px;
+    color: var(--muted);
+    font-family: var(--font-mono);
+    flex-wrap: wrap;
+  }
+  .article-meta span { display: flex; align-items: center; gap: 6px; }
+
+  article { padding: 30px 0 60px; }
+  .prose { max-width: 680px; margin: 0 auto; padding: 0 20px; }
+  .prose h2 {
+    font-size: clamp(22px, 3vw, 28px);
+    font-weight: 800;
+    margin: 56px 0 18px;
+    padding-top: 4px;
+  }
+  .prose h2 .num {
+    font-family: var(--font-mono);
+    font-size: 15px;
+    color: var(--pine-deep);
+    background: var(--pine-pale);
+    border-radius: 8px;
+    padding: 3px 9px;
+    margin-right: 10px;
+    vertical-align: middle;
+  }
+  .prose h3 {
+    font-size: 18px;
+    font-weight: 800;
+    margin: 32px 0 12px;
+    color: var(--pine-deep);
+  }
+  .prose p { margin: 0 0 18px; color: var(--ink); }
+  .prose p.lede { font-size: 17.5px; color: var(--ink-soft); }
+  .prose strong { color: var(--ink); }
+  .prose ul, .prose ol { padding-left: 1.3em; margin: 0 0 18px; }
+  .prose li { margin-bottom: 8px; }
+  .prose hr { border: none; border-top: 1px solid var(--border); margin: 48px 0; }
+
+  blockquote.pull {
+    font-family: var(--font-display);
+    font-size: clamp(22px, 3vw, 28px);
+    font-weight: 600;
+    line-height: 1.55;
+    color: var(--hanko);
+    margin: 34px 0;
+    padding: 4px 0 4px 24px;
+    border-left: 4px solid var(--hanko);
+  }
+  blockquote.pull cite {
+    display: block;
+    font-family: var(--font-mono);
+    font-style: normal;
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 10px;
+  }
+
+  .code-note {
+    /* ⚠ 常に「濃い地に薄い文字」の固定配色。var(--ink) はダークモードで明るい色に
+       入れ替わるため、テーマ変数のままだと文字とほぼ同じ明るさになって読めなくなる。 */
+    font-family: var(--font-mono);
+    font-size: 13.5px;
+    background: #1c1d16;
+    color: #e8e4d4;
+    border-radius: 12px;
+    padding: 16px 18px;
+    margin: 20px 0;
+    line-height: 1.7;
+    overflow-x: auto;
+  }
+
+  .score-badge {
+    /* 固定色(朱色の判子をイメージ)。テーマで変わると小さい文字のコントラストが不足するため */
+    display: inline-flex;
+    align-items: baseline;
+    gap: 6px;
+    background: #b3372c;
+    color: #fff;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 20px;
+    padding: 6px 16px 6px 14px;
+    border-radius: 10px;
+    transform: rotate(-2deg);
+    box-shadow: var(--shadow);
+  }
+  .score-badge small { font-size: 12px; font-weight: 600; opacity: 0.85; }
+
+  .fail-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--hanko);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    padding: 20px 22px;
+    margin: 24px 0;
+  }
+  .fail-card .tag {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    font-weight: 700;
+    color: var(--hanko);
+    letter-spacing: 0.06em;
+    display: block;
+    margin-bottom: 8px;
+  }
+  .fail-card p:last-child { margin-bottom: 0; }
+
+  .win-card {
+    background: var(--pine-pale);
+    border-radius: var(--radius);
+    padding: 20px 22px;
+    margin: 24px 0;
+  }
+  .win-card .tag {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    font-weight: 700;
+    color: var(--pine-deep);
+    letter-spacing: 0.06em;
+    display: block;
+    margin-bottom: 8px;
+  }
+  .win-card p:last-child { margin-bottom: 0; }
+
+  /* 行政・外部への提言/呼びかけ用。gold=「未解決・誰かへの働きかけ」の役割で他ページと統一 */
+  .appeal-card {
+    background: var(--gold-pale);
+    border: 2px solid var(--gold);
+    border-radius: var(--radius);
+    padding: 22px 24px;
+    margin: 24px 0;
+  }
+  .appeal-card .tag {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    font-weight: 700;
+    color: var(--gold);
+    letter-spacing: 0.06em;
+    display: block;
+    margin-bottom: 8px;
+  }
+  .appeal-card p:last-child { margin-bottom: 0; }
+
+  table.data {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0 26px;
+    font-size: 14.5px;
+  }
+  table.data th, table.data td {
+    text-align: left;
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  table.data th { color: var(--muted); font-weight: 700; font-size: 13px; }
+
+  .prose code {
+    font-family: var(--font-mono);
+    font-size: 0.88em;
+    background: var(--pine-pale);
+    color: var(--pine-deep);
+    padding: 2px 6px;
+    border-radius: 5px;
+  }
+  .prose table.data code { white-space: nowrap; }
+
+  .stat-inline {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 4px;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    color: var(--pine-deep);
+  }
+
+  .checklist { list-style: none; padding: 0; }
+  .checklist li {
+    display: flex;
+    gap: 12px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .checklist li:last-child { border-bottom: none; }
+  .checklist .n {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    color: var(--pine-deep);
+    flex-shrink: 0;
+  }
+
+  .end-cta {
+    text-align: center;
+    padding: 50px 20px 10px;
+  }
+  .end-cta p { color: var(--ink-soft); max-width: 46ch; margin: 14px auto 24px; }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html">
+      <span class="brand-mark"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><mask id="kb-mask-header"><rect x="5" y="5" width="14" height="15" rx="2" fill="white"/><rect x="9" y="2.2" width="6" height="4.4" rx="1.3" fill="white"/><rect x="7.5" y="10" width="9" height="1.4" rx="0.7"/><rect x="7.5" y="13.4" width="9" height="1.4" rx="0.7"/><rect x="7.5" y="16.8" width="6" height="1.4" rx="0.7"/></mask><rect width="24" height="24" fill="currentColor" mask="url(#kb-mask-header)"/></svg></span>
+      kairanban-app
+    </a>
+    <nav class="site-nav">
+      <a href="index.html">サービス紹介</a>
+      <a href="ai-coding-beginners.html">AI入門</a>
+      <a href="https://github.com/jagyamamoto/kairanban-app">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<div class="article-hero">
+  <div class="prose">
+    <span class="eyebrow hanko">AI開発の裏側</span>
+    <h1>開発統括はしてもコードは書かない町会役員が、<br>AIと作ったもの。</h1>
+    <p class="lead">
+      「AIに頼めばアプリができる」という話はよく聞きます。でも、実際に他人に使わせて
+      運用するまでには、思っていたのと違うことが山ほどありました。
+      うまくいったことも、失敗したことも、正直に書きます。
+    </p>
+    <div class="article-meta">
+      <span>👤 開発者: 開発統括・プロデュース経験あり(コーディングは長年ブランク)</span>
+      <span>🤖 使ったAI: Claude Code</span>
+      <span>⏱ 開発期間: 約2週間(空き時間のみ)</span>
+    </div>
+  </div>
+</div>
+
+<article>
+  <div class="prose">
+
+    <p class="lede">
+      このアプリは、中学校でBASICのゲームを自作して以来、開発統括・プロデュースは手がけてきたものの、
+      コーディングそのものは長らく行っていなかった町内会の役員が、
+      Anthropic の Claude Code に指示を出して開発しました。
+      TypeScript 約1万行、データベースの変更履歴23本。
+      できあがったものより、<strong>そこに至る過程</strong>のほうが、記録する価値があると思っています。
+    </p>
+
+    <hr>
+
+    <h2><span class="num">01</span>何ができたか</h2>
+    <p>
+      回覧・会館予約・会合の出欠・資料共有・写真ブログ・防災情報・多言語対応。
+      通知(Web Push)、メール配信、未読バッジ。管理画面では会員管理や
+      回覧の確認状況、入会申込の処理までひととおり動きます。
+    </p>
+    <table class="data">
+      <tr><th>規模</th><td>TypeScript 約1万行 / マイグレーション23本</td></tr>
+      <tr><th>開発期間</th><td>約2週間(オーナーの空き時間のみ)</td></tr>
+      <tr><th>開発者の経験</th><td>開発統括・プロデュースは手がけてきたが、コーディングは長年ブランク(直近の実装は中学校のBASIC以来)</td></tr>
+    </table>
+
+    <hr>
+
+    <h2><span class="num">02</span>うまくいったこと</h2>
+
+    <h3>2-1. 「AIへの接し方」を先に決めた</h3>
+    <p>
+      最初に、AIに対する運用ルールを文書化しました。要点はこうです。
+    </p>
+    <ul>
+      <li><strong>専門用語で質問しない。</strong>「D1のdatabase_idを教えてください」ではなく、「このコマンドを貼ってEnterしてください。結果は私が読み取ります」と書く</li>
+      <li><strong>質問はYes/Noか選択肢A/B/Cにする。</strong>各選択肢に「推奨」と理由を1行付ける</li>
+      <li><strong>技術的な判断はAIが自分で行い、事後報告する</strong>(ライブラリ選定・命名・エラー対処)</li>
+      <li><strong>エラーが出たらまず自分で3回調べる。</strong>それでも駄目なら「今どうなっているか・何を試したか・次に人間がやる1手順」を報告する</li>
+    </ul>
+    <div class="win-card">
+      <span class="tag">EFFECTIVE</span>
+      <p>
+        これが一番効きました。<strong>非開発者が判断できる形に翻訳させる</strong>ことで、
+        オーナーは「決める」ことだけに集中できました。
+      </p>
+    </div>
+
+    <h3>2-2. 実機で確かめさせた</h3>
+    <p>
+      AIは「できました」と報告しがちです。<strong>画面を実際に測らせる</strong>と、
+      報告と現実の差が見えます。
+    </p>
+    <p>
+      例: iOSの「ホーム画面に追加」の案内で、共有画面が開いたときに手順が隠れないよう
+      「画面の上から42%以内」に収める設計にしていました。ところが実機のシミュレータで測ると、
+      iPhone SE では <span class="stat-inline">48%</span> まで伸びていて、手順4と5が隠れていました。
+      文字サイズが固定pxだったためです。画面の高さに追従させて解決しました。
+    </p>
+    <div class="win-card">
+      <span class="tag">EFFECTIVE</span>
+      <p>測らなければ、この不具合は「完成」として世に出ていました。</p>
+    </div>
+
+    <h3>2-3. 決めたことを文書に残した</h3>
+    <p>
+      AIはセッションが変わると経緯を忘れます。「なぜそうしたか」を残しておかないと、
+      次のセッションが<strong>善意で元に戻します</strong>。実際に効いた書き方はこれです。
+    </p>
+    <div class="code-note">⚠ この仕様を「脆弱性」として勝手に直さないこと。オーナーが承知のうえで選んでいる。</div>
+
+    <hr>
+
+    <h2><span class="num">03</span>失敗したこと</h2>
+
+    <h3>3-1. 「マニュアルを作る」という発想そのものが間違っていた</h3>
+    <p>
+      「ホーム画面に追加」の手順書を、スクリーンショット付きで丁寧に作りました。
+      オーナーの評価は—
+    </p>
+    <p style="margin: 24px 0;"><span class="score-badge">20<small>/ 100点</small></span></p>
+    <blockquote class="pull">
+      スマホに詳しくない層は、見たものを記憶して操作することは無理
+      <cite>— オーナーの一言</cite>
+    </blockquote>
+    <p>
+      iOSでは操作の途中でOSの共有画面が現れ、説明が見えなくなります。
+      つまり従来のマニュアルは「2手順以上を暗記させる」ことを要求していました。
+      <strong>体裁をどれだけ磨いても、原理的に失敗する設計</strong>だったわけです。
+    </p>
+    <p>
+      作り直した方針は「記憶ゼロ」。押すものの写真を画面の上に<strong>出しっぱなし</strong>にして、
+      利用者は見比べて選ぶだけにしました(実機検証で、共有画面が開いても
+      画面の上から約43%は隠れないことを確認できたので成立しました)。
+    </p>
+    <div class="fail-card">
+      <span class="tag">LESSON</span>
+      <p>AIは「指示されたものを上手に作る」。指示そのものが間違っていると、上手に失敗する。</p>
+    </div>
+
+    <h3>PWA化の技術的な格闘 — なぜここまでこだわったか</h3>
+    <p>
+      「ホーム画面に追加」は、単なる見た目の話ではありません。<strong>iOSのSafariは、
+      サイトがホーム画面に追加され「単独のアプリのように開かれた状態(standalone)」で
+      なければ、Web Push通知そのものを許可しません。</strong>
+      つまりこの一連の操作を終えない限り、通知機能は原理的に一度も動きません。
+      「押すのが面倒な設定」ではなく、「機能の唯一の入口」でした。
+    </p>
+    <div class="code-note">function isStandalone() {
+  return matchMedia("(display-mode: standalone)").matches
+      || navigator.standalone === true; // iOS Safari 独自のプロパティ
+}
+// standalone でなければ、この時点で "need_install" として案内へ誘導する
+if (isIos() &amp;&amp; !isStandalone()) return "need_install";</div>
+
+    <p>
+      実装にあたって、いくつもの技術的な行き止まりにぶつかりました。順番に書きます。
+    </p>
+    <table class="data">
+      <tr><th>試したこと</th><th>分かったこと</th></tr>
+      <tr>
+        <td><code>navigator.share()</code>でボタン一発、共有画面を開けないか</td>
+        <td>開けるが、そのメニューに<strong>「ホーム画面に追加」が存在しない</strong>(コピー・リーディングリスト等のみ)。この経路は棄却</td>
+      </tr>
+      <tr>
+        <td>共有画面が開いたことを<code>blur</code>/<code>focus</code>/<code>visibilitychange</code>/<code>resize</code>で検知できないか</td>
+        <td><strong>どれも発火しない。</strong>OSの共有画面はページの外側にあるレイヤーで、Webページ側からは一切観測できない</td>
+      </tr>
+      <tr>
+        <td>それでも画面のどこかは見えているのでは、と実測</td>
+        <td><strong>見えている。</strong>共有画面が開いた状態でも、画面の上から約42.7%はページのまま隠れずに残る(2機種で実測)</td>
+      </tr>
+      <tr>
+        <td>共有画面が開いている間、JSのタイマーは動き続けるか</td>
+        <td><strong>動く。</strong>タイマーで数値を更新しながら共有画面を開いたままにしても、カウンタは進み続けた</td>
+      </tr>
+    </table>
+    <p>
+      この4つの実験から方針が決まりました。<strong>画面の上から42.7%以内に固定した帯</strong>を置けば、
+      OSの共有画面が開いていても隠れずに読める。ただし「検知できない」ため、
+      「いま何番目の手順か」をこちらから能動的に切り替えることはできません。
+      だから<strong>全手順を常に表示し、利用者が自分の画面と見比べて選ぶ</strong>方式にしました
+      (これが前述の「記憶ゼロ」設計です)。
+    </p>
+
+    <p>
+      もうひとつ、副産物的な発見もありました。iOSの共有画面は、開いた瞬間の
+      ページの<code>&lt;title&gt;</code>を自分のヘッダー部分にそのまま表示します。
+      案内を始める直前に <code>document.title</code> を「↓ホーム画面に追加を押す」に
+      書き換えておくと、<strong>OS純正の画面の中にまで指示が滲み出る</strong>という、
+      二重の手がかりを仕込めました(共有画面を閉じたら元のタイトルに戻します)。
+    </p>
+
+    <div class="fail-card">
+      <span class="tag">CAUGHT BY MEASUREMENT</span>
+      <p>
+        帯の文字と写真を固定pxで組んでいたところ、画面の小さい機種(iPhone SE)では
+        帯が<strong>画面の48%まで伸び</strong>、共有画面の推奨範囲(42.7%)を超えて
+        手順4・5が隠れていました。大きい機種では問題が出ないため、
+        気づかず「完成」として出てしまいそうな不具合でした。
+      </p>
+    </div>
+    <div class="code-note">.ig-band-title { font-size: clamp(17px, 2.4vh, 21px); }
+.ig-step-img   { height:    clamp(24px, 3.8vh, 38px); }
+/* 固定pxをやめ、画面の高さ(vh)に追従させる。
+   小さい機種でも自動的に縮み、42.7%以内に収まる */</div>
+    <p>
+      画面の高さに追従する <code>clamp()</code> に直し、いちばん小さい画面
+      (iPhone SE)で撮り直したスクリーンショットで、共有画面を開いた状態でも
+      5手順すべてが見えることを確認して収束させました。
+    </p>
+
+    <div class="win-card">
+      <span class="tag">ANDROID は別の道</span>
+      <p>
+        AndroidのChromeは、この苦労がまるごと要りません。<code>beforeinstallprompt</code>
+        というイベントをブラウザ自身が発行してくれるので、それを横取りして
+        ボタン1回に差し替えれば、OS純正の確認画面がそのまま出ます。
+        コードはこの機能が使える端末を検知すると、iOS向けの帯もろとも
+        <strong>丸ごと出さずに、ネイティブの1回タップへ委ねます。</strong>
+        見た目は「同じボタン」でも、内側の実装は機種によってまったくの別物です。
+      </p>
+    </div>
+
+    <p>
+      そして最後の1枚。ホーム画面への追加が完了した直後の画面は、「できました」で
+      終わらせず、<strong>続けて通知の許可を求める画面を出します。</strong>
+      ここが、設定全体の中でいちばん見返りの大きい1タップだからです。
+      ここを飛ばされると、その後どれだけ良い回覧を作っても、静かに届かないままになります。
+    </p>
+
+    <h3>3-2. 時間で自動的に進める案内は破綻した</h3>
+    <p>
+      作り直した最初の版は、8秒ごとに指示を自動で次へ進める方式でした。
+      実機テストで、<strong>「案内の文字」と「実際に開いている画面」が食い違いました</strong>
+      (何も開いていないのに「白い紙の中」と表示される等)。
+      スマホに詳しくない方は自分のペースで進むので、時間による進行は必ずずれます。
+    </p>
+    <p>→ 進行をやめ、<strong>全手順を常に表示する</strong>方式に変更しました。</p>
+
+    <h3>3-3. 複数のAIセッションを並行させて事故を起こした</h3>
+    <p>
+      同じリポジトリで2つのチャットを並行作業させたところ、片方が
+      <code>git add -A</code> を実行し、<strong>もう片方の作業中ファイルを巻き込んでコミット</strong>
+      しました。逆方向の巻き込みも起きました。
+    </p>
+    <p>→ 「自分が変更したファイルだけを指定してコミットする」というルールを文書化しました。</p>
+
+    <h3>3-4. 検証用のファイルが本番で公開されていた</h3>
+    <p>
+      動作確認のために置いたHTMLを消し忘れ、<strong>本番で誰でも見られる状態</strong>に
+      なっていました(内容は無害でしたが)。
+    </p>
+    <p>→ 「検証用HTMLを本番ディレクトリに置かない」をルール化し、機械的な確認スクリプトを用意しました。</p>
+
+    <h3>3-5. 個人情報の確認は、目視では足りなかった</h3>
+    <p>
+      公開前に、ログイン不要で見られるページの画像33枚を点検しました。
+      その中に<strong>氏名＋住所＋電話番号が並んだ管理画面の写真</strong>がありました。
+    </p>
+    <p>
+      目視では「テストデータらしい」としか判断できません。macOSの文字認識で全画像を読み取り、
+      <strong>本番データベースの氏名・電話・住所と機械的に突き合わせて</strong>、
+      一致0件であることを確認しました。
+    </p>
+    <div class="fail-card">
+      <span class="tag">LESSON</span>
+      <p>「たぶん大丈夫」を「照合して0件」に変えないと、公開の判断はできない。</p>
+    </div>
+
+    <h3>3-6. 公開直後、実際に競合状態のバグを踏んだ</h3>
+    <p>
+      この文章を書いている最中、デモサイトの検証で同時アクセスが重なり、
+      データの全消し・再投入処理が二重に走って<strong>管理者の権限が一時的に消える</strong>
+      不具合を、実際に自分で踏みました。
+    </p>
+    <p>
+      排他制御(データベースの1行をロック代わりに使う方式)を入れ、
+      15並列でアクセスしても壊れないことを確認して直しました。
+      この文書を書いている最中に起きた実話です。
+    </p>
+
+    <hr>
+
+    <h2><span class="num">04</span>実際の運用に何が必要だったか</h2>
+    <p>AIが書いたコードを動かすだけでは足りませんでした。以下は人間側の作業です。</p>
+    <table class="data">
+      <tr><th>判断</th><td>電話番号だけのログインを許容するか等、リスクを引き受ける判断</td></tr>
+      <tr><th>実地テスト</th><td>実際にスマホに詳しくない方に使ってもらい、どこで止まるかを見る</td></tr>
+      <tr><th>外部サービスの契約</th><td>Cloudflare・Resend の登録、DNS設定</td></tr>
+      <tr><th>データの初期投入</th><td>会員名簿の登録、既存の回覧の移行</td></tr>
+      <tr><th>運用ルール</th><td>名簿を外に出さない、回覧本文に個人の連絡先を書かない</td></tr>
+      <tr><th>継続的な確認</th><td>「通知が届いているか」を定期的に確かめる</td></tr>
+    </table>
+
+    <h3>自治体ごとに、防災情報の出し方がまるで違う</h3>
+    <p>
+      「防災・安全情報を町会サイトにも載せる」という、一見地味な機能のために、
+      実際には<strong>自治体ごとにまったく違う対応</strong>が必要でした。
+      RSSで機械的に読み込める自治体もあれば、そもそも機械が読める形式を
+      一切公開していない自治体もあります。
+    </p>
+    <p>
+      このアプリの元になった町会がある<strong>江東区の場合、防災・安全情報の公式な配信手段は
+      「安全安心メール」という<strong>メール配信サービスのみ</strong></strong>でした。
+      RSSのような、プログラムが定期的に読みに行ける公開の窓口は用意されていません。
+      そこで<strong>メールを受信し、内容を解析してアプリで読める形に変換し、
+      改めて配信し直す仕組みを別途つくりました。</strong>
+      「メールを読む」という、一見なんでもない作業のために、
+      受信から解析までの仕組みをまるごと1つ作る必要があったわけです。
+    </p>
+    <p>
+      これは江東区だけの話ではないはずです。自治体によってRSS配信・メール配信・
+      PDFの掲示・ウェブページへの手入力など出し方がバラバラで、
+      <strong>その数だけ「取り込むための工夫」を個別に作る必要があります。</strong>
+      町内会のような小さな団体が、同じような仕組みをそれぞれ独自に作り続けるのは、
+      社会全体で見ればかなり非効率です。
+    </p>
+    <div class="appeal-card">
+      <span class="tag">行政の皆様へ</span>
+      <p>
+        防災・安全情報のような公共性の高い情報は、人が読むためのメールやウェブページに加えて、
+        <strong>RSSなど機械可読でオープンな形式でも、あわせて配信していただけないでしょうか。</strong>
+        それだけで、町内会・自治会や地域の見守りアプリなど、様々な現場でその情報を
+        無理なく再利用できるようになります。強くお願いしたいです。
+      </p>
+    </div>
+
+    <hr>
+
+    <h2><span class="num">05</span>今後の課題</h2>
+    <ul>
+      <li><strong>本当にスマホに詳しくない方が自力で設置できるか</strong>は、まだ十分な人数で検証できていません(3名以上に、説明者が口を出さずに試してもらうのが目標)</li>
+      <li><strong>電話番号ログイン</strong>は、使いやすさと引き換えのリスクを負っています。合言葉やメール確認番号を「選べる」形にするのが次の課題です</li>
+      <li><strong>他の町会での導入例がまだありません。</strong>地域ごとの事情(ごみの日の形式、役員の呼び名、自治体の情報公開の仕方)がどれだけ違うか、実例が必要です</li>
+      <li><strong>AIの作業品質の担保。</strong>今回は人間が実機で測ることで不具合を見つけましたが、その「測る」こと自体を仕組みにしないと、規模が大きくなると破綻します</li>
+    </ul>
+
+    <hr>
+
+    <h2><span class="num">06</span>これから同じことをする人へ</h2>
+    <ol class="checklist">
+      <li><span class="n">01</span><span><strong>AIに「翻訳」させる。</strong>専門用語で聞かれたら「非開発者に分かる言葉で、選択肢にして」と返す</span></li>
+      <li><span class="n">02</span><span><strong>「できました」を信じない。</strong>画面を測らせる、実機で動かさせる、数字を出させる</span></li>
+      <li><span class="n">03</span><span><strong>決めた理由を残させる。</strong>残さないと次のセッションが親切心で元に戻す</span></li>
+      <li><span class="n">04</span><span><strong>公開前は機械的に確認する。</strong>目視は必ず漏れる</span></li>
+      <li><span class="n">05</span><span><strong>一番大事なのは、誰のために作っているかを手放さないこと。</strong>今回「20点」の評価が出たのは、作り手ではなく使う人を見ていた人がいたからです</span></li>
+    </ol>
+
+  </div>
+
+  <div class="end-cta">
+    <span class="eyebrow">読んでいただき、ありがとうございます</span>
+    <h2 style="font-size: 24px; font-weight: 800; margin-top: 14px;">続きは、コードとデモでご覧ください。</h2>
+    <p>MITライセンスで公開しています。改変・商用利用ともに自由です。</p>
+    <div class="btn-row" style="justify-content: center;">
+      <a class="btn btn-primary" href="https://kairanban-demo.jagyamamoto.workers.dev">🖐 デモを試す</a>
+      <a class="btn btn-ghost" href="https://github.com/jagyamamoto/kairanban-app">GitHubで見る</a>
+    </div>
+  </div>
+</article>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-links">
+      <a href="index.html">サービス紹介</a>
+      <a href="ai-coding-beginners.html">AI入門</a>
+      <a href="https://github.com/jagyamamoto/kairanban-app">GitHub</a>
+      <a href="https://kairanban-demo.jagyamamoto.workers.dev">デモサイト</a>
+      <a href="https://github.com/jagyamamoto/kairanban-app/issues/1">ログイン方式の議論</a>
+    </div>
+    <p>kairanban-app は、個人が空いた時間で管理しているオープンソースプロジェクトです。</p>
+  </div>
+</footer>
+
+</body>
+</html>
