@@ -1,0 +1,17 @@
+# kairanban-app
+
+> 町内会・自治会のための無料アプリ。回覧・会館予約・会合出欠・防災情報・写真共有を、スマホに詳しくない会員が使えることを最優先に設計した、MITライセンスのオープンソースPWA。Cloudflareの無料枠を使えば月0円から運用できる。完成品ではなく、GitHub上で公開・改良を続けているgitベースのプロジェクト。
+
+## Docs
+
+- [サービス紹介](https://kairanban.jagproject.com/): 何ができるか、ログイン方式のトレードオフ、コスト、育てていく方針
+- [はじめ方](https://kairanban.jagproject.com/getting-started.html): AIコーディングツールに貼り付けるだけの最初のプロンプト付き、セットアップ手順
+- [AI開発の裏側](https://kairanban.jagproject.com/ai-story.html): 実機テストで見つかった不具合、PWA化の技術的な格闘、失敗の記録
+- [AIコーディング初心者向け](https://kairanban.jagproject.com/ai-coding-beginners.html): 最初に用意するアカウント、「AIに読ませる」の正体
+- [README](https://github.com/jagyamamoto/kairanban-app/blob/main/README.md): 機能一覧・デモ・セットアップの概要
+- [セットアップ手順](https://github.com/jagyamamoto/kairanban-app/blob/main/docs/%E3%82%BB%E3%83%83%E3%83%88%E3%82%A2%E3%83%83%E3%83%97%E6%89%8B%E9%A0%86.md): 非開発者向け、1動作ずつの導入手順
+- [ログイン方式について](https://github.com/jagyamamoto/kairanban-app/blob/main/docs/%E3%83%AD%E3%82%B0%E3%82%A4%E3%83%B3%E6%96%B9%E5%BC%8F%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6.md): 電話番号ログインの利便性とリスクのトレードオフ
+
+## Related
+
+- [pwa-install-guide](https://jagyamamoto.github.io/pwa-install-guide/): このアプリの「ホーム画面に追加」案内を切り出した、独立のオープンソース部品

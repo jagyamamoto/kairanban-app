@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>はじめ方 — 自分の町内会用にセットアップする | kairanban-app</title>
+<meta name="description" content="AIコーディングツールに貼り付けるだけの最初のプロンプト付き。準備するものから、自分の町内会・自治会用にkairanban-appをセットアップするまでの流れ。">
+<link rel="canonical" href="https://kairanban.jagproject.com/getting-started.html">
+<meta property="og:title" content="はじめ方 — 自分の町内会用にセットアップする">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://kairanban.jagproject.com/getting-started.html">
+<meta property="og:site_name" content="kairanban-app">
+<meta property="og:description" content="AIコーディングツールに貼り付けるだけの最初のプロンプト付き。準備するものから、自分の町内会・自治会用にセットアップするまでの流れ。">
+<meta property="og:image" content="https://kairanban.jagproject.com/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="ja_JP">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="はじめ方 — 自分の町内会用にセットアップする">
+<meta name="twitter:description" content="AIコーディングツールに貼り付けるだけの最初のプロンプト付き。">
+<meta name="twitter:image" content="https://kairanban.jagproject.com/assets/og-image.png">
+<meta name="theme-color" content="#0a7a3d">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230a7a3d'/%3E%3Cmask id='m'%3E%3Crect x='24' y='26' width='52' height='56' rx='8' fill='white'/%3E%3Crect x='38' y='12' width='24' height='18' rx='6' fill='white'/%3E%3Crect x='32' y='42' width='36' height='6' rx='3'/%3E%3Crect x='32' y='56' width='36' height='6' rx='3'/%3E%3Crect x='32' y='70' width='24' height='6' rx='3'/%3E%3C/mask%3E%3Crect width='100' height='100' fill='white' mask='url(%23m)'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": "kairanban-appを自分の町内会用にセットアップする",
+  "description": "AIコーディングツールに最初のプロンプトを貼り付けて、自分の団体用にkairanban-appをセットアップする手順。",
+  "step": [
+    { "@type": "HowToStep", "name": "準備する", "text": "パソコン、メールアドレス、AIコーディングツール(Claude Codeなど)を用意する。クレジットカードは不要。" },
+    { "@type": "HowToStep", "name": "リポジトリを取得する", "text": "GitHubからkairanban-appをダウンロードまたはgit cloneする。" },
+    { "@type": "HowToStep", "name": "最初のプロンプトを貼り付ける", "text": "用意された依頼文を、団体名などを書き換えてAIコーディングツールに貼り付ける。" },
+    { "@type": "HowToStep", "name": "AIと質問に答えながら進める", "text": "docs/セットアップ手順.mdに沿って、AIが1つずつ質問・コマンド提示しながら進める。" },
+    { "@type": "HowToStep", "name": "自分を管理者にする", "text": "デプロイ後のURLの/adminで、決めた合言葉を使って管理者になる。" }
+  ]
+}
+</script>
+<style>
+  .article-hero { padding: 56px 0 20px; border-bottom: 1px solid var(--border); margin-bottom: 40px; }
+  .article-hero .prose { max-width: 680px; margin: 0 auto; padding: 0 20px; }
+  .eyebrow.hanko { color: var(--hanko); background: var(--hanko-pale); }
+  .lead { font-size: 17.5px; color: var(--ink-soft); margin: 18px 0 0; }
+  .prose { max-width: 680px; margin: 0 auto; padding: 0 20px 40px; }
+  .prose h2 { font-size: 22px; font-weight: 800; margin: 44px 0 14px; }
+  .prose h2 .n { font-family: var(--font-mono); color: var(--muted); font-size: 0.6em; display: block; margin-bottom: 6px; letter-spacing: 0.08em; }
+  .prose p { margin: 0 0 16px; }
+  .prose ul { padding-left: 1.3em; margin: 0 0 16px; }
+  .prose li { margin-bottom: 8px; }
+
+  .step-list { counter-reset: step; margin: 20px 0; }
+  .step { display: flex; gap: 18px; padding: 18px 0; border-bottom: 1px solid var(--border); }
+  .step:last-child { border-bottom: none; }
+  .step-num {
+    counter-increment: step; flex-shrink: 0; width: 34px; height: 34px; border-radius: 50%;
+    background: var(--pine-solid); color: #fff; display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-mono); font-weight: 700; font-size: 14px;
+  }
+  .step-num::before { content: counter(step); }
+  .step h3 { font-size: 16px; font-weight: 800; margin: 0 0 4px; }
+  .step p { color: var(--ink-soft); font-size: 14.5px; margin: 0; }
+
+  .code-note {
+    font-family: var(--font-mono); font-size: 13.5px; background: #1c1d16; color: #e8e4d4;
+    border-radius: 12px; padding: 18px 20px; margin: 16px 0; line-height: 1.75; overflow-x: auto;
+    white-space: pre-wrap;
+  }
+  .copy-hint { font-size: 13px; color: var(--muted); margin: 8px 0 0; }
+  .fill-in { color: #ffd76b; }
+
+  .win-card { background: var(--pine-pale); border-radius: var(--radius); padding: 20px 22px; margin: 24px 0; }
+  .win-card .tag { font-family: var(--font-mono); font-size: 11.5px; font-weight: 700; color: var(--pine-deep); letter-spacing: 0.06em; display: block; margin-bottom: 8px; }
+  .win-card p:last-child { margin-bottom: 0; }
+
+  .end-cta { text-align: center; padding: 50px 20px 10px; }
+  .end-cta p { color: var(--ink-soft); max-width: 46ch; margin: 14px auto 24px; }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html">
+      <span class="brand-mark"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><mask id="kb-mask-header"><rect x="5" y="5" width="14" height="15" rx="2" fill="white"/><rect x="9" y="2.2" width="6" height="4.4" rx="1.3" fill="white"/><rect x="7.5" y="10" width="9" height="1.4" rx="0.7"/><rect x="7.5" y="13.4" width="9" height="1.4" rx="0.7"/><rect x="7.5" y="16.8" width="6" height="1.4" rx="0.7"/></mask><rect width="24" height="24" fill="currentColor" mask="url(#kb-mask-header)"/></svg></span>
+      kairanban-app
+    </a>
+    <nav class="site-nav">
+      <a href="index.html">サービス紹介</a>
+      <a href="ai-story.html">AI開発の裏側</a>
+      <a href="ai-coding-beginners.html">AI入門</a>
+      <a href="https://github.com/jagyamamoto/kairanban-app">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<div class="article-hero">
+  <div class="prose">
+    <span class="eyebrow hanko">はじめての方へ</span>
+    <h1>自分の町内会用に、<br>セットアップする。</h1>
+    <p class="lead">
+      できるだけ簡単に始められるように、<strong>コピーして貼るだけの最初のプロンプト</strong>を
+      用意しました。AIコーディングツール（Claude Codeなど）に貼り付けて、あとは質問に答えていくだけです。
+    </p>
+  </div>
+</div>
+
+<div class="prose">
+
+  <h2><span class="n">01</span>準備するもの</h2>
+  <ul>
+    <li>パソコン（Windows / Mac どちらでも）</li>
+    <li>メールアドレス（クレジットカードは不要です）</li>
+    <li>AIコーディングツール（Claude Codeなど）</li>
+  </ul>
+  <div class="win-card">
+    <span class="tag">AIコーディングツール自体が初めての方へ</span>
+    <p>
+      アカウントの作り方や、「AIにファイルを読ませる」の意味からは
+      <a href="ai-coding-beginners.html">AIコーディング初心者向け・最初に用意するもの</a>
+      にまとめています。先にそちらをご覧ください。
+    </p>
+  </div>
+
+  <h2><span class="n">02</span>このアプリをダウンロードする</h2>
+  <ol class="step-list">
+    <li class="step">
+      <span class="step-num"></span>
+      <div>
+        <h3>GitHubのページを開く</h3>
+        <p><a href="https://github.com/jagyamamoto/kairanban-app">github.com/jagyamamoto/kairanban-app</a> を開き、緑色の「Code」ボタンから「Download ZIP」を選んで展開します。gitに慣れていれば <code>git clone</code> でも構いません。</p>
+      </div>
+    </li>
+    <li class="step">
+      <span class="step-num"></span>
+      <div>
+        <h3>AIコーディングツールでフォルダを開く</h3>
+        <p>展開してできたフォルダを、Claude Codeなどでいつも通り開きます。</p>
+      </div>
+    </li>
+  </ol>
+
+  <h2><span class="n">03</span>最初のプロンプト</h2>
+  <p>
+    下の内容を、【】の中だけ自分の団体の情報に書き換えて、そのままAIのチャット欄に貼り付けてください。
+  </p>
+  <div class="code-note">このリポジトリ(kairanban-app)を、私の団体用にセットアップしてください。
+
+私はプログラミングの経験がありません。専門用語を使わず、
+YesかNoで答えられる質問か、A/B/Cのような選択肢で聞いてください。
+実行してほしいコマンドは、私がコピーして貼り付けるだけで済む形で、1つずつ出してください。
+
+まず docs/セットアップ手順.md を読んでください。その手順に沿って、
+・ターミナルで実行するコマンドは、私がそのまま貼り付けられる形で提示する
+・Cloudflareへのログインなど、私自身の操作が必要なところだけ、私にやってもらう
+・団体名や会館情報など、私の団体の情報を先に聞いてから、AIが代わりにファイルを書き換える
+という進め方でお願いします。
+
+私の団体名: <span class="fill-in">【ここに団体名を書く】</span>
+会館の名前・住所: <span class="fill-in">【ここに書く（無ければ「無し」でOK）】</span></div>
+  <p class="copy-hint">この文章をそのまま選択してコピーし、AIのチャット欄に貼り付けてください。</p>
+
+  <h2><span class="n">04</span>そのあとの流れ</h2>
+  <p>
+    ここから先はAIが主導します。Cloudflareアカウントの作成や、ログインのためのブラウザ操作など、
+    <strong>あなた自身にしかできない操作だけ</strong>、その都度指示が来ます。分からないことが出てきたら、
+    「わからない」とそのまま伝えれば、AIが言葉を変えて説明し直します。
+  </p>
+  <p>
+    全体で<strong>1〜2時間程度</strong>です。途中で中断しても、続きから再開できます。
+    詳しい手順の全文は <a href="https://github.com/jagyamamoto/kairanban-app/blob/main/docs/%E3%82%BB%E3%83%83%E3%83%88%E3%82%A2%E3%83%83%E3%83%97%E6%89%8B%E9%A0%86.md">セットアップ手順.md</a> にあります。
+  </p>
+
+  <h2><span class="n">05</span>困ったとき</h2>
+  <p>
+    AIが3回試しても解決しない場合は、
+    <a href="https://github.com/jagyamamoto/kairanban-app/issues">GitHubのIssue</a>
+    に、今どういう状態か（何をしたか・何が起きたか）を書き込んでください。
+    エラーの文字は、そのままコピーして貼り付けるだけで大丈夫です。
+  </p>
+
+</div>
+
+<div class="end-cta">
+  <span class="eyebrow">ここまで来れば、あとはAIと一緒に</span>
+  <p>このページ自体、同じやり方でAIに作らせています。うまくいかない箇所があれば、それも含めて教えてください。</p>
+  <div class="btn-row" style="justify-content:center;">
+    <a class="btn btn-primary" href="https://github.com/jagyamamoto/kairanban-app">GitHubへ →</a>
+    <a class="btn btn-ghost" href="index.html">この部品について、もう一度読む</a>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-links">
+      <a href="index.html">サービス紹介</a>
+      <a href="ai-story.html">AI開発の裏側</a>
+      <a href="ai-coding-beginners.html">AI入門</a>
+      <a href="https://github.com/jagyamamoto/kairanban-app">GitHub</a>
+      <a href="https://kairanban-demo.jagyamamoto.workers.dev">デモサイト</a>
+    </div>
+    <p>kairanban-app は、個人が空いた時間で管理しているオープンソースプロジェクトです。</p>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -5,9 +5,34 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>AI開発の裏側 — 開発統括はしてもコードは書かない町会役員が、AIと作ったもの | kairanban-app</title>
 <meta name="description" content="20点の評価をもらって作り直した話、実機で見つかった不具合、複数AIセッションの事故、目視では足りなかった個人情報点検。うまくいったことも失敗したことも書きました。">
+<link rel="canonical" href="https://kairanban.jagproject.com/ai-story.html">
 <meta property="og:title" content="AI開発の裏側 — 開発統括はしてもコードは書かない町会役員が、AIと作ったもの">
 <meta property="og:type" content="article">
+<meta property="og:url" content="https://kairanban.jagproject.com/ai-story.html">
+<meta property="og:site_name" content="kairanban-app">
+<meta property="og:description" content="20点の評価をもらって作り直した話、実機で見つかった不具合、複数AIセッションの事故、目視では足りなかった個人情報点検。うまくいったことも失敗したことも書きました。">
+<meta property="og:image" content="https://kairanban.jagproject.com/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="ja_JP">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="AI開発の裏側 — 開発統括はしてもコードは書かない町会役員が、AIと作ったもの">
+<meta name="twitter:description" content="20点の評価をもらって作り直した話、実機で見つかった不具合、複数AIセッションの事故。うまくいったことも失敗したことも書きました。">
+<meta name="twitter:image" content="https://kairanban.jagproject.com/assets/og-image.png">
 <meta name="theme-color" content="#0a7a3d">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "AI開発の裏側 — 開発統括はしてもコードは書かない町会役員が、AIと作ったもの",
+  "description": "20点の評価をもらって作り直した話、実機で見つかった不具合、複数AIセッションの事故、目視では足りなかった個人情報点検。",
+  "url": "https://kairanban.jagproject.com/ai-story.html",
+  "image": "https://kairanban.jagproject.com/assets/og-image.png",
+  "author": { "@type": "Person", "name": "Jag Yamamoto", "url": "https://www.jagproject.com/about" },
+  "publisher": { "@type": "Person", "name": "Jag Yamamoto" },
+  "mainEntityOfPage": "https://kairanban.jagproject.com/ai-story.html"
+}
+</script>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230a7a3d'/%3E%3Cmask id='m'%3E%3Crect x='24' y='26' width='52' height='56' rx='8' fill='white'/%3E%3Crect x='38' y='12' width='24' height='18' rx='6' fill='white'/%3E%3Crect x='32' y='42' width='36' height='6' rx='3'/%3E%3Crect x='32' y='56' width='36' height='6' rx='3'/%3E%3Crect x='32' y='70' width='24' height='6' rx='3'/%3E%3C/mask%3E%3Crect width='100' height='100' fill='white' mask='url(%23m)'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -260,6 +285,7 @@
     </a>
     <nav class="site-nav">
       <a href="index.html">サービス紹介</a>
+      <a href="getting-started.html">はじめ方</a>
       <a href="ai-coding-beginners.html">AI入門</a>
       <a href="https://github.com/jagyamamoto/kairanban-app">GitHub</a>
     </nav>
@@ -516,6 +542,17 @@ if (isIos() &amp;&amp; !isStandalone()) return "need_install";</div>
       ここを飛ばされると、その後どれだけ良い回覧を作っても、静かに届かないままになります。
     </p>
 
+    <div class="win-card">
+      <span class="tag">この案内だけ、別の部品として切り出した</span>
+      <p>
+        ここまでの判定ロジック・文言・配色・実測値は、このアプリ専用のコードではなく
+        <strong>iOSでPWAを配るすべてのアプリに共通する内容</strong>です。そこで、この案内部分だけを
+        <a href="https://jagyamamoto.github.io/pwa-install-guide/">pwa-install-guide</a>という
+        MITライセンスの独立したオープンソース部品として切り出しました。他のWebアプリに、
+        同じ実測データと失敗の記録ごと組み込めます。
+      </p>
+    </div>
+
     <h3>3-2. 時間で自動的に進める案内は破綻した</h3>
     <p>
       作り直した最初の版は、8秒ごとに指示を自動で次へ進める方式でした。
@@ -665,9 +702,11 @@ if (isIos() &amp;&amp; !isStandalone()) return "need_install";</div>
   <div class="wrap">
     <div class="footer-links">
       <a href="index.html">サービス紹介</a>
+      <a href="getting-started.html">はじめ方</a>
       <a href="ai-coding-beginners.html">AI入門</a>
       <a href="https://github.com/jagyamamoto/kairanban-app">GitHub</a>
       <a href="https://kairanban-demo.jagyamamoto.workers.dev">デモサイト</a>
+      <a href="https://jagyamamoto.github.io/pwa-install-guide/">PWAインストール案内(部品)</a>
       <a href="https://github.com/jagyamamoto/kairanban-app/issues/1">ログイン方式の議論</a>
     </div>
     <p>kairanban-app は、個人が空いた時間で管理しているオープンソースプロジェクトです。</p>
