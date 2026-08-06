@@ -357,6 +357,13 @@
   table.compare tr.self { background: var(--pine-pale); }
   table.compare tr.self th { color: var(--pine-deep); }
   .compare-note { font-size: 13.5px; color: var(--muted); max-width: 62ch; }
+
+  /* 数字ファクト表 */
+  table.facts { width: 100%; border-collapse: collapse; font-size: 15px; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+  table.facts th, table.facts td { padding: 13px 16px; border-bottom: 1px solid var(--border); text-align: left; vertical-align: top; line-height: 1.7; }
+  table.facts tr:last-child th, table.facts tr:last-child td { border-bottom: none; }
+  table.facts th { font-weight: 800; white-space: nowrap; width: 11em; }
+  .facts-note { font-size: 13.5px; color: var(--muted); margin-top: 10px; }
 </style>
 </head>
 <body>
@@ -462,6 +469,23 @@
           45〜65歳くらいのこの世代だと、私たちは考えています。
         </p>
       </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap-narrow">
+      <div class="section-head">
+        <h2>数字で見る kairanban-app</h2>
+      </div>
+      <table class="facts">
+        <tr><th>開発期間</th><td>約2週間</td></tr>
+        <tr><th>コード規模</th><td>TypeScript 約1万行</td></tr>
+        <tr><th>データベース変更履歴</th><td>23本</td></tr>
+        <tr><th>運用費</th><td>月0円〜（Cloudflare無料枠）</td></tr>
+        <tr><th>対応言語</th><td>5言語（日本語・やさしい日本語・英語・中国語・ベトナム語）</td></tr>
+        <tr><th>実測値</th><td>iPhoneの共有画面が開いても、画面の上から約42.7%は隠れない——この範囲だけで完結する導入案内を設計</td></tr>
+      </table>
+      <p class="facts-note">注記: 数値・図版は出典（kairanban.jagproject.com）明記で引用できます。</p>
     </div>
   </section>
 
@@ -712,6 +736,24 @@
     </div>
   </section>
 
+  <section>
+    <div class="wrap-narrow">
+      <div class="callout callout-pine">
+        <h3>共同検証パートナー町会・自治会（第1号）を募集します。</h3>
+        <p>
+          kairanban-appを実際の運用で検証してくださる町会・自治会を、1団体募集します。立ち上げ時の設定作業には、検証プロジェクトの一環として開発者が伴走します。恒常的なサポートや動作の保証をお約束するものではありません。
+        </p>
+        <p>お願いしたいこと:</p>
+        <ul class="support-list">
+          <li>スマホに詳しくない会員を含む、10世帯以上で試すこと</li>
+          <li>つまずいた点と、改善してほしい点を教えていただくこと</li>
+          <li>差し支えない範囲で、事例として紹介させていただくこと（匿名でも構いません）</li>
+        </ul>
+        <p>応募・お問い合わせ: <a href="mailto:press@jagproject.com">press@jagproject.com</a></p>
+      </div>
+    </div>
+  </section>
+
   <section id="grow">
     <div class="wrap-narrow">
       <div class="callout callout-pine">
@@ -782,6 +824,28 @@
   </section>
 
   <section>
+    <div class="wrap-narrow">
+      <div class="section-head">
+        <h2>電子回覧板は「市場」になった。だから、逆の設計にした。</h2>
+      </div>
+      <p style="color: var(--ink-soft); max-width: 62ch;">
+        2025年、東京都は町会・自治会のデジタル化を助成する制度を始めました。新聞社が電子回覧板サービスへの参入を発表するなど、電子回覧板は、事業者が次々に加わる市場になりつつあります。その多くは月額課金型で、会費は毎月、地域の外の事業者へ流れ出ていきます。kairanban-appは逆の設計です。サーバーは無料枠で動き、コードは全て公開しています。維持を担うのは、町内のIT系・電気系の会員や、地元の事業者。お金も知恵も、地域の中で循環させます。
+      </p>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap-narrow">
+      <div class="callout">
+        <h3>「デジタル自治」とは</h3>
+        <p>
+          デジタルを手段として、住民が自治を担うこと。サイバーセキュリティやデジタル基盤の整備を国や行政に任せきりにせず、町内会・自治会が自らデジタルを使いこなし、地域の運営に生かす考え方です。「デジタルそのものを統治する」という意味ではありません。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section>
     <div class="wrap-narrow" style="text-align: center;">
       <span class="eyebrow hanko">もうひとつの話</span>
       <h2 style="font-size: clamp(22px, 3vw, 28px); font-weight: 800; margin: 16px 0 14px;">
@@ -808,6 +872,7 @@
       <a href="https://jagyamamoto.github.io/pwa-install-guide/">PWAインストール案内(部品)</a>
       <a href="https://github.com/jagyamamoto/kairanban-app/issues/1">ログイン方式の議論</a>
       <a href="https://github.com/jagyamamoto/kairanban-app/blob/main/LICENSE">MIT License</a>
+      <a href="press.html">報道関係の方へ</a>
       <a href="https://www.jagproject.com/about">Jag Projectについて</a>
     </div>
     <p>kairanban-app は、Jag Project, LLC が生成AI時代の開発様式と「デジタル自治」の可能性を検証するフラッグシッププロジェクトとして開発・公開しているオープンソースプロジェクトです。動作の保証や導入代行は行っていません。</p>
