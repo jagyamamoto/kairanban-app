@@ -32,7 +32,7 @@
   "offers": { "@type": "Offer", "price": "0", "priceCurrency": "JPY" },
   "license": "https://github.com/jagyamamoto/kairanban-app/blob/main/LICENSE",
   "codeRepository": "https://github.com/jagyamamoto/kairanban-app",
-  "author": { "@type": "Person", "name": "Jag Yamamoto", "url": "https://www.jagproject.com/about" }
+  "author": { "@type": "Organization", "name": "Jag Project, LLC", "url": "https://www.jagproject.com/", "founder": { "@type": "Person", "name": "Jag Yamamoto", "url": "https://www.jagproject.com/about" } }
 }
 </script>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230a7a3d'/%3E%3Cmask id='m'%3E%3Crect x='24' y='26' width='52' height='56' rx='8' fill='white'/%3E%3Crect x='38' y='12' width='24' height='18' rx='6' fill='white'/%3E%3Crect x='32' y='42' width='36' height='6' rx='3'/%3E%3Crect x='32' y='56' width='36' height='6' rx='3'/%3E%3Crect x='32' y='70' width='24' height='6' rx='3'/%3E%3C/mask%3E%3Crect width='100' height='100' fill='white' mask='url(%23m)'/%3E%3C/svg%3E">
@@ -329,6 +329,34 @@
   .callout.callout-pine { border-color: var(--pine); background: var(--pine-pale); }
   .callout .support-list { margin: 0 0 18px; padding-left: 1.2em; color: var(--ink-soft); }
   .callout .support-list li { margin-bottom: 6px; }
+
+  /* 構想(デジタル自治)セクション */
+  .vision-section {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 40px clamp(24px, 5vw, 56px);
+  }
+  .vision-section .vision-lead {
+    font-family: var(--font-display);
+    font-size: clamp(19px, 2.6vw, 24px);
+    font-weight: 600;
+    line-height: 1.7;
+    color: var(--ink);
+    margin: 18px 0 20px;
+  }
+  .vision-section p { color: var(--ink-soft); max-width: 62ch; }
+
+  /* 比較表 */
+  .compare-wrap { overflow-x: auto; margin: 24px 0 10px; }
+  table.compare { width: 100%; min-width: 640px; border-collapse: collapse; font-size: 14.5px; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+  table.compare th, table.compare td { padding: 13px 14px; border-bottom: 1px solid var(--border); text-align: left; vertical-align: top; line-height: 1.6; }
+  table.compare thead th { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.05em; color: var(--muted); background: var(--paper-deep); }
+  table.compare tbody th { font-weight: 800; white-space: nowrap; }
+  table.compare tr.self { background: var(--pine-pale); }
+  table.compare tr.self th { color: var(--pine-deep); }
+  .compare-note { font-size: 13.5px; color: var(--muted); max-width: 62ch; }
 </style>
 </head>
 <body>
@@ -371,8 +399,10 @@
         </div>
         <p class="hero-note">
           🌱 パッケージ化された完成品ではなく、GitHub上で公開・改良を続けている
-          <strong>gitベースのオープンソースプロジェクト</strong>です。サポートについては
-          <a href="#grow">下記</a>をご覧ください。
+          <strong>gitベースのオープンソースプロジェクト</strong>です。
+          <a href="https://www.jagproject.com/about">Jag Project, LLC</a> が、生成AI時代の開発様式と
+          「デジタル自治」の可能性を実地に検証する<strong>フラッグシッププロジェクト</strong>として
+          開発・公開しています。サポートについては<a href="#grow">下記</a>をご覧ください。
         </p>
       </div>
       <div class="mock-wrap">
@@ -398,6 +428,39 @@
             </div>
           </div>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="vision-section">
+        <span class="eyebrow hanko">大きなテーマ</span>
+        <p class="vision-lead">
+          会費が、地域の外に出ていかない回覧板。<br>
+          そして「デジタル自治」という考え方。
+        </p>
+        <p>
+          電子回覧板のサービスは増えました。しかしその多くは月額課金型で、
+          <strong>町会費が毎月、地域の外の事業者へ流れ出ていく</strong>構造です。
+          kairanban-app は逆の設計にしました。サーバーは無料枠、コードはオープンソース。
+          生成AIの発展によって、専任のプログラマがいなくても、ある程度の知識と学習があれば
+          フリーのソースを運用できる時代が始まっています。
+        </p>
+        <p>
+          町内のIT系・電気系の会員や地元の事業者が、自分の地域の「サービス提供者」になれます。
+          維持の手間に対価を払うとしても、その相手が地域の中なら、<strong>お金は地域で循環します</strong>。
+          もちろん専門知識のある企業のサポートがあれば心強い。ただ、サイバーセキュリティや
+          デジタルの基盤づくりを国や行政に任せきりにするのではなく、
+          <strong>自治会自身がデジタルを「自治」する意識</strong>を育てていく過程に、
+          いま来ているのではないでしょうか。
+        </p>
+        <p>
+          担い手はすでに地域にいます。いまの60代には、MacintoshやPC-9800シリーズを
+          仕事で使ってきた人が少なくありません。いわば<strong>「アナログとデジタルのハイブリッド世代」</strong>。
+          紙をデジタルに置き換えるノウハウにいちばん長けているのは、
+          45〜65歳くらいのこの世代だと、私たちは考えています。
+        </p>
       </div>
     </div>
   </section>
@@ -460,7 +523,12 @@
         <div class="feature-card">
           <div class="feature-icon">📷</div>
           <h3>ブログ</h3>
-          <p>行事の写真を共有。<strong>一般公開は一切できない</strong>設計です。</p>
+          <p>行事の写真を会員だけで共有。顔が写った写真が外に出ないよう、<strong>一般公開は一切できない</strong>設計です。</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">✉️</div>
+          <h3>入会受付</h3>
+          <p>町会・子ども会への入会申込をフォームで受付。個人のメールやLINEを経由せずに受け取れます。</p>
         </div>
         <div class="feature-card">
           <div class="feature-icon">🔔</div>
@@ -474,7 +542,7 @@
         <div class="feature-card">
           <div class="feature-icon">🌏</div>
           <h3>多言語</h3>
-          <p>日本語・やさしい日本語・英語・中国語・ベトナム語をAIが自動翻訳。</p>
+          <p>日本語・やさしい日本語・英語・中国語・ベトナム語をAIが自動翻訳。外国籍の住民や日本語が得意でない方にも、ごみの出し方や行事の情報が届きます。</p>
         </div>
         <div class="feature-card">
           <div class="feature-icon">🌀</div>
@@ -546,7 +614,68 @@
           <span class="label">メール配信</span>
           <span class="note">— Resend など(使う場合のみ・無料枠あり)</span>
         </div>
+        <div class="cost-row">
+          <span class="amount">実費</span>
+          <span class="label">生成AIコーディングツール</span>
+          <span class="note">— 導入・改変の担当者には事実上必須(下記参照)</span>
+        </div>
       </div>
+      <p style="font-size: 14px; color: var(--muted); max-width: 62ch; margin: 16px auto 0;">
+        ⚠ このアプリはAIコーディングで開発されており、セットアップや自分の地域向けの書き換えも、
+        担当者が生成AIコーディングツール(Claude Code など)に指示して進める前提です。
+        すでに有償プランをお使いなら追加費用はかかりませんが、
+        <strong>無料枠だけでは作業を完走できないことがあります</strong>のでご注意ください。
+      </p>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">違い</span>
+        <h2>LINEでの回覧と、何が違うのか。</h2>
+        <p>それぞれに向き不向きがあります。「町会の公式な回覧」に必要な条件で比べました。</p>
+      </div>
+      <div class="compare-wrap">
+        <table class="compare">
+          <thead>
+            <tr><th>方式</th><th>費用</th><th>誰が読んだか</th><th>会員同士の距離</th></tr>
+          </thead>
+          <tbody>
+            <tr class="self">
+              <th>kairanban-app</th>
+              <td>月0円〜(サーバー無料枠)</td>
+              <td>「確認しました」を個人別に自動集計</td>
+              <td>会員同士が直接つながる仕組みがない。連絡先を互いに知らせずに済む</td>
+            </tr>
+            <tr>
+              <th>LINE公式アカウント</th>
+              <td>配信数が増えると有料(従量制)</td>
+              <td>個人別の把握は難しい</td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <th>LINEグループ</th>
+              <td>無料</td>
+              <td>既読の人数のみ。誰が読んだかは分からない</td>
+              <td>参加者同士が1対1でつながれる。個別勧誘などトラブルの入口になりやすい</td>
+            </tr>
+            <tr>
+              <th>LINEオープンチャット</th>
+              <td>無料</td>
+              <td>誰が読んだかは分からない</td>
+              <td>1対1接続を防げる(役員間の連絡には有効)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="compare-note">
+        LINEは即時の連絡手段として優れており、役員同士のやりとりにはオープンチャットが有効です。
+        ただ「一方向の配信」「未読者の把握」「記録として残す」といった町会の公式な回覧の要件は、
+        設計の目的が異なります。地域でLINEを安全に使う方法は、
+        代表がBCNに寄稿した記事
+        「<a href="https://www.bcnretail.com/market/detail/20240126_396662.html">PTA、町内会、ママ友などでLINEグループをつくるコツ</a>」でも解説しています。
+      </p>
     </div>
   </section>
 
@@ -596,14 +725,16 @@
         </p>
         <ul class="support-list">
           <li><strong>サポート・動作保証は一切ありません。</strong>導入の代行や障害対応の約束もできません</li>
-          <li>個人が空いた時間で管理しています。Issue・PRへの返信は必ずしも早くありません</li>
+          <li>Jag Project, LLC の検証プロジェクトとして運営しています。Issue・PRへの返信は必ずしも早くありません</li>
           <li>各町会での運用や個人情報の取り扱いの責任は、<strong>導入した町会が負う</strong>ことになります</li>
         </ul>
         <p>
           その代わり、コードはすべて公開されています。<strong>「使うだけ」でなく、
-          育てるのに力を貸してください。</strong>気づいた不具合、改善のアイデア、
-          「うちの町会ではここが違う」という実例。どんな小さなことでも構いません。
-          一人で作ったものを、みんなで育てていくプロジェクトにできたら嬉しいです。
+          育てるのに力を貸してください。</strong>あなたの町会・自治会で「なにが足りないか」
+          「どこでつまずいたか」——その現場のフィードバックが、いちばんの貢献です。
+          気づいた不具合、改善のアイデア、「うちの町会ではここが違う」という実例。
+          どんな小さなことでも構いません。各地の町会・自治会と、フィードバックで育て合う
+          プロジェクトにできたら嬉しいです。
         </p>
         <div class="btn-row">
           <a class="btn btn-primary" href="https://github.com/jagyamamoto/kairanban-app/issues">Issueを立てる →</a>
@@ -628,12 +759,36 @@
   </section>
 
   <section>
+    <div class="wrap-narrow">
+      <div class="section-head">
+        <span class="eyebrow">見立て</span>
+        <h2>「完成品を買う」から、<br>「最終ビルドだけして使う」へ。</h2>
+      </div>
+      <p style="color: var(--ink-soft); max-width: 62ch;">
+        これからは、パッケージとして完成したアプリを買うのではなく、
+        公開されたソースコードを生成AIで自分の課題に合わせて手直しし、
+        <strong>最終的なビルドだけして使う</strong>——そんなソフトウェアの使われ方が
+        増えていくと考えています。AIで簡単に改変できること、そして
+        アプリストアの審査や規約に縛られないWebアプリ(PWA)であることが、
+        この使い方と噛み合うからです。
+      </p>
+      <p style="color: var(--ink-soft); max-width: 62ch;">
+        これまでオープンソースの世界でプログラマ同士が行ってきたやりとりを、
+        生成AIを介して、もっと多くの人が行う時代が来る。
+        kairanban-app は、Jag Project, LLC がその見立てを実地で確かめるための
+        検証プロジェクトでもあります。
+      </p>
+    </div>
+  </section>
+
+  <section>
     <div class="wrap-narrow" style="text-align: center;">
       <span class="eyebrow hanko">もうひとつの話</span>
       <h2 style="font-size: clamp(22px, 3vw, 28px); font-weight: 800; margin: 16px 0 14px;">
-        これは、開発統括・プロデュースは手がけても<br>コーディングは長年ブランクがあった町会役員が、AIに指示して作ったアプリです。
+        これは、現役の町会役員でもある Jag Project, LLC 代表が、<br>AIに指示して作ったアプリです。
       </h2>
       <p style="color: var(--ink-soft); max-width: 52ch; margin: 0 auto 24px;">
+        開発統括・プロデュースは手がけてきたものの、コーディングは長年ブランクがある代表が、
         20点の評価をもらって作り直した話、実機で見つかった不具合、
         個人情報の点検で分かったこと。うまくいったことも失敗したことも書きました。
       </p>
@@ -655,7 +810,7 @@
       <a href="https://github.com/jagyamamoto/kairanban-app/blob/main/LICENSE">MIT License</a>
       <a href="https://www.jagproject.com/about">Jag Projectについて</a>
     </div>
-    <p>kairanban-app は、個人が空いた時間で管理しているオープンソースプロジェクトです。動作の保証や導入代行はできません。</p>
+    <p>kairanban-app は、Jag Project, LLC が「デジタル自治」と生成AI時代の開発様式を検証するフラッグシッププロジェクトとして開発・公開しているオープンソースプロジェクトです。動作の保証や導入代行は行っていません。</p>
   </div>
 </footer>
 
