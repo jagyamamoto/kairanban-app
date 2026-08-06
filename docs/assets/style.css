@@ -135,9 +135,11 @@ a { color: var(--pine-deep); }
 }
 .site-nav {
   display: flex;
+  align-items: center;
   gap: 18px;
   font-size: 14.5px;
   font-weight: 700;
+  flex-wrap: wrap;
 }
 .site-nav a { color: var(--ink-soft); text-decoration: none; }
 .site-nav a:hover { color: var(--pine-deep); }
@@ -146,6 +148,15 @@ a { color: var(--pine-deep); }
   border-bottom: 2px solid var(--pine);
   padding-bottom: 2px;
 }
+/* 言語切り替え: 通常メニューと区別するピル型ボタン */
+.site-nav a.lang-switch {
+  border: 1.5px solid var(--pine);
+  color: var(--pine-deep);
+  padding: 4px 14px;
+  border-radius: 999px;
+  font-weight: 700;
+}
+.site-nav a.lang-switch:hover { background: var(--pine-pale); color: var(--pine-deep); }
 
 /* ---------- 見出し ---------- */
 h1, h2, h3 { line-height: 1.4; text-wrap: balance; margin: 0; }
