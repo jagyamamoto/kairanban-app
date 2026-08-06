@@ -47,6 +47,12 @@
   .quote-guide ul { margin: 0; padding-left: 1.3em; color: var(--ink-soft); }
   .quote-guide li { margin-bottom: 8px; }
   .quote-guide li:last-child { margin-bottom: 0; }
+  blockquote.pull {
+    font-family: var(--font-display); font-size: clamp(19px, 2.6vw, 24px); font-weight: 600;
+    line-height: 1.6; color: var(--hanko); margin: 28px 0; padding: 4px 0 4px 22px;
+    border-left: 4px solid var(--hanko); max-width: 60ch;
+  }
+  .press-section h3 { font-size: 17px; font-weight: 800; margin: 26px 0 10px; color: var(--pine-deep); }
 </style>
 </head>
 <body>
@@ -134,6 +140,68 @@
         association in Koto ward, Tokyo, and is now recruiting the first partner association
         to test it in real use. Every failure along the way — including a 20-out-of-100 score
         for the first onboarding guide — is published.
+      </p>
+    </div>
+  </section>
+
+  <section class="press-section">
+    <div class="wrap-narrow">
+      <h2>Background for reporters: the kairanban, briefly</h2>
+
+      <h3>What it is</h3>
+      <p>
+        A kairanban is a clipboard of printed notices — festival dates, garbage-sorting rules,
+        disaster-drill schedules — passed by hand from house to house. Each household reads it,
+        stamps its personal seal (<em>hanko</em>) or signs, and walks it to the next door.
+        A full circuit of a neighborhood can take a week or more.
+      </p>
+
+      <h3>Where it came from</h3>
+      <p>
+        The kairanban is a wartime institution that outlived the war. Tokyo distributed
+        100,000 kairanban boards in 1939; a Home Ministry ordinance of September 1940
+        organized every city block into neighborhood associations and ten-household units
+        (<em>tonarigumi</em>), with the kairanban as their official channel. A national
+        radio song of 1940, "Tonarigumi," even told citizens to "pass the kairanban along" —
+        the object is embedded in Japanese popular memory. The wartime structure was
+        dissolved after 1945, but the clipboard stayed, and it still circulates through
+        neighborhood associations across Japan today.
+      </p>
+
+      <h3>Why it has survived the smartphone</h3>
+      <p>
+        The kairanban does three things no ordinary app does. It reaches every household,
+        regardless of technology. The handover doubles as a doorstep check on aging
+        neighbors — if the board stops moving, someone notices. And it is a small ritual
+        of contact in a society worried about isolation. Digital replacements that serve
+        only the young abandon exactly the people the kairanban exists for. That is a large
+        part of why it is still here.
+      </p>
+
+      <h3>The point of this project: preservation, not disruption</h3>
+      <p>
+        kairanban-app is not an attempt to abolish the kairanban. It is an attempt to
+        preserve what the kairanban does — reach everyone, confirm who has seen a notice,
+        keep the sense of being looked after — in a form that can survive the next decade.
+        The design consequences are concrete: an install guide built for members who are
+        not comfortable with smartphones (nothing to memorize, measured on real devices),
+        read-confirmation lists that replace the hanko stamp, and five languages so that
+        foreign residents — the newest neighbors — are inside the circle, not outside it.
+      </p>
+      <blockquote class="pull">
+        This is not a disruption story. It is a rescue operation for a paper institution,
+        teaching a system born in 1940 to send push notifications.
+      </blockquote>
+
+      <h3>Why now: the closing window</h3>
+      <p>
+        The officers running Japan's neighborhood associations today — largely in their
+        40s to 60s — are the country's analog-digital hybrid generation: people who used
+        PC-9800s and Macintoshes at work and passed paper kairanban at home. They are the
+        last cohort fluent in both worlds, and they know exactly what the paper board does
+        for a community. If the handover from paper to digital is going to preserve the
+        institution rather than lose it, it has to happen on their watch. That is the
+        deadline this project is built against.
       </p>
     </div>
   </section>
