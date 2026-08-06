@@ -357,13 +357,6 @@
   table.compare tr.self { background: var(--pine-pale); }
   table.compare tr.self th { color: var(--pine-deep); }
   .compare-note { font-size: 13.5px; color: var(--muted); max-width: 62ch; }
-
-  /* 数字ファクト表 */
-  table.facts { width: 100%; border-collapse: collapse; font-size: 15px; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
-  table.facts th, table.facts td { padding: 13px 16px; border-bottom: 1px solid var(--border); text-align: left; vertical-align: top; line-height: 1.7; }
-  table.facts tr:last-child th, table.facts tr:last-child td { border-bottom: none; }
-  table.facts th { font-weight: 800; white-space: nowrap; width: 11em; }
-  .facts-note { font-size: 13.5px; color: var(--muted); margin-top: 10px; }
 </style>
 </head>
 <body>
@@ -469,23 +462,6 @@
           45〜65歳くらいのこの世代だと、私たちは考えています。
         </p>
       </div>
-    </div>
-  </section>
-
-  <section>
-    <div class="wrap-narrow">
-      <div class="section-head">
-        <h2>数字で見る kairanban-app</h2>
-      </div>
-      <table class="facts">
-        <tr><th>開発期間</th><td>約2週間</td></tr>
-        <tr><th>コード規模</th><td>TypeScript 約1万行</td></tr>
-        <tr><th>データベース変更履歴</th><td>23本</td></tr>
-        <tr><th>運用費</th><td>月0円〜（Cloudflare無料枠）</td></tr>
-        <tr><th>対応言語</th><td>5言語（日本語・やさしい日本語・英語・中国語・ベトナム語）</td></tr>
-        <tr><th>実測値</th><td>iPhoneの共有画面が開いても、画面の上から約42.7%は隠れない——この範囲だけで完結する導入案内を設計</td></tr>
-      </table>
-      <p class="facts-note">注記: 数値・図版は出典（kairanban.jagproject.com）明記で引用できます。</p>
     </div>
   </section>
 
