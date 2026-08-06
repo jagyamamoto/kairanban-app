@@ -85,7 +85,7 @@
   <section class="press-section">
     <div class="wrap-narrow">
       <h2>連絡先</h2>
-      <p>メール: <a href="mailto:press@jagproject.com">press@jagproject.com</a>（担当: Jag Yamamoto〈山本 釈弘〉）</p>
+      <p>メール: <span class="email-addr" data-u="press" data-d="jagproject.com">press（アットマーク）jagproject.com</span>（担当: Jag Yamamoto〈山本 釈弘〉）</p>
       <p>実機デモ・リモート取材とも応じます。所在地は東京都江東区です。</p>
       <p>数値・図版の引用条件は、本ページ末尾の「引用ガイド」をご覧ください。</p>
     </div>
@@ -156,6 +156,17 @@
     </div>
   </section>
 </main>
+
+<script>
+  // 迷惑メール対策: アドレスはHTMLに書かず、表示時に組み立てる
+  document.querySelectorAll('.email-addr').forEach(function (el) {
+    var addr = el.dataset.u + '@' + el.dataset.d;
+    var a = document.createElement('a');
+    a.href = 'mailto:' + addr;
+    a.textContent = addr;
+    el.replaceWith(a);
+  });
+</script>
 
 <footer class="site-footer">
   <div class="wrap">

@@ -728,7 +728,7 @@
           <li>つまずいた点と、改善してほしい点を教えていただくこと</li>
           <li>差し支えない範囲で、事例として紹介させていただくこと（匿名でも構いません）</li>
         </ul>
-        <p>応募・お問い合わせ: <a href="mailto:press@jagproject.com">press@jagproject.com</a></p>
+        <p>応募・お問い合わせ: <span class="email-addr" data-u="press" data-d="jagproject.com">press（アットマーク）jagproject.com</span></p>
       </div>
     </div>
   </section>
@@ -839,6 +839,17 @@
     </div>
   </section>
 </main>
+
+<script>
+  // 迷惑メール対策: アドレスはHTMLに書かず、表示時に組み立てる
+  document.querySelectorAll('.email-addr').forEach(function (el) {
+    var addr = el.dataset.u + '@' + el.dataset.d;
+    var a = document.createElement('a');
+    a.href = 'mailto:' + addr;
+    a.textContent = addr;
+    el.replaceWith(a);
+  });
+</script>
 
 <footer class="site-footer">
   <div class="wrap">
