@@ -12,6 +12,12 @@
 - [セットアップ手順](https://github.com/jagyamamoto/kairanban-app/blob/main/docs/%E3%82%BB%E3%83%83%E3%83%88%E3%82%A2%E3%83%83%E3%83%97%E6%89%8B%E9%A0%86.md): 非開発者向け、1動作ずつの導入手順
 - [ログイン方式について](https://github.com/jagyamamoto/kairanban-app/blob/main/docs/%E3%83%AD%E3%82%B0%E3%82%A4%E3%83%B3%E6%96%B9%E5%BC%8F%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6.md): 電話番号ログインの利便性とリスクのトレードオフ
 
+## English
+
+- [Press & Media (English)](https://kairanban.jagproject.com/press-en.html): media contact, fact sheet, FAQ, citation guide
+- [The Dev Story (English, abridged)](https://kairanban.jagproject.com/ai-story-en.html): how it was built by directing AI — failures included
+- [README (English)](https://github.com/jagyamamoto/kairanban-app/blob/main/README.en.md)
+
 ## Related
 
 - [pwa-install-guide](https://jagyamamoto.github.io/pwa-install-guide/): このアプリの「ホーム画面に追加」案内を切り出した、独立のオープンソース部品

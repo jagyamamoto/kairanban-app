@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Dev Story — How a Neighborhood Officer in Tokyo Built a Civic App by Directing AI | kairanban-app</title>
+<meta name="description" content="A 20-out-of-100 review, a 42.7% screen measurement, a git accident between AI sessions — the abridged English record of building kairanban-app with Claude Code, failures included.">
+<link rel="canonical" href="https://kairanban.jagproject.com/ai-story-en.html">
+<link rel="alternate" hreflang="ja" href="https://kairanban.jagproject.com/ai-story.html">
+<link rel="alternate" hreflang="en" href="https://kairanban.jagproject.com/ai-story-en.html">
+<meta property="og:title" content="How a Neighborhood Officer in Tokyo Built a Civic App by Directing AI — Failures Included">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://kairanban.jagproject.com/ai-story-en.html">
+<meta property="og:site_name" content="kairanban-app">
+<meta property="og:description" content="A 20-out-of-100 review, a 42.7% screen measurement, a git accident between AI sessions — the abridged English record, failures included.">
+<meta property="og:image" content="https://kairanban.jagproject.com/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="How a Neighborhood Officer in Tokyo Built a Civic App by Directing AI">
+<meta name="twitter:description" content="The abridged English record of building kairanban-app with Claude Code — failures included.">
+<meta name="twitter:image" content="https://kairanban.jagproject.com/assets/og-image.png">
+<meta name="theme-color" content="#0a7a3d">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "How a Neighborhood Association Officer in Tokyo Built a Civic App by Directing AI — Failures Included",
+  "description": "The abridged English record of building kairanban-app with Claude Code: a 20-out-of-100 review, a 42.7% measurement, and what AI could not do.",
+  "url": "https://kairanban.jagproject.com/ai-story-en.html",
+  "image": "https://kairanban.jagproject.com/assets/og-image.png",
+  "inLanguage": "en",
+  "author": { "@type": "Person", "name": "Jag Yamamoto", "url": "https://www.jagproject.com/about" },
+  "publisher": { "@type": "Organization", "name": "Jag Project, LLC", "url": "https://jagproject.com" },
+  "mainEntityOfPage": "https://kairanban.jagproject.com/ai-story-en.html"
+}
+</script>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230a7a3d'/%3E%3Cmask id='m'%3E%3Crect x='24' y='26' width='52' height='56' rx='8' fill='white'/%3E%3Crect x='38' y='12' width='24' height='18' rx='6' fill='white'/%3E%3Crect x='32' y='42' width='36' height='6' rx='3'/%3E%3Crect x='32' y='56' width='36' height='6' rx='3'/%3E%3Crect x='32' y='70' width='24' height='6' rx='3'/%3E%3C/mask%3E%3Crect width='100' height='100' fill='white' mask='url(%23m)'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+<style>
+  .article-hero { padding: 52px 0 12px; }
+  .article-hero h1 { font-size: clamp(26px, 4vw, 40px); font-weight: 800; margin: 16px 0 18px; letter-spacing: -0.01em; }
+  .article-hero .lead { font-size: 18px; color: var(--ink-soft); max-width: 60ch; }
+  article { padding: 20px 0 60px; }
+  .prose { max-width: 680px; margin: 0 auto; padding: 0 20px; }
+  .prose h2 { font-size: clamp(21px, 2.8vw, 26px); font-weight: 800; margin: 48px 0 16px; }
+  .prose p { margin: 0 0 18px; color: var(--ink); line-height: 1.85; }
+  .prose ul { padding-left: 1.3em; margin: 0 0 18px; }
+  .prose li { margin-bottom: 8px; color: var(--ink); }
+  .prose hr { border: none; border-top: 1px solid var(--border); margin: 44px 0; }
+  blockquote.pull {
+    font-family: var(--font-display); font-size: clamp(20px, 2.8vw, 26px); font-weight: 600;
+    line-height: 1.55; color: var(--hanko); margin: 32px 0; padding: 4px 0 4px 22px;
+    border-left: 4px solid var(--hanko);
+  }
+  table.data { width: 100%; border-collapse: collapse; margin: 20px 0 26px; font-size: 15px; }
+  table.data th, table.data td { padding: 10px 12px; border-bottom: 1px solid var(--border); text-align: left; vertical-align: top; }
+  table.data th { font-weight: 800; white-space: nowrap; }
+  .end-cta { text-align: center; padding: 40px 20px 10px; }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html">
+      <span class="brand-mark"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><mask id="kb-mask-header"><rect x="5" y="5" width="14" height="15" rx="2" fill="white"/><rect x="9" y="2.2" width="6" height="4.4" rx="1.3" fill="white"/><rect x="7.5" y="10" width="9" height="1.4" rx="0.7"/><rect x="7.5" y="13.4" width="9" height="1.4" rx="0.7"/><rect x="7.5" y="16.8" width="6" height="1.4" rx="0.7"/></mask><rect width="24" height="24" fill="currentColor" mask="url(#kb-mask-header)"/></svg></span>
+      kairanban-app
+    </a>
+    <nav class="site-nav">
+      <a href="press-en.html">Press (EN)</a>
+      <a href="ai-story.html">日本語</a>
+      <a href="https://github.com/jagyamamoto/kairanban-app">GitHub</a>
+      <a href="https://kairanban-demo.jagyamamoto.workers.dev">Demo</a>
+    </nav>
+  </div>
+</header>
+
+<div class="article-hero">
+  <div class="prose">
+    <span class="eyebrow">Abridged English edition</span>
+    <h1>How a Neighborhood Association Officer in Tokyo Built a Civic App by Directing AI — Failures Included</h1>
+    <p class="lead">
+      The full record, in Japanese, is on <a href="ai-story.html">this page</a>.
+      This is the short version for readers outside Japan: what worked,
+      what failed, and what an AI still cannot do for you.
+    </p>
+  </div>
+</div>
+
+<article>
+  <div class="prose">
+
+    <h2>The last clipboard in the smartphone era</h2>
+    <p>
+      Japan recently declared victory in its government "war on floppy disks." Another analog
+      institution survives in its neighborhoods: the <em>kairanban</em>, a clipboard of printed
+      notices that is passed from house to house, each household stamping or signing it before
+      walking it to the next door. It can take a week or more to circle the block. Nobody knows
+      who has actually read it. It is also, in its way, beloved — a small ritual of contact in
+      an aging society.
+    </p>
+    <p>
+      Neighborhood associations (<em>chōnaikai</em>) — the volunteer bodies that run local
+      festivals, disaster drills and community halls — are shrinking and disbanding across
+      Japan. TV networks have spent the past year reporting the "problem" side: associations
+      dissolving, autumn festivals losing their portable-shrine processions. kairanban-app is
+      an attempt at the "what now" side.
+    </p>
+
+    <h2>Who built it, and how</h2>
+    <p>
+      I am an active officer of my neighborhood association in Koto ward, Tokyo, and the
+      representative of Jag Project, LLC. I have planned and directed software projects for
+      most of my career in Japan's media industry — but the last time I personally wrote a
+      program was BASIC games in junior high school.
+    </p>
+    <p>
+      I built kairanban-app by directing a generative AI coding agent (Anthropic's Claude
+      Code) in Japanese: describing what I wanted, deciding between options it proposed,
+      and refusing to accept "done" without proof. A public beta took about two weeks.
+      The app has been updated daily since, including contributions through GitHub.
+      I developed it as a working proposal to my own association — which is still
+      considering it — and released it as open source so any association can use it.
+      We are now recruiting the first partner association to verify it in real use.
+    </p>
+    <table class="data">
+      <tr><th>Time to beta</th><td>About 2 weeks</td></tr>
+      <tr><th>Code</th><td>~10,000 lines of TypeScript, 23 database migrations</td></tr>
+      <tr><th>Running cost</th><td>From ¥0/month (free-tier hosting)</td></tr>
+      <tr><th>Languages</th><td>Japanese, Easy Japanese, English, Chinese, Vietnamese</td></tr>
+      <tr><th>Development cost</th><td>Mainly paid subscriptions to AI tools (ChatGPT, Claude)</td></tr>
+    </table>
+    <p>
+      The design premise is economic as much as technical. Electronic circular boards are
+      becoming a market in Japan — a newspaper company has entered the business, and the Tokyo
+      metropolitan government now subsidizes association digitization. Most offerings are
+      monthly subscriptions, which means association fees flow out of the neighborhood every
+      month. kairanban-app inverts that: free infrastructure, open code, and if anyone is paid
+      to maintain it, it can be the association's own IT-literate members or a local business.
+      We call the idea <strong>"digital self-governance"</strong> — residents using digital
+      tools to run their own community, rather than leaving digital infrastructure entirely
+      to government or vendors.
+    </p>
+
+    <hr>
+
+    <h2>The 20-out-of-100 manual</h2>
+    <p>
+      The hardest problem was not code. It was the button labeled "Add to Home Screen."
+    </p>
+    <p>
+      The app is a PWA — a web app that installs to the phone's home screen. On iOS, push
+      notifications only work after that installation, and Apple provides no way to automate
+      it: a member must tap through Share → Add to Home Screen → Add by themselves. So I had
+      the AI produce a beautiful step-by-step manual with screenshots. I scored it 20 out
+      of 100.
+    </p>
+    <blockquote class="pull">
+      People who aren't comfortable with smartphones cannot memorize what they saw
+      and then operate from memory.
+    </blockquote>
+    <p>
+      On iOS, the moment you start the procedure, the system share sheet slides up and covers
+      the instructions. A conventional manual therefore demands that the user memorize two or
+      more steps — which is precisely what the least confident users cannot do. However
+      polished, it fails by design.
+    </p>
+    <p>
+      The rebuild started from measurement. On real devices, we found the iOS share sheet
+      leaves the top <strong>42.7%</strong> of the screen uncovered. We also confirmed that
+      JavaScript keeps running while the sheet is open, that a web page cannot detect the
+      sheet opening at all, and that <code>navigator.share()</code> cannot offer
+      "Add to Home Screen." The answer: a "zero-memory" guide that keeps photographs of every
+      button on-screen inside that 42.7% band, all steps visible at once, so the user only
+      compares and taps — nothing to remember, no timed auto-advance.
+    </p>
+    <p>
+      Even that failed once: the band was sized in fixed pixels, and on the smallest iPhone
+      it silently stretched to 48% of the screen, hiding steps 4 and 5. Only a real-device
+      screenshot caught it. The guide has since been extracted as its own open-source
+      component, <a href="https://jagyamamoto.github.io/pwa-install-guide/">pwa-install-guide</a>,
+      with all the measurements documented.
+    </p>
+
+    <h2>Other failures, all published</h2>
+    <ul>
+      <li><strong>Two AI sessions, one repository.</strong> Running two AI chat sessions on the same codebase in parallel, one session committed the other's half-finished files. We now require each session to commit only files it changed itself.</li>
+      <li><strong>A test page left in production.</strong> A verification HTML file was forgotten in a public directory. Harmless content — but it became a rule, and then a script that checks mechanically before every release.</li>
+      <li><strong>Eyes are not an audit.</strong> Before publishing, we ran optical character recognition over all 33 images on the public pages and machine-matched the text against the database. Zero personal-data hits — but only the machine check could prove it.</li>
+      <li><strong>A race condition in production.</strong> The demo site's daily data reset ran twice concurrently and briefly wiped role data. It was found, reproduced under 15 parallel requests, and fixed with a database lock — while this document was being written.</li>
+    </ul>
+
+    <h2>What the AI could not do</h2>
+    <p>
+      Claude Code wrote essentially all of the code. It did not — could not — do the parts
+      that turned code into something a community can use:
+    </p>
+    <ul>
+      <li><strong>Judgment.</strong> Deciding, for example, that login would use phone numbers only — trading security risk for the certainty that members who cannot manage passwords can still get in. That trade-off is documented publicly, with a standing request for better ideas.</li>
+      <li><strong>Verification on real devices.</strong> An AI reports "done." Whether step 5 is visible on the smallest iPhone is a fact about the physical world.</li>
+      <li><strong>Writing decisions down.</strong> AI sessions forget. Undocumented decisions get "helpfully" reverted by the next session.</li>
+      <li><strong>Knowing who it is for.</strong> The 20-point review existed because someone was watching the user, not the product.</li>
+    </ul>
+
+    <hr>
+
+    <h2>Why publish the failures</h2>
+    <p>
+      We believe software use is shifting from "buy a finished package" to "take open source,
+      have an AI adapt it to your own problem, and build it yourself." That future needs
+      honest accounts of what directing an AI is actually like — not demos. This project is
+      Jag Project, LLC's flagship verification of that future, and the record, including
+      everything that went wrong, is the point.
+    </p>
+
+  </div>
+</article>
+
+<div class="end-cta">
+  <div class="btn-row" style="justify-content:center;">
+    <a class="btn btn-primary" href="https://kairanban-demo.jagyamamoto.workers.dev">Try the demo (fictional data)</a>
+    <a class="btn btn-ghost" href="press-en.html">Press &amp; Media →</a>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-links">
+      <a href="index.html">About (JA)</a>
+      <a href="press-en.html">Press (EN)</a>
+      <a href="ai-story.html">日本語版</a>
+      <a href="https://github.com/jagyamamoto/kairanban-app">GitHub</a>
+      <a href="https://kairanban-demo.jagyamamoto.workers.dev">Demo</a>
+      <a href="https://github.com/jagyamamoto/kairanban-app/blob/main/LICENSE">MIT License</a>
+      <a href="https://www.jagproject.com/about">About Jag Project</a>
+    </div>
+    <p>kairanban-app is an open-source project developed and published by Jag Project, LLC as a flagship project to verify AI-era development practices and the possibility of "digital self-governance". No warranty or support is provided.</p>
+  </div>
+</footer>
+
+</body>
+</html>
