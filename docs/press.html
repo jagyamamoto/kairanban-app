@@ -40,6 +40,7 @@
   table.facts tr:last-child th, table.facts tr:last-child td { border-bottom: none; }
   table.facts th { font-weight: 800; white-space: nowrap; width: 11em; }
   .facts-note { font-size: 13.5px; color: var(--muted); margin-top: 10px; }
+  .facts-group { font-size: 16px; font-weight: 800; margin: 24px 0 10px; color: var(--pine-deep); }
 
   .faq-item { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px 22px; margin-bottom: 14px; }
   .faq-item .q { font-weight: 800; margin: 0 0 8px; color: var(--ink); }
@@ -90,13 +91,21 @@
   <section class="press-section">
     <div class="wrap-narrow">
       <h2>数字で見る kairanban-app</h2>
+      <p>記事用のファクトシートです。「どれだけの労力と費用で開発できたか」と「導入する町会側の数字」に分けています。</p>
+
+      <h3 class="facts-group">開発にかかった労力・費用</h3>
       <table class="facts">
-        <tr><th>開発期間</th><td>約2週間</td></tr>
+        <tr><th>開発期間</th><td>ベータ版（最初のテスト版）の公開まで約2週間。その後も、GitHub経由の参加者を含めて日々更新を続けています</td></tr>
         <tr><th>コード規模</th><td>TypeScript 約1万行</td></tr>
         <tr><th>データベース変更履歴</th><td>23本</td></tr>
-        <tr><th>運用費</th><td>月0円〜（Cloudflare無料枠）</td></tr>
-        <tr><th>対応言語</th><td>5言語（日本語・やさしい日本語・英語・中国語・ベトナム語）</td></tr>
+        <tr><th>開発コスト</th><td>生成AIツールの有償プラン利用料（ChatGPT・Claude）。人件費を除けば、主な支出はこれだけです</td></tr>
         <tr><th>実測値</th><td>iPhoneの共有画面が開いても、画面の上から約42.7%は隠れない——この範囲だけで完結する導入案内を設計</td></tr>
+      </table>
+
+      <h3 class="facts-group">導入する町会側の数字</h3>
+      <table class="facts">
+        <tr><th>運用費</th><td>月0円〜（Cloudflare無料枠）。ただし導入・改変の担当者には生成AIツールの有償プランが事実上必要です</td></tr>
+        <tr><th>対応言語</th><td>5言語（日本語・やさしい日本語・英語・中国語・ベトナム語）</td></tr>
       </table>
       <p class="facts-note">注記: 数値・図版は出典（kairanban.jagproject.com）明記で引用できます。</p>
     </div>
