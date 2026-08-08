@@ -59,10 +59,28 @@ const IOS_STEPS: Step[] = [
   { img: "/help/img/t4-add.png", alt: "右上の青い追加ボタン", label: "右上の「追加」を押す" },
 ];
 
-// ⚠ Androidに手順は出さない(オーナー指示 2026-07-30)。
-//   Android/Chromeは「1回押すだけ」で追加できる仕組みを持っているので、
-//   そのボタンだけを出す。仕組みが使えない端末では案内そのものを出さない
-//   (押せないボタンや長い手順を見せるより、何も出さないほうがよい)。
+// Android(Chrome)の手順。**写真は付けない。**
+// Androidはメーカーごとにメニューの見た目が違い、合わない写真は
+// 「自分のと違う」と手を止めさせる。位置を言葉で書くほうが確実。
+//
+// ⚠ 以前は「Androidには手順を出さない。1回押すだけが使えるときだけボタンを出す」
+//   としていた(2026-07-30)。しかしこの前提が 2026-08-09 の実機テストで崩れた。
+//   `beforeinstallprompt` は非同期で遅れて届き、そもそも届かないブラウザもある。
+//   届く前に判定していたため、AndroidなのにiOS用の「Safariで開いてください」が出た。
+//   → Androidにも手動の手順を用意し、いつでも案内できるようにした。
+const ANDROID_STEPS: Step[] = [
+  { label: "画面の右上の、たて に3つ ならんだ点を押す" },
+  { label: "「アプリをインストール」を押す。無いときは「ホーム画面に追加」を押す" },
+  { label: "出てきた画面の「インストール」を押す。「追加」と出ることもある" },
+];
+
+/**
+ * Androidの `beforeinstallprompt` は**ページ表示より遅れて届く**。
+ * 実機で 200〜800ms 程度。余裕を見て、この時間だけ待ってから最初の画面を出す。
+ * 待たずに描くと「はじめる」(手動)を先に見せてしまい、直後に
+ * 「1回押すだけ」へ化けて利用者を驚かせる。
+ */
+const ANDROID_PROMPT_GRACE_MS = 1200;
 
 function isStandalone(): boolean {
   return (
@@ -97,12 +115,20 @@ function isIOSSafari(): boolean {
   return !/CriOS|FxiOS|EdgiOS|Line\/|FBAN|FBAV|Instagram|GSA\/|YJApp/i.test(ua);
 }
 
+// Androidのアプリ内ブラウザ(LINE・Facebook・Instagram等)か。
+// ここからはホーム画面に追加できないので、外のブラウザへ逃がすしかない。
+// `; wv)` はAndroid標準のWebViewが名乗る印。
+function isAndroidInApp(): boolean {
+  if (!isAndroid()) return false;
+  return /Line\/|FBAN|FBAV|Instagram|Twitter|; wv\)/i.test(navigator.userAgent);
+}
+
 // 通知が「許可」になっているか。iOSはホーム画面のアイコンから開いたときだけ聞かれる。
 function notificationsGranted(): boolean {
   return typeof Notification !== "undefined" && Notification.permission === "granted";
 }
 
-function CopyUrlButton() {
+function CopyUrlButton({ android }: { android: boolean }) {
   const [copied, setCopied] = useState(false);
   return (
     <button
@@ -127,7 +153,11 @@ function CopyUrlButton() {
         }
       }}
     >
-      {copied ? "✅ コピーしました。次はSafariを開いてください" : "📋 このページのアドレスをコピーする"}
+      {copied
+        ? android
+          ? "✅ コピーしました。次はChromeを開いてください"
+          : "✅ コピーしました。次はSafariを開いてください"
+        : "📋 このページのアドレスをコピーする"}
     </button>
   );
 }
@@ -135,25 +165,39 @@ function CopyUrlButton() {
 // 画面上部に固定する案内。手順を常時ぜんぶ表示する(自動で進めない)。
 function GuideBand({
   steps,
+  place,
   onDismiss,
   onRestart,
 }: {
   steps: Step[];
+  /**
+   * ⚠ 帯は押すボタンと**反対側**に置く。同じ側だと自分でボタンを隠す。
+   *   Safari(…は画面の下) → "top" / Android Chrome(⋮は画面の右上) → "bottom"
+   */
+  place: "top" | "bottom";
   onDismiss: () => void;
   onRestart: () => void;
 }) {
   const originalTitle = useRef(document.title);
 
   // 共有の画面の中(最上部のタイトル欄)にも指示を出す。実機検証で確認済みの効果。
+  // ⚠ iOSだけ。Androidの「ホーム画面に追加」は document.title ではなく
+  //   manifest の名前を出すので、書き換えても意味がなく、タブの題名が変わるだけ。
   useEffect(() => {
+    if (!isIOS()) return;
     document.title = INJECTED_TITLE;
+    const prev = originalTitle.current;
     return () => {
-      document.title = originalTitle.current;
+      document.title = prev;
     };
   }, []);
 
   return (
-    <div className="ig-band" role="region" aria-label="ホーム画面に追加する手順">
+    <div
+      className={`ig-band${place === "bottom" ? " ig-band-bottom" : ""}`}
+      role="region"
+      aria-label="ホーム画面に追加する手順"
+    >
       <div className="ig-band-head">
         <span className="ig-band-title">設定方法</span>
         <span className="ig-band-label">1から順に押していってください</span>
@@ -198,16 +242,34 @@ export default function InstallGuide({
   const [oneTap, setOneTap] = useState(false);
   useEffect(() => onInstallAvailable(setOneTap), []);
 
-  const steps = IOS_STEPS;
+  const android = isAndroid();
+  const steps = android ? ANDROID_STEPS : IOS_STEPS;
 
   // 案内の入口。
   // ・iPhoneのSafari本体 → 写真つきの手順を出す
-  // ・Android → 「1回押すだけ」が使えるときだけボタンを出す(手順は出さない)
-  // ・iPhoneでLINEやChromeの中 → 「Safariで開いてください」を出す
-  const canGuideHere = isAndroid() ? oneTap : isIOSSafari();
+  // ・Android → 「1回押すだけ」が使えればそのボタン、使えなければ文字の手順
+  // ・アプリ内ブラウザ(LINE等) → 外のブラウザで開き直してもらう
+  //
+  // ⚠ Androidを `oneTap` で判定してはいけない。ここが 2026-08-09 まで入っていた不具合。
+  //   `beforeinstallprompt` は遅れて届き、届かないブラウザもある
+  //   (Firefox・Samsung Internet・メーカー製ブラウザ)。届く前に判定すると
+  //   canGuideHere が false になり、**AndroidなのにiOS用の案内**が出た。
+  const canGuideHere = android ? !isAndroidInApp() : isIOSSafari();
   const entryMode = (): "intro" | "safari" => (canGuideHere ? "intro" : "safari");
   // 閉じたあとは、手順を出せる端末には必ず小さな入口を残す。
   const closedMode = (): "reopen" | "hidden" => (canGuideHere ? "reopen" : "hidden");
+
+  // Androidでは beforeinstallprompt を少しだけ待ってから最初の画面を出す。
+  const [promptSettled, setPromptSettled] = useState(!android);
+  useEffect(() => {
+    if (promptSettled) return;
+    if (oneTap) {
+      setPromptSettled(true);
+      return;
+    }
+    const id = window.setTimeout(() => setPromptSettled(true), ANDROID_PROMPT_GRACE_MS);
+    return () => window.clearTimeout(id);
+  }, [promptSettled, oneTap]);
 
   useEffect(() => {
     if (isStandalone()) {
@@ -221,16 +283,21 @@ export default function InstallGuide({
     // iPhoneとAndroidの両方を案内する。
     // ⚠ 以前はAndroidを静的ガイド側に任せていたが、手順が2か所に分かれて
     //   食い違いの原因になったため、案内はここに一本化した。
-    if (!isIOS() && !isAndroid()) return; // パソコンには出さない
+    if (!isIOS() && !android) return; // パソコンには出さない
     if (me?.user?.pwa_installed) return; // 設定済みが分かっている人には出さない
+    if (!promptSettled) return; // Androidは beforeinstallprompt を待ってから出す
     // ⚠ 一度閉じても「二度と出ない」にはしない。間違って閉じた人が次に何をすれば
     //   よいか分からなくなるため、閉じたあとは小さな入口(reopen)を必ず出す。
+    // ⚠ 依存に oneTap を入れないこと。あとから届いたときに mode が intro へ
+    //   巻き戻り、手順の途中の人が最初の画面に戻される。
+    //   「1回押すだけ」への切り替えは intro の描画側が oneTap を見て行う。
     if (localStorage.getItem(DISMISS_KEY)) {
       setMode(closedMode());
       return;
     }
     setMode(entryMode());
-  }, [me?.user?.pwa_installed]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [me?.user?.pwa_installed, promptSettled]);
 
   // ☰メニューから呼ばれたら、閉じていても必ず開く
   useEffect(() => {
@@ -335,29 +402,54 @@ export default function InstallGuide({
     );
   }
 
+  // アプリ内ブラウザ(LINE等)。ここからはホーム画面に追加できない。
+  // ⚠ 逃がす先は端末で違う。AndroidにSafariの案内を出すと、
+  //   存在しないアプリを探させることになる(2026-08-09の実機報告)。
   if (mode === "safari") {
     return (
       <div className="card ig-card">
         <div className="spread">
-          <h2 className="ig-title">青いコンパスの「Safari」で開いてください</h2>
+          <h2 className="ig-title">
+            {android
+              ? "赤・黄・緑の輪の「Chrome」で開いてください"
+              : "青いコンパスの「Safari」で開いてください"}
+          </h2>
           <button className="btn btn-secondary btn-sm ig-close" onClick={dismiss}>
             × あとで
           </button>
         </div>
         <p className="ig-body">
-          この画面では、ホーム画面への設定ができません。次の順で<strong>Safari</strong>に移ってください。
+          この画面では、ホーム画面への設定ができません。次の順で
+          <strong>{android ? "Chrome" : "Safari"}</strong>に移ってください。
         </p>
         <ol className="ig-steps-list">
           <li>
             このボタンを押します(アドレスが自動で写されます)
             <div style={{ margin: "10px 0" }}>
-              <CopyUrlButton />
+              <CopyUrlButton android={android} />
             </div>
           </li>
-          <li>ホーム画面にもどって、青いコンパスの<strong>Safari</strong>を開きます</li>
-          <li>
-            画面下の<strong>住所欄を長押し</strong>して、<strong>「ペーストして開く」</strong>を押します
-          </li>
+          {android ? (
+            <>
+              <li>
+                ホーム画面にもどって、赤・黄・緑の輪の<strong>Chrome</strong>を開きます
+              </li>
+              <li>
+                画面上の<strong>住所欄を長押し</strong>して、<strong>「貼り付けて検索」</strong>
+                を押します
+              </li>
+            </>
+          ) : (
+            <>
+              <li>
+                ホーム画面にもどって、青いコンパスの<strong>Safari</strong>を開きます
+              </li>
+              <li>
+                画面下の<strong>住所欄を長押し</strong>して、
+                <strong>「ペーストして開く」</strong>を押します
+              </li>
+            </>
+          )}
         </ol>
       </div>
     );
@@ -368,7 +460,12 @@ export default function InstallGuide({
   if (mode === "guide")
     return (
       <div className="ig-fullscreen">
-        <GuideBand steps={steps} onDismiss={dismiss} onRestart={() => setMode("intro")} />
+        <GuideBand
+          steps={steps}
+          place={android ? "bottom" : "top"}
+          onDismiss={dismiss}
+          onRestart={() => setMode("intro")}
+        />
       </div>
     );
 
@@ -384,10 +481,14 @@ export default function InstallGuide({
           ×
         </button>
       </div>
+      {/* ⚠ oneTap は遅れて true になることがある。ここは毎回の描画で読み直すので、
+          届いた瞬間に「1回押すだけ」へ切り替わる(mode は動かさない)。 */}
       <p className="ig-intro-body">
         {oneTap
           ? "下のボタンを1回押すだけで終わります。"
-          : "押すものの写真を画面の上に出しておきます。何も覚えなくて大丈夫です。"}
+          : android
+            ? "押すものの場所を画面の下に出しておきます。何も覚えなくて大丈夫です。"
+            : "押すものの写真を画面の上に出しておきます。何も覚えなくて大丈夫です。"}
       </p>
       <p className="ig-intro-note">
         押し間違えても、途中でやめても、壊れたりお金がかかったりすることは絶対にありません。
