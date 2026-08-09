@@ -35,7 +35,19 @@ const WELCOME_KEY = "pwaWelcomeDone";
 const APP_URL = window.location.origin;
 const INJECTED_TITLE = "↓ホーム画面に追加を押す";
 
-type Step = { img?: string; alt?: string; label: string };
+type Step = {
+  img?: string;
+  alt?: string;
+  label: string;
+  /**
+   * 押すものの**候補**。機種やブラウザの版で文字が違うときに並べて見せる。
+   * ⚠ 1つに絞らないこと。外した1つを断定で書くと「そんなものは無い」で手が止まる。
+   */
+  options?: string[];
+};
+
+/** Androidのブラウザの系統。メニューの位置と文言がここで決まる。 */
+type AndroidBrowser = "chrome" | "samsung" | "firefox" | "edge" | "opera" | "other";
 
 // iPhone(Safari)の手順。写真は実機の切り抜き。文字が写真に入っているものには注記を付けない
 // (画面に出ている文字と写真が一対一で対応するようにする)。
@@ -68,11 +80,53 @@ const IOS_STEPS: Step[] = [
 //   `beforeinstallprompt` は非同期で遅れて届き、そもそも届かないブラウザもある。
 //   届く前に判定していたため、AndroidなのにiOS用の「Safariで開いてください」が出た。
 //   → Androidにも手動の手順を用意し、いつでも案内できるようにした。
-const ANDROID_STEPS: Step[] = [
-  { label: "画面の右上の、たて に3つ ならんだ点を押す" },
-  { label: "「アプリをインストール」を押す。無いときは「ホーム画面に追加」を押す" },
-  { label: "出てきた画面の「インストール」を押す。「追加」と出ることもある" },
-];
+// ⚠⚠ **押すものの文言をブラウザの「版」から割り出すことはできない。**(2026-08-09 調査)
+//   Chrome 110以降 UAのマイナー版は 0.0.0 に丸められ、しかもメジャー番号と文言が対応しない
+//   (Finch＝サーバ側の実験配信で段階的に変わるため、同じ Chrome 140 でも
+//    「アプリをインストール」と「インストールしてショートカットを作成」に分かれる)。
+//   さらに文言は端末のUI言語で出る。
+//   → 1つに断定せず、候補を並べて見比べてもらう(options)。
+const ANDROID_MENU: Record<AndroidBrowser, string> = {
+  chrome: "画面の右上の、たて に3つ ならんだ点を押す",
+  firefox: "画面の右上の、たて に3つ ならんだ点を押す",
+  samsung: "画面の右下の、よこ線が3本ならんだ印を押す",
+  edge: "画面のいちばん下の、まん中の「…」を押す",
+  opera: "画面の右下の、赤い丸の印を押す",
+  other: "この画面のメニュー（よこ線3本、または点3つ）を押す",
+};
+const ANDROID_PICK: Record<AndroidBrowser, string[]> = {
+  chrome: ["アプリをインストール", "インストールしてショートカットを作成", "ホーム画面に追加"],
+  firefox: ["ホーム画面に追加", "アプリをインストール"],
+  samsung: ["現在のページを追加 → ホーム画面", "ページを追加 → ホーム画面"],
+  edge: ["アプリ → このサイトをインストール", "ホーム画面に追加"],
+  opera: ["ホーム画面に追加", "アプリをインストール"],
+  other: ["アプリをインストール", "ホーム画面に追加"],
+};
+
+function androidSteps(b: AndroidBrowser): Step[] {
+  return [
+    { label: ANDROID_MENU[b] },
+    { label: "次のどれかが出るので、出ているものを押す", options: ANDROID_PICK[b] },
+    { label: "出てきた画面の「インストール」を押す。「追加」と出ることもある" },
+  ];
+}
+
+// ⚠ 判定の順番を変えないこと。Samsung・Edge・Opera のUAには Chrome/ が入っている。
+function androidBrowser(): AndroidBrowser {
+  const ua = navigator.userAgent;
+  if (/SamsungBrowser/i.test(ua)) return "samsung";
+  if (/EdgA\//i.test(ua)) return "edge";
+  if (/OPR\//i.test(ua)) return "opera";
+  if (/Firefox\//i.test(ua)) return "firefox";
+  if (/Chrome\//i.test(ua)) return "chrome";
+  return "other";
+}
+
+// そのブラウザのメニューが画面の上にあるか。帯はこの反対側に置く。
+// Chrome・Firefox は右上の ⋮ / Samsung・Edge・Opera は画面の下。
+function androidMenuIsUp(b: AndroidBrowser): boolean {
+  return b === "chrome" || b === "firefox" || b === "other";
+}
 
 /**
  * Androidの `beforeinstallprompt` は**ページ表示より遅れて届く**。
@@ -211,7 +265,20 @@ function GuideBand({
           <li className="ig-step-row" key={s.label}>
             <span className="ig-step-num">{i + 1}</span>
             {s.img && <img className="ig-step-img" src={s.img} alt={s.alt} />}
-            <span className="ig-step-where">{s.label}</span>
+            <span className="ig-step-where">
+              {s.label}
+              {/* 候補は縦に積む。横に「／」でつなぐと1つの長い文に見えて、
+                  選ぶものだと分からない(見比べて選ばせるのが目的)。 */}
+              {s.options && (
+                <span className="ig-step-options">
+                  {s.options.map((o) => (
+                    <span className="ig-step-option" key={o}>
+                      {o}
+                    </span>
+                  ))}
+                </span>
+              )}
+            </span>
           </li>
         ))}
       </ol>
@@ -243,7 +310,14 @@ export default function InstallGuide({
   useEffect(() => onInstallAvailable(setOneTap), []);
 
   const android = isAndroid();
-  const steps = android ? ANDROID_STEPS : IOS_STEPS;
+  const andBrowser = android ? androidBrowser() : "other";
+  const steps = android ? androidSteps(andBrowser) : IOS_STEPS;
+  // 帯は押すボタンと反対側。Androidも一律ではない(Samsung・Edge・Operaはメニューが下)。
+  const bandPlace: "top" | "bottom" = android
+    ? androidMenuIsUp(andBrowser)
+      ? "bottom"
+      : "top"
+    : "top";
 
   // 案内の入口。
   // ・iPhoneのSafari本体 → 写真つきの手順を出す
@@ -462,7 +536,7 @@ export default function InstallGuide({
       <div className="ig-fullscreen">
         <GuideBand
           steps={steps}
-          place={android ? "bottom" : "top"}
+          place={bandPlace}
           onDismiss={dismiss}
           onRestart={() => setMode("intro")}
         />

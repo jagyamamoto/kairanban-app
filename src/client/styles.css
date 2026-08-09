@@ -917,6 +917,38 @@ table.simple th { background: #eef2ee; font-size: 14px; }
 }
 
 /* 「さいしょの画面にもどる」。押せる場所を目に見えるボタンにしておく。 */
+/* 押すものの**候補**（Androidのメニューは端末ごとに文言が違う）。
+   ⚠ 横に「／」でつながず、必ず縦に積むこと。横に並べると1つの長い文に見えて、
+     「この中から選ぶもの」だと分からない。見比べて選ばせるのが目的。
+   ⚠ 白地＋枠にして、地の文（黄色地の指示）と見た目を分ける。
+     画面に出ている文字そのものであることが一目で分かる。 */
+.ig-step-options {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin-top: 4px;
+}
+.ig-step-option {
+  background: #fff;
+  border: 2px solid #111;
+  border-radius: 6px;
+  padding: 3px 8px;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+.ig-step-option::before {
+  content: "「";
+}
+.ig-step-option::after {
+  content: "」";
+}
+/* 候補を並べる行だけ、番号を上端にそろえる(中央だと番号が宙に浮く)。
+   :has() が無いブラウザでは中央のままになるだけで、読めなくなることはない。 */
+.ig-step-row:has(.ig-step-options) {
+  align-items: flex-start;
+  margin-bottom: 6px;
+}
 .ig-band-back {
   display: block;
   width: 100%;
