@@ -969,7 +969,11 @@ table.simple th { background: #eef2ee; font-size: 14px; }
   position: fixed;
   inset: 0;
   z-index: 9998;
-  background: #ffd400;
+  /* ⚠ ここを黄色(#ffd400)に戻さないこと。
+     全面を1色で塗るとブラウザのバーまで同じ色に染まり、
+     利用者が押すべきボタン(iOSの共有マーク・Androidの ⋮)がバーに同化して見えなくなる。
+     指示は帯だけを黄色にして、地は白のままにする。 */
+  background: #ffffff;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
 }
@@ -986,10 +990,11 @@ table.simple th { background: #eef2ee; font-size: 14px; }
   background: #fff;
   border-color: #111;
 }
-/* 全画面の中では帯の影は不要(境目が無いため) */
+/* 全画面の中では帯の影は不要(枠線で境目が出るため)。
+   ⚠ border-bottom は消さないこと。地を白にしたので、枠線が無いと
+     黄色い帯と白い地の境目はつくものの、帯の下端が締まらず指示に見えない。 */
 .ig-fullscreen .ig-band {
   box-shadow: none;
-  border-bottom: none;
 }
 /* 設定を閉じたあとの小さな入口。目立ちすぎず、しかし必ず見つかる位置に置く。
    ⚠ これを消すと、間違って閉じた人が設定に戻れなくなる(オーナー指摘 2026-07-30)。 */
