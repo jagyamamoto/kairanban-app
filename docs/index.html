@@ -583,16 +583,49 @@
           — この前提で設計をやり直しました。
         </p>
         <p style="max-width: 60ch; color: var(--ink-soft);">
-          iPhoneの「ホーム画面に追加」は、操作の途中でOSの共有画面が現れて説明が隠れます。
-          記憶を頼りにする案内は、原理的に失敗します。実機で測って作り直しました。
-          <strong>この設定を終えないと通知(プッシュ通知)が届かない</strong>ため、
-          単なる見栄えの問題ではなく機能の入口そのものでした。
-          技術的な試行錯誤は <a href="ai-story.html" style="color: var(--pine-deep); font-weight: 700;">AI開発の裏側</a> で詳しく書いています。
+          このアプリは、Webページをスマホの<strong>アプリのように使う</strong>形（PWA）です。
+          ホーム画面にアイコンが並び、通知も届きます。
+          ただ、その「アプリにする」操作が、スマホに詳しくない方にはとても難しい。
+          <strong>そこを、画面の案内に沿って進むだけで終わる形にしました。</strong>
+          お使いの機種を自動で見分けて、<strong>いま押す場所だけ</strong>を1つずつ示します。
+          手順を覚えておく必要はありません。
+          <strong>この操作を終えないと通知が届かない</strong>ため、
+          見栄えの問題ではなく、機能の入口そのものでした。
+          案内の部分は
+          <a href="https://jagyamamoto.github.io/pwa-install-guide/" style="color: var(--pine-deep); font-weight: 700;">単体の部品としても公開</a>
+          しています。実機で試した記録は
+          <a href="ai-story.html" style="color: var(--pine-deep); font-weight: 700;">AI開発の裏側</a> にあります。
+        </p>
+
+        <!-- ⚠ 事実確認済み(2026-09-03)。ここを書き換えるときは根拠も一緒に確認すること。
+             ・PWAはApp Store / Google Playを経由しない(web.dev「Installation」)
+             ・Androidは「提供元不明のアプリ」の許可も不要。Play Servicesが署名するため
+               (web.dev: "the phone installs it without disabling security")
+             ・Appleの「承認と購入のリクエスト」の対象は
+               "downloading an app from the App Store"(無料アプリも含む)。
+               ホーム画面への追加は対象として挙げられていない
+             ・ただしMDMやスクリーンタイムのWeb制限の影響は受けうるので、断定しない -->
+        <p style="max-width: 60ch; color: var(--ink-soft);">
+          この形には、もうひとつ利点があります。
+          <strong>アプリを入れる権限がない方でも使えます。</strong>
+          App Store や Google Play を通らないため、
+          Apple IDやGoogleアカウントのパスワード、支払い情報の登録、
+          ファミリー共有の「承認と購入のリクエスト」——
+          ふつうアプリを入れるときに必要になるものが、どれも要りません。
+          Androidでも「提供元不明のアプリを許可」といった設定を触らずに済みます。
+        </p>
+        <p style="max-width: 60ch; color: var(--ink-soft);">
+          離れて暮らす親のスマホを、帰省したときに家族が設定してあげる。
+          そんな場面でも、パスワードを聞き出さずに終えられます。
+          <span style="font-size: 14px;">
+            （会社や学校が配ったスマホなど、管理プロファイルやスクリーンタイムで
+            Webの利用そのものが制限されている端末では、この限りではありません。）
+          </span>
         </p>
         <div class="fact-strip">
           <div class="fact">
             <b>42.7%</b>
-            <span>共有画面の上端の位置(実測)。案内の帯はここに収める</span>
+            <span>iPhoneで画面の下から出てくるメニューの上端(実測)。案内はここより上に収める</span>
           </div>
           <div class="fact">
             <b>44px</b>
