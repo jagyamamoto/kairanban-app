@@ -228,27 +228,6 @@
     padding-left: 20px;
     margin: 0 0 28px;
   }
-  .fact-strip {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-    margin-top: 28px;
-  }
-  @media (max-width: 700px) { .fact-strip { grid-template-columns: 1fr; } }
-  .fact {
-    background: var(--card);
-    border-radius: 14px;
-    padding: 18px 20px;
-    border: 1px solid var(--border);
-  }
-  .fact b {
-    font-family: var(--font-mono);
-    font-size: 22px;
-    color: var(--pine-deep);
-    display: block;
-    margin-bottom: 4px;
-  }
-  .fact span { font-size: 13.5px; color: var(--ink-soft); }
 
   /* ---------- 費用 ---------- */
   .cost-row {
@@ -622,20 +601,6 @@
             Webの利用そのものが制限されている端末では、この限りではありません。）
           </span>
         </p>
-        <div class="fact-strip">
-          <div class="fact">
-            <b>42.7%</b>
-            <span>iPhoneで画面の下から出てくるメニューの上端(実測)。案内はここより上に収める</span>
-          </div>
-          <div class="fact">
-            <b>44px</b>
-            <span>指で押すものすべての最小の高さ</span>
-          </div>
-          <div class="fact">
-            <b>0秒</b>
-            <span>時間で自動的に手順を進める演出。実機テストで撤廃した</span>
-          </div>
-        </div>
       </div>
     </div>
   </section>
