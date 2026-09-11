@@ -11,7 +11,9 @@
     "icons": "node tools/gen-icons.mjs",
     "db:local": "wrangler d1 migrations apply kairanban --local",
     "db:remote": "wrangler d1 migrations apply kairanban --remote",
-    "deploy": "npm run build && wrangler deploy"
+    "deploy": "npm run build && wrangler deploy",
+    "build:demo": "DEMO_LIFE_INFO=1 vite build",
+    "deploy:demo": "npm run build:demo && wrangler deploy -c wrangler.demo.jsonc"
   },
   "dependencies": {
     "hono": "^4.6.0",

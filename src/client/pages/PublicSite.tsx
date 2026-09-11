@@ -24,7 +24,7 @@ import {
   HINANBASHO,
   LIFE_LINKS,
   LIFE_INFO,
-  LIFE_INFO_ENABLED,
+  SHOW_LIFE_INFO,
   mapUrl,
 } from "../../shared/lifeinfo";
 import { fmtDate, fmtDateTime } from "../util";
@@ -1552,7 +1552,7 @@ const VIEW_TO_PATH: Record<string, string> = {
   life: "/seikatsu",
   // 組み込みの生活情報を切っている町会は、slug が seikatsu の「ページ」を
   // /seikatsu で開けるようにする(チラシやQRに刷った行き先を生かすため)。
-  ...(LIFE_INFO_ENABLED ? {} : { seikatsu: "/seikatsu" }),
+  ...(SHOW_LIFE_INFO ? {} : { seikatsu: "/seikatsu" }),
 };
 
 export default function PublicSite() {
@@ -1578,7 +1578,7 @@ export default function PublicSite() {
       const v = PATH_TO_VIEW[window.location.pathname.replace(/\/$/, "") || "/"] ?? "notices";
       // 生活情報を切っているときに /seikatsu を直接開かれると、
       // タブも中身も無い空の画面になる。回覧一覧に寄せる。
-      return v === "life" && !LIFE_INFO_ENABLED ? "notices" : v;
+      return v === "life" && !SHOW_LIFE_INFO ? "notices" : v;
     },
   );
   // ⚠ 下のURL同期で window.location は書き換わる。最初のパスは先に控えておく。
@@ -1620,7 +1620,7 @@ export default function PublicSite() {
   // slug が seikatsu の「ページ」があればそれを開く。
   // ⚠ 無いときは触らない。存在しないslugを view にすると「読み込み中…」で止まる。
   useEffect(() => {
-    if (LIFE_INFO_ENABLED) return;
+    if (SHOW_LIFE_INFO) return;
     if (initialPath.current !== "/seikatsu") return;
     if (view !== "notices") return;
     if (pageList.some((p) => p.slug === "seikatsu")) setView("seikatsu");
@@ -1830,7 +1830,7 @@ export default function PublicSite() {
           {/* 生活情報は既定で切ってある(中身が架空のサンプルのため)。
               src/shared/lifeinfo.ts を自分の町会の内容に書き換えてから true にする。
               ごみの日は管理画面の「ページ」でも載せられる(そちらはこの条件と無関係)。 */}
-          {LIFE_INFO_ENABLED && (
+          {SHOW_LIFE_INFO && (
             <button
               className={`tab${view === "life" ? " active" : ""}`}
               aria-current={view === "life" ? "page" : undefined}
@@ -1898,7 +1898,7 @@ export default function PublicSite() {
           <PublicHallForm />
         ) : view === "privacy" ? (
           <PrivacyPage lang={lang} />
-        ) : view === "life" && LIFE_INFO_ENABLED ? (
+        ) : view === "life" && SHOW_LIFE_INFO ? (
           <LifeInfoPage lang={lang} />
         ) : view === "apply-chonai" ? (
           <ChonaiJoinForm

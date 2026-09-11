@@ -34,6 +34,19 @@ import type { PubLang } from "./i18n";
  */
 export const LIFE_INFO_ENABLED = false;
 
+// ⚠ ここから下はデモサイト公開用の仕掛け。**町会は触らなくてよい。**
+//   デモ(kairanban-demo)は架空の町会なので、架空のごみの日を出しているのが
+//   正しい姿。だがソースの既定を true にすると、クローンした町会にも
+//   嘘の収集日が出てしまう。そこで **デモの公開時だけビルドで上書き**する。
+//     npm run deploy:demo   → DEMO_LIFE_INFO=1 でビルドされ、タブが出る
+//     npm run build         → 出ない（町会が使うのはこちら）
+//   ⚠ 定義が無い環境でも落ちないように typeof で見ている。
+declare const __DEMO_LIFE_INFO__: boolean | undefined;
+const demoShowsLifeInfo = typeof __DEMO_LIFE_INFO__ === "undefined" ? false : __DEMO_LIFE_INFO__;
+
+/** 画面が見るのはこちら。町会の設定か、デモの上書きか、どちらかが立っていれば出す */
+export const SHOW_LIFE_INFO = LIFE_INFO_ENABLED || demoShowsLifeInfo;
+
 
 export const LIFE_LINKS = {
   gomiSchedule: "https://www.example.com/",

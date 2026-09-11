@@ -7,6 +7,11 @@
 //   ごみが出せない・収集されないという実害になるうえ、
 //   画面を見ただけでは「それらしく」見えるので目視では気づけない。
 //
+// ⚠ デモサイトは例外。kairanban-demo は架空の町会なので、架空のごみの日が
+//   出ているのが正しい姿。デモは `npm run deploy:demo` がビルド時に上書きして
+//   出しており、ソースの LIFE_INFO_ENABLED は false のまま。
+//   だからこの検査は **ソースの LIFE_INFO_ENABLED だけ**を見ればよい。
+//
 // 使い方: node tools/check-lifeinfo.mjs   (npm run check から呼ばれる)
 
 import { readFileSync } from "node:fs";
@@ -16,7 +21,7 @@ const src = readFileSync(FILE, "utf8");
 
 const enabled = /export const LIFE_INFO_ENABLED\s*=\s*true/.test(src);
 if (!enabled) {
-  console.log("生活情報の検査: OK(生活情報タブは切ってあります)");
+  console.log("生活情報の検査: OK(生活情報タブは切ってあります。デモは deploy:demo が別途出します)");
   process.exit(0);
 }
 
