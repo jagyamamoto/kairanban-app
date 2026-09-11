@@ -24,6 +24,7 @@ import {
   HINANBASHO,
   LIFE_LINKS,
   LIFE_INFO,
+  LIFE_INFO_ENABLED,
   mapUrl,
 } from "../../shared/lifeinfo";
 import { fmtDate, fmtDateTime } from "../util";
@@ -1549,6 +1550,9 @@ const VIEW_TO_PATH: Record<string, string> = {
   "apply-chonai": "/nyukai",
   hall: "/yoyaku",
   life: "/seikatsu",
+  // 組み込みの生活情報を切っている町会は、slug が seikatsu の「ページ」を
+  // /seikatsu で開けるようにする(チラシやQRに刷った行き先を生かすため)。
+  ...(LIFE_INFO_ENABLED ? {} : { seikatsu: "/seikatsu" }),
 };
 
 export default function PublicSite() {
@@ -1570,8 +1574,15 @@ export default function PublicSite() {
   // (オーナー指示 2026-07-30: 子ども会入会をQRで案内したい)。
   // ⚠ 新しいURLを足すときは PATH_TO_VIEW と VIEW_TO_PATH の**両方**に足すこと。
   const [view, setView] = useState<string>(
-    () => PATH_TO_VIEW[window.location.pathname.replace(/\/$/, "") || "/"] ?? "notices",
+    () => {
+      const v = PATH_TO_VIEW[window.location.pathname.replace(/\/$/, "") || "/"] ?? "notices";
+      // 生活情報を切っているときに /seikatsu を直接開かれると、
+      // タブも中身も無い空の画面になる。回覧一覧に寄せる。
+      return v === "life" && !LIFE_INFO_ENABLED ? "notices" : v;
+    },
   );
+  // ⚠ 下のURL同期で window.location は書き換わる。最初のパスは先に控えておく。
+  const initialPath = useRef(window.location.pathname.replace(/\/$/, "") || "/");
   const [pageList, setPageList] = useState<PageSummary[]>([]);
   const [circulars, setCirculars] = useState<PubCircular[] | null>(null);
   const [selected, setSelected] = useState<PubCircular | null>(null);
@@ -1591,14 +1602,29 @@ export default function PublicSite() {
     el?.scrollIntoView({ inline: "center", block: "nearest" });
   }, [view, pageList.length, loggedIn]);
 
+  // ⚠ ページ一覧は言語が変わるたびに取り直す。タブの見出しも翻訳されるため。
+  //   ここを [] のままにすると、言語を切り替えてもタブだけ日本語で残る。
   useEffect(() => {
-    api<{ pages: PageSummary[] }>("/api/public/pages")
+    api<{ pages: PageSummary[] }>(`/api/public/pages?lang=${lang}`)
       .then((d) => setPageList(d.pages))
       .catch(() => setPageList([]));
+  }, [lang]);
+
+  useEffect(() => {
     api<{ sponsors: Sponsor[] }>("/api/public/sponsors")
       .then((d) => setSponsors(d.sponsors))
       .catch(() => setSponsors([]));
   }, []);
+
+  // /seikatsu で開かれたが組み込みの生活情報を切っている場合、
+  // slug が seikatsu の「ページ」があればそれを開く。
+  // ⚠ 無いときは触らない。存在しないslugを view にすると「読み込み中…」で止まる。
+  useEffect(() => {
+    if (LIFE_INFO_ENABLED) return;
+    if (initialPath.current !== "/seikatsu") return;
+    if (view !== "notices") return;
+    if (pageList.some((p) => p.slug === "seikatsu")) setView("seikatsu");
+  }, [pageList]);
 
   // ?lang= は一度読み取ったらURLから外す(あとで手動で言語を変えたとき、再読込で戻らないように)
   useEffect(() => {
@@ -1801,13 +1827,18 @@ export default function PublicSite() {
           >
             {t.notices}
           </button>
-          <button
-            className={`tab${view === "life" ? " active" : ""}`}
-            aria-current={view === "life" ? "page" : undefined}
-            onClick={() => setView("life")}
-          >
-            {LIFE_INFO[lang].tab}
-          </button>
+          {/* 生活情報は既定で切ってある(中身が架空のサンプルのため)。
+              src/shared/lifeinfo.ts を自分の町会の内容に書き換えてから true にする。
+              ごみの日は管理画面の「ページ」でも載せられる(そちらはこの条件と無関係)。 */}
+          {LIFE_INFO_ENABLED && (
+            <button
+              className={`tab${view === "life" ? " active" : ""}`}
+              aria-current={view === "life" ? "page" : undefined}
+              onClick={() => setView("life")}
+            >
+              {LIFE_INFO[lang].tab}
+            </button>
+          )}
           {pageList.map((p) => (
             <button
               key={p.slug}
@@ -1867,7 +1898,7 @@ export default function PublicSite() {
           <PublicHallForm />
         ) : view === "privacy" ? (
           <PrivacyPage lang={lang} />
-        ) : view === "life" ? (
+        ) : view === "life" && LIFE_INFO_ENABLED ? (
           <LifeInfoPage lang={lang} />
         ) : view === "apply-chonai" ? (
           <ChonaiJoinForm

@@ -31,10 +31,27 @@ export const publicPages = new Hono<AppEnv>();
 const PUBLIC_LANGS = ["ja", "ja-easy", "en", "zh", "vi"];
 
 publicPages.get("/", async (c) => {
+  // ⚠ タブの見出しも翻訳して返すこと。
+  //   ここで日本語の title をそのまま返していたため、ベトナム語で開いても
+  //   タブだけ日本語のままだった(本文は翻訳されていたので気づきにくい)。
+  //   ごみの日を「ページ」で載せる町会にとっては、ここが翻訳の入口になる。
+  const lang = PUBLIC_LANGS.includes(c.req.query("lang") || "") ? c.req.query("lang")! : "ja";
   const rows = await c.env.DB.prepare(
-    "SELECT id, slug, title, sort_order FROM pages WHERE status='published' ORDER BY sort_order, id",
-  ).all<{ id: number; slug: string; title: string; sort_order: number }>();
-  return c.json({ pages: rows.results });
+    `SELECT p.id, p.slug, p.sort_order, p.title, t.title AS t_title
+     FROM pages p
+     LEFT JOIN page_translations t ON t.page_id=p.id AND t.lang=?
+     WHERE p.status='published' ORDER BY p.sort_order, p.id`,
+  )
+    .bind(lang === "ja" ? "__none__" : lang)
+    .all<{ id: number; slug: string; sort_order: number; title: string; t_title: string | null }>();
+  return c.json({
+    pages: rows.results.map((r) => ({
+      id: r.id,
+      slug: r.slug,
+      sort_order: r.sort_order,
+      title: r.t_title ?? r.title,
+    })),
+  });
 });
 
 publicPages.get("/:slug", async (c) => {

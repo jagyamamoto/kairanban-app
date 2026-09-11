@@ -1,6 +1,7 @@
 // 公開回覧・固定ページの自動翻訳(Cloudflare Workers AI 無料枠)
 // 方針: 機械翻訳は quality='machine' で保存し、担当者が確認後 'reviewed' に更新できる。
 import type { Env } from "./core";
+import { glossaryLine } from "../shared/org";
 
 // 翻訳モデル。@cf/meta/llama-3.1-8b-instruct は2026-05-30に廃止され、
 // 以降ずっと翻訳が無言で失敗していた(エラーを握りつぶしていたため気づけなかった)。
@@ -72,10 +73,10 @@ export async function translateOne(
   try {
     // 固有名詞の対訳表。防災・行政情報では地名や施設名の取り違えが実害になる
     // (実運用で、区名や神社名をAIが別の実在地名に誤訳した実例があった)。
-    // ⚠ ここは**導入する地域の地名・施設名に書き換える**(以下は架空のサンプル)。
-    const glossary =
-      "みどり区 = Midori Ward, みどり町 = Midori-machi, " +
-      "みどり町会館 = Midori-machi Community Hall, みどり中央公園 = Midori Central Park";
+    // ⚠ 中身は src/shared/org.ts の ORG.glossary にある。町会ごとに書き換える場所を
+    //   1か所へ寄せるため、ここには置かない(以前ここに直接書いてあり、
+    //   「書き換える場所の一覧」から漏れていた)。
+    const glossary = glossaryLine();
 
     // 「やさしい日本語」は出力そのものが日本語。英語の指示文だと英訳して返してしまう
     // 事象が続いたため、この言語だけ指示文も日本語にする。
