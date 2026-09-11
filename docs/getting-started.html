@@ -1,23 +1,23 @@
 <!doctype html>
-<html lang="ja">
+<html lang="ja" data-path="ai">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>はじめ方 — 自分の町内会用にセットアップする | kairanban-app</title>
-<meta name="description" content="AIコーディングツールに貼り付けるだけの最初のプロンプト付き。準備するものから、自分の町内会・自治会用にkairanban-appをセットアップするまでの流れ。">
+<meta name="description" content="AIコーディングツールに任せる道と、AIを使わない道。ページ上で選ぶと、その道の手順だけが表示されます。自分の町内会・自治会用にkairanban-appをセットアップする流れ。">
 <link rel="canonical" href="https://kairanban.jagproject.com/getting-started.html">
 <meta property="og:title" content="はじめ方 — 自分の町内会用にセットアップする">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://kairanban.jagproject.com/getting-started.html">
 <meta property="og:site_name" content="kairanban-app">
-<meta property="og:description" content="AIコーディングツールに貼り付けるだけの最初のプロンプト付き。準備するものから、自分の町内会・自治会用にセットアップするまでの流れ。">
+<meta property="og:description" content="AIの契約なしで進む道と、AIコーディングツールに任せる道。準備するものから、自分の町内会・自治会用にセットアップするまでの流れ。">
 <meta property="og:image" content="https://kairanban.jagproject.com/assets/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="ja_JP">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="はじめ方 — 自分の町内会用にセットアップする">
-<meta name="twitter:description" content="AIコーディングツールに貼り付けるだけの最初のプロンプト付き。">
+<meta name="twitter:description" content="AIの契約なしでも、最後まで進みます。">
 <meta name="twitter:image" content="https://kairanban.jagproject.com/assets/og-image.png">
 <meta name="theme-color" content="#0a7a3d">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230a7a3d'/%3E%3Cmask id='m'%3E%3Crect x='24' y='26' width='52' height='56' rx='8' fill='white'/%3E%3Crect x='38' y='12' width='24' height='18' rx='6' fill='white'/%3E%3Crect x='32' y='42' width='36' height='6' rx='3'/%3E%3Crect x='32' y='56' width='36' height='6' rx='3'/%3E%3Crect x='32' y='70' width='24' height='6' rx='3'/%3E%3C/mask%3E%3Crect width='100' height='100' fill='white' mask='url(%23m)'/%3E%3C/svg%3E">
@@ -30,12 +30,15 @@
   "@context": "https://schema.org",
   "@type": "HowTo",
   "name": "kairanban-appを自分の町内会用にセットアップする",
-  "description": "AIコーディングツールに最初のプロンプトを貼り付けて、自分の団体用にkairanban-appをセットアップする手順。",
+  "description": "AIコーディングツールに任せる道と、AIを使わず手順書どおりに進める道。どちらでも同じアプリが立ち上がる。",
+  "totalTime": "PT2H",
+  "estimatedCost": { "@type": "MonetaryAmount", "currency": "JPY", "value": "0" },
   "step": [
-    { "@type": "HowToStep", "name": "準備する", "text": "パソコン、メールアドレス、AIコーディングツール(Claude Codeなど)を用意する。クレジットカードは不要。" },
+    { "@type": "HowToStep", "name": "どちらの道で進むか選ぶ", "text": "AIコーディングツールを使うか、使わないかを選ぶ。使わない場合でも最後まで進められ、費用は0円。" },
+    { "@type": "HowToStep", "name": "準備する", "text": "パソコンとメールアドレスを用意する。クレジットカードは不要。AIを使わない場合、Windowsではgitも入れる。" },
     { "@type": "HowToStep", "name": "リポジトリを取得する", "text": "GitHubからkairanban-appをダウンロードまたはgit cloneする。" },
-    { "@type": "HowToStep", "name": "最初のプロンプトを貼り付ける", "text": "用意された依頼文を、団体名などを書き換えてAIコーディングツールに貼り付ける。" },
-    { "@type": "HowToStep", "name": "AIと質問に答えながら進める", "text": "docs/セットアップ手順.mdに沿って、AIが1つずつ質問・コマンド提示しながら進める。" },
+    { "@type": "HowToStep", "name": "セットアップを進める", "text": "AIを使う場合は用意された依頼文を貼り付ける。使わない場合はdocs/セットアップ手順.mdを上から順に進める。" },
+    { "@type": "HowToStep", "name": "ごみの日・防災を載せる", "text": "管理画面の「ページ」に日本語で書いて「翻訳を更新」を押すと、5言語のタブになる。AIの契約は不要。" },
     { "@type": "HowToStep", "name": "自分を管理者にする", "text": "デプロイ後のURLの/adminで、決めた合言葉を使って管理者になる。" }
   ]
 }
@@ -47,7 +50,54 @@
   .lead { font-size: 17.5px; color: var(--ink-soft); margin: 18px 0 0; }
   .prose { max-width: 680px; margin: 0 auto; padding: 0 20px 40px; }
   .prose h2 { font-size: 22px; font-weight: 800; margin: 44px 0 14px; }
+  /* ⚠ 見出しの番号は**CSSのカウンタ**で振る。選んだ道によって節が消えるので、
+     手で 01 02 … と書くと、消えた節の番号が飛んで読めなくなる。
+     display:none の見出しはカウンタを進めないので、常に連番になる。 */
+  .prose { counter-reset: sec; }
   .prose h2 .n { font-family: var(--font-mono); color: var(--muted); font-size: 0.6em; display: block; margin-bottom: 6px; letter-spacing: 0.08em; }
+  .prose h2 .n::before { counter-increment: sec; content: counter(sec, decimal-leading-zero); }
+
+  /* ───── 道の選択 ───── */
+  .chooser { display: grid; gap: 14px; grid-template-columns: 1fr 1fr; margin: 4px 0 8px; }
+  @media (max-width: 620px) { .chooser { grid-template-columns: 1fr; } }
+  .choice {
+    text-align: left; font: inherit; cursor: pointer; position: relative;
+    background: var(--card); border: 2px solid var(--border); border-radius: var(--radius);
+    padding: 18px 18px 16px; transition: border-color .15s, transform .15s;
+  }
+  .choice:hover { transform: translateY(-1px); }
+  .choice:focus-visible { outline: 3px solid var(--pine); outline-offset: 2px; }
+  .choice .rec {
+    position: absolute; top: -10px; right: 14px; font-family: var(--font-mono);
+    font-size: 11px; font-weight: 700; letter-spacing: .06em;
+    background: var(--gold); color: #fff; border-radius: 999px; padding: 3px 10px;
+  }
+  .choice h3 { margin: 0 0 4px; font-size: 17px; font-weight: 800; display: flex; align-items: center; gap: 8px; }
+  .choice .mark {
+    width: 20px; height: 20px; flex: 0 0 20px; border-radius: 50%;
+    border: 2px solid var(--border); display: inline-block;
+  }
+  .choice .facts { font-family: var(--font-mono); font-size: 12.5px; color: var(--muted); margin: 0 0 8px; font-variant-numeric: tabular-nums; }
+  .choice p.why { margin: 0; font-size: 14px; color: var(--ink-soft); line-height: 1.65; }
+  html[data-path="ai"] .choice-ai, html[data-path="manual"] .choice-manual { border-color: var(--pine); background: var(--pine-pale); }
+  html[data-path="ai"] .choice-ai .mark, html[data-path="manual"] .choice-manual .mark {
+    border-color: var(--pine-solid); background: var(--pine-solid);
+    box-shadow: inset 0 0 0 3px var(--card);
+  }
+
+  /* ───── 道ごとの出し分け ───── */
+  html[data-path="ai"] .only-manual, html[data-path="manual"] .only-ai { display: none; }
+  .switch-back { text-align: center; margin: 34px 0 0; font-size: 14px; }
+  .switch-back button {
+    font: inherit; font-size: 14px; background: none; border: none; padding: 0;
+    color: var(--pine-deep); text-decoration: underline; cursor: pointer;
+  }
+  .path-label {
+    display: inline-block; font-family: var(--font-mono); font-size: 11.5px; font-weight: 700;
+    letter-spacing: .06em; border-radius: 999px; padding: 3px 10px; margin-bottom: 10px;
+  }
+  .only-ai > .path-label { background: var(--gold-pale); color: var(--gold); }
+  .only-manual > .path-label { background: var(--pine-pale); color: var(--pine-deep); }
   .prose p { margin: 0 0 16px; }
   .prose ul { padding-left: 1.3em; margin: 0 0 16px; }
   .prose li { margin-bottom: 8px; }
@@ -91,6 +141,7 @@
     <nav class="site-nav">
       <a href="index.html">ホーム</a>
       <a href="getting-started.html" aria-current="page">はじめ方</a>
+      <a href="ai-required.html">AIは要る？</a>
       <a href="ai-coding-beginners.html">AI入門</a>
       <a href="ai-story.html">AI開発の裏側</a>
       <a href="press.html">報道の方へ</a>
@@ -106,30 +157,94 @@
     <span class="eyebrow hanko">はじめての方へ</span>
     <h1>自分の町内会用に、<br>セットアップする。</h1>
     <p class="lead">
-      できるだけ簡単に始められるように、<strong>コピーして貼るだけの最初のプロンプト</strong>を
-      用意しました。AIコーディングツール（Claude Codeなど）に貼り付けて、あとは質問に答えていくだけです。
+      <strong>AIコーディングツールがあると、だいぶ楽です。</strong>
+      ただ、<strong>無くても最後まで進めます</strong>し、そのぶん費用はかかりません。
+      まず、どちらで読むかを選んでください。<strong>選んだ道の手順だけが表示されます。</strong>
     </p>
   </div>
 </div>
 
 <div class="prose">
 
-  <h2><span class="n">01</span>準備するもの</h2>
+  <h2 id="choose"><span class="n"></span>どちらで進みますか</h2>
+
+  <div class="chooser" role="group" aria-label="進め方を選ぶ">
+    <button type="button" class="choice choice-ai" data-choose="ai" aria-pressed="true">
+      <span class="rec">おすすめ</span>
+      <h3><span class="mark" aria-hidden="true"></span>AIを使う</h3>
+      <p class="facts">30分〜1時間 ・ 月3,000円前後</p>
+      <p class="why">
+        詰まってもその場で聞けます。区の公式サイトからごみの日を作らせることもできます。
+        立ち上げが終われば要らないので、<strong>1か月だけ契約して解約</strong>しても構いません。
+      </p>
+    </button>
+    <button type="button" class="choice choice-manual" data-choose="manual" aria-pressed="false">
+      <h3><span class="mark" aria-hidden="true"></span>AIを使わない</h3>
+      <p class="facts">1〜2時間 ・ 0円</p>
+      <p class="why">
+        手順書を上から順に、貼ってEnterを押していきます。
+        翻訳はCloudflareの無料機能で動くので、<strong>契約もAPIキーも要りません</strong>。
+      </p>
+    </button>
+  </div>
+
+  <p class="copy-hint">
+    あとから切り替えられます。違いとお金の詳しい比較は
+    <a href="ai-required.html">AIの契約は要りますか</a> にまとめました。
+  </p>
+
+  <noscript>
+    <div class="win-card">
+      <span class="tag">JavaScriptが切れています</span>
+      <p>
+        このページでは「AIを使う」道の手順が表示されています。
+        AIを使わずに進める場合は、
+        <a href="https://github.com/jagyamamoto/kairanban-app/blob/main/docs/%E3%82%BB%E3%83%83%E3%83%88%E3%82%A2%E3%83%83%E3%83%97%E6%89%8B%E9%A0%86.md">セットアップ手順</a>
+        を上から順に進めてください。そちらだけで最後まで行けます。
+      </p>
+    </div>
+  </noscript>
+
+  <h2><span class="n"></span>準備するもの</h2>
   <ul>
     <li>パソコン（Windows / Mac どちらでも）</li>
     <li>メールアドレス（クレジットカードは不要です）</li>
-    <li>AIコーディングツール（Claude Codeなど）</li>
   </ul>
-  <div class="win-card">
-    <span class="tag">AIコーディングツール自体が初めての方へ</span>
-    <p>
-      アカウントの作り方や、「AIにファイルを読ませる」の意味からは
-      <a href="ai-coding-beginners.html">AIコーディング初心者向け・最初に用意するもの</a>
-      にまとめています。先にそちらをご覧ください。
-    </p>
+
+  <div class="only-ai">
+    <span class="path-label">AIを使う道</span>
+    <ul>
+      <li>AIコーディングツール（Claude Code など）</li>
+    </ul>
+    <div class="win-card" style="background: var(--gold-pale);">
+      <span class="tag" style="color: var(--gold);">AIの道具そのものが初めての方へ</span>
+      <p>
+        アカウントの作り方や、「AIにファイルを読ませる」の意味からは
+        <a href="ai-coding-beginners.html">AIコーディング初心者向け・最初に用意するもの</a>
+        にまとめています。先にそちらをご覧ください。
+      </p>
+    </div>
   </div>
 
-  <h2><span class="n">02</span>このアプリをダウンロードする</h2>
+  <div class="only-manual">
+    <span class="path-label">AIを使わない道</span>
+    <ul>
+      <li><strong>Windowsの方は git も</strong>（Macは最初から入っています）<br>
+        <a href="https://git-scm.com/download/win">git-scm.com/download/win</a> から入れて、
+        画面は何も変えずに「Next」を押していきます。
+        <strong>これが無いと最初のコマンドで止まります。</strong></li>
+    </ul>
+    <div class="win-card">
+      <span class="tag">AIの契約は要りません</span>
+      <p>
+        翻訳（やさしい日本語・英語・中国語・ベトナム語）は、Cloudflare に最初から付いてくる
+        無料の機能を使います。別の契約もAPIキーも要りません。
+        ごみの日や防災の情報も、<strong>管理画面に日本語で書くだけ</strong>で5言語になります。
+      </p>
+    </div>
+  </div>
+
+  <h2><span class="n"></span>このアプリを手元に置く</h2>
   <ol class="step-list">
     <li class="step">
       <span class="step-num"></span>
@@ -138,20 +253,30 @@
         <p><a href="https://github.com/jagyamamoto/kairanban-app">github.com/jagyamamoto/kairanban-app</a> を開き、緑色の「Code」ボタンから「Download ZIP」を選んで展開します。gitに慣れていれば <code>git clone</code> でも構いません。</p>
       </div>
     </li>
-    <li class="step">
+    <li class="step only-ai">
       <span class="step-num"></span>
       <div>
         <h3>AIコーディングツールでフォルダを開く</h3>
         <p>展開してできたフォルダを、Claude Codeなどでいつも通り開きます。</p>
       </div>
     </li>
+    <li class="step only-manual">
+      <span class="step-num"></span>
+      <div>
+        <h3>ターミナルでそのフォルダに入る</h3>
+        <p>Windowsは「コマンドプロンプト」、Macは「ターミナル」を開きます。あとは手順書のコマンドを、上から1行ずつ貼ってEnterを押すだけです。</p>
+      </div>
+    </li>
   </ol>
 
-  <h2><span class="n">03</span>最初のプロンプト</h2>
-  <p>
-    下の内容を、【】の中だけ自分の団体の情報に書き換えて、そのままAIのチャット欄に貼り付けてください。
-  </p>
-  <div class="code-note">このリポジトリ(kairanban-app)を、私の団体用にセットアップしてください。
+  <h2><span class="n"></span>セットアップを進める</h2>
+
+  <div class="only-ai">
+    <span class="path-label">AIを使う道</span>
+    <p>
+      下の内容を、【】の中だけ自分の団体の情報に書き換えて、そのままAIのチャット欄に貼り付けてください。
+    </p>
+    <div class="code-note">このリポジトリ(kairanban-app)を、私の団体用にセットアップしてください。
 
 私はプログラミングの経験がありません。専門用語を使わず、
 YesかNoで答えられる質問か、A/B/Cのような選択肢で聞いてください。
@@ -165,37 +290,159 @@ YesかNoで答えられる質問か、A/B/Cのような選択肢で聞いてく�
 
 私の団体名: <span class="fill-in">【ここに団体名を書く】</span>
 会館の名前・住所: <span class="fill-in">【ここに書く（無ければ「無し」でOK）】</span></div>
-  <p class="copy-hint">この文章をそのまま選択してコピーし、AIのチャット欄に貼り付けてください。</p>
+    <p class="copy-hint">この文章をそのまま選択してコピーし、AIのチャット欄に貼り付けてください。</p>
+    <p>
+      ここから先はAIが主導します。Cloudflareアカウントの作成や、ログインのためのブラウザ操作など、
+      <strong>あなた自身にしかできない操作だけ</strong>、その都度指示が来ます。
+      分からないことが出てきたら「わからない」とそのまま伝えれば、AIが言葉を変えて説明し直します。
+    </p>
+  </div>
 
-  <h2><span class="n">04</span>そのあとの流れ</h2>
-  <p>
-    ここから先はAIが主導します。Cloudflareアカウントの作成や、ログインのためのブラウザ操作など、
-    <strong>あなた自身にしかできない操作だけ</strong>、その都度指示が来ます。分からないことが出てきたら、
-    「わからない」とそのまま伝えれば、AIが言葉を変えて説明し直します。
-  </p>
-  <p>
-    全体で<strong>1〜2時間程度</strong>です。途中で中断しても、続きから再開できます。
-    詳しい手順の全文は <a href="https://github.com/jagyamamoto/kairanban-app/blob/main/docs/%E3%82%BB%E3%83%83%E3%83%88%E3%82%A2%E3%83%83%E3%83%97%E6%89%8B%E9%A0%86.md">セットアップ手順.md</a> にあります。
-  </p>
+  <div class="only-manual">
+    <span class="path-label">AIを使わない道</span>
+    <p>
+      <a href="https://github.com/jagyamamoto/kairanban-app/blob/main/docs/%E3%82%BB%E3%83%83%E3%83%88%E3%82%A2%E3%83%83%E3%83%97%E6%89%8B%E9%A0%86.md">セットアップ手順</a>
+      を、<strong>上から順に</strong>進めてください。11の段に分かれていて、
+      ほとんどが<strong>コードを貼ってEnterを押すだけ</strong>です。
+    </p>
+    <p>自分で文字を書き換えるのは、次の2つのファイルだけです。</p>
+    <ul>
+      <li><code>wrangler.jsonc</code> … アプリの名前・データベースのID</li>
+      <li><code>src/shared/org.ts</code> … 町会の名前・会館の場所・地名の対訳表</li>
+    </ul>
+    <div class="win-card">
+      <span class="tag">対訳表だけは必ず直してください</span>
+      <p>
+        外国語に訳すとき、<strong>AIが地名をよその土地の実在する地名に置き換えることがあります。</strong>
+        実際に起きました。防災の案内では行き先が変わるので、実害になります。
+        分からなければ、町会名と会館名の2つだけでも入れてください。
+      </p>
+    </div>
+  </div>
 
-  <h2><span class="n">05</span>困ったとき</h2>
+  <h2><span class="n"></span>ごみの日・防災を載せる</h2>
   <p>
-    AIが3回試しても解決しない場合は、
-    <a href="https://github.com/jagyamamoto/kairanban-app/issues">GitHubのIssue</a>
-    に、今どういう状態か（何をしたか・何が起きたか）を書き込んでください。
-    エラーの文字は、そのままコピーして貼り付けるだけで大丈夫です。
+    <strong>ここはどちらの道でも、AIの契約は要りません。</strong>
+    管理画面の「ページ」に日本語で書いて、<strong>「翻訳を更新」を押すだけ</strong>です。
+    やさしい日本語・英語・中国語・ベトナム語のタブが自動で出ます。ファイルは触りません。
+  </p>
+  <ol class="step-list">
+    <li class="step">
+      <span class="step-num"></span>
+      <div>
+        <h3>「ページ」を開く</h3>
+        <p>管理画面の左のメニューから「ページ」を押し、「+ 新しいページを作る」を押します。</p>
+      </div>
+    </li>
+    <li class="step">
+      <span class="step-num"></span>
+      <div>
+        <h3>日本語で書く</h3>
+        <p>スラッグに <code>seikatsu</code>、タイトルに「ごみの日・防災」、本文に自治体のホームページの内容を写します。最後に出典（どこの何年何月の情報か）を1行入れてください。</p>
+      </div>
+    </li>
+    <li class="step">
+      <span class="step-num"></span>
+      <div>
+        <h3>公開して、翻訳を更新する</h3>
+        <p>「下書きを作成」→「公開する」→「翻訳を更新」の順に押します。<strong>内容を直したら、そのつど「翻訳を更新」を押してください。</strong>押さないと古い訳が残ります。</p>
+      </div>
+    </li>
+  </ol>
+
+  <div class="only-ai">
+    <span class="path-label">AIを使う道</span>
+    <div class="win-card" style="background: var(--gold-pale);">
+      <span class="tag" style="color: var(--gold);">もっと詳しく載せたい場合</span>
+      <p>
+        区が出している多言語のPDFまで一覧に並べたい場合は、
+        <a href="https://github.com/jagyamamoto/kairanban-app/blob/main/docs/AI%E3%81%AB%E6%89%8B%E4%BC%9D%E3%81%A3%E3%81%A6%E3%82%82%E3%82%89%E3%81%86.md">AIに手伝ってもらう</a>
+        に、区の公式サイトを読ませるための指示文を用意しています。
+      </p>
+      <p>
+        ⚠ <strong>AIが書いた収集日と地名は、必ず区の公式サイトと見比べてください。</strong>
+        また、<strong>会員名簿・電話番号・住所をAIに貼らないでください。</strong>
+        このアプリは電話番号でログインするため、名簿が外に出るとなりすましができてしまいます。
+      </p>
+    </div>
+  </div>
+
+  <h2><span class="n"></span>困ったとき</h2>
+
+  <div class="only-ai">
+    <span class="path-label">AIを使う道</span>
+    <p>
+      まずAIに、画面に出ているエラーの文字をそのまま貼って聞いてください。
+      <strong>3回試しても解決しない場合</strong>は、
+      <a href="https://github.com/jagyamamoto/kairanban-app/issues">GitHubのIssue</a>
+      に、今どういう状態か（何をしたか・何が起きたか）を書き込んでください。
+    </p>
+  </div>
+
+  <div class="only-manual">
+    <span class="path-label">AIを使わない道</span>
+    <p>
+      手順書のいちばん下に「困ったとき」の表があります。よくある症状はそこで直ります。
+      それでも解決しないときは、
+      <a href="https://github.com/jagyamamoto/kairanban-app/issues">GitHubのIssue</a>
+      に、エラーの文字をそのまま貼って質問してください。
+    </p>
+    <div class="win-card">
+      <span class="tag">正直に申し上げると</span>
+      <p>
+        このアプリに<strong>サポート窓口はありません。</strong>Issueの返事は早くないことがあります。
+        <strong>ここがいちばん、AIの有無で差が出るところ</strong>です。
+        行き詰まったら、立ち上げの月だけAIを契約して、終わったら解約する手もあります。
+      </p>
+    </div>
+  </div>
+
+  <p class="switch-back">
+    <button type="button" data-choose="toggle">もう一方の道で読み直す</button>
   </p>
 
 </div>
 
 <div class="end-cta">
-  <span class="eyebrow">ここまで来れば、あとはAIと一緒に</span>
+  <span class="eyebrow">ここまで来れば、あとは町会のもの</span>
   <p>このページ自体、同じやり方でAIに作らせています。うまくいかない箇所があれば、それも含めて教えてください。</p>
   <div class="btn-row" style="justify-content:center;">
     <a class="btn btn-primary" href="https://github.com/jagyamamoto/kairanban-app">GitHubへ →</a>
-    <a class="btn btn-ghost" href="index.html">このアプリについて、もう一度読む</a>
+    <a class="btn btn-ghost" href="ai-required.html">AIの契約は要る？</a>
   </div>
 </div>
+
+<script>
+// 進め方の選択。選んだ道だけを表示する。
+// ⚠ 既定は "ai"（HTMLの data-path に書いてある）。JavaScriptが動かない環境でも
+//   AIの道の手順は読めて、<noscript> で「使わない道」の入口を案内している。
+(function () {
+  var root = document.documentElement;
+  var KEY = "kairanban.setupPath";
+  function apply(path, remember) {
+    if (path !== "ai" && path !== "manual") return;
+    root.setAttribute("data-path", path);
+    document.querySelectorAll("[data-choose]").forEach(function (b) {
+      var v = b.getAttribute("data-choose");
+      if (v === "ai" || v === "manual") b.setAttribute("aria-pressed", String(v === path));
+    });
+    if (remember) { try { localStorage.setItem(KEY, path); } catch (e) {} }
+  }
+  try { var saved = localStorage.getItem(KEY); if (saved) apply(saved, false); } catch (e) {}
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest ? e.target.closest("[data-choose]") : null;
+    if (!b) return;
+    var v = b.getAttribute("data-choose");
+    if (v === "toggle") {
+      apply(root.getAttribute("data-path") === "ai" ? "manual" : "ai", true);
+      var h = document.getElementById("choose");
+      if (h) h.scrollIntoView({ behavior: "smooth", block: "start" });
+    } else {
+      apply(v, true);
+    }
+  });
+})();
+</script>
 
 <footer class="site-footer">
   <div class="wrap">
@@ -203,6 +450,7 @@ YesかNoで答えられる質問か、A/B/Cのような選択肢で聞いてく�
       <a href="index.html">サービス紹介</a>
       <a href="https://kairanban-demo.jagyamamoto.workers.dev">デモサイト</a>
       <a href="getting-started.html">はじめ方</a>
+      <a href="ai-required.html">AIの契約は要る？</a>
       <a href="ai-coding-beginners.html">AI入門</a>
       <a href="ai-story.html">AI開発の裏側</a>
       <a href="press.html">報道関係の方へ</a>

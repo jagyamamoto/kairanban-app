@@ -51,9 +51,15 @@ digital self-governance.
 
 - **No warranty and no support.** Adopting associations are responsible for their own
   operation and data.
-- Setup requires directing an AI coding tool (a paid plan of Claude Code or similar is
-  practically necessary). See the Japanese setup guide:
+- **No AI subscription is required.** Setup is copy-and-paste from the guide, and the
+  multilingual translation (easy Japanese, English, Chinese, Vietnamese) runs on
+  Cloudflare's own bundled free tier — no separate account, no API key. Garbage-collection
+  and disaster information are written in Japanese in the admin screen and translated with
+  one button. See the Japanese setup guide:
   [docs/セットアップ手順.md](docs/セットアップ手順.md)
+- An AI coding tool makes some steps shorter (drafting local content from your ward's
+  website, and answering you when you get stuck), but it is optional:
+  [docs/AIに手伝ってもらう.md](docs/AIに手伝ってもらう.md)
 - Issues and pull requests are welcome — field reports from real associations most of all.
 
 ## License

@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AIの契約は要りますか — 町内会でkairanban-appを使うために | kairanban-app</title>
+<meta name="description" content="結論から言うと要りません。立ち上げも日々の運営も、AIの有料契約なしでできます。あると何が楽になるのか、お金はいくらかかるのかを表にまとめました。">
+<link rel="canonical" href="https://kairanban.jagproject.com/ai-required.html">
+<meta property="og:title" content="AIの契約は要りますか — 結論から言うと要りません">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://kairanban.jagproject.com/ai-required.html">
+<meta property="og:site_name" content="kairanban-app">
+<meta property="og:description" content="立ち上げも日々の運営も、AIの有料契約なしでできます。あると何が楽になるのか、お金はいくらかかるのかを表にまとめました。">
+<meta property="og:image" content="https://kairanban.jagproject.com/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="ja_JP">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="AIの契約は要りますか — 結論から言うと要りません">
+<meta name="twitter:description" content="立ち上げも日々の運営も、AIの有料契約なしでできます。">
+<meta name="twitter:image" content="https://kairanban.jagproject.com/assets/og-image.png">
+<meta name="theme-color" content="#0a7a3d">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230a7a3d'/%3E%3Cmask id='m'%3E%3Crect x='24' y='26' width='52' height='56' rx='8' fill='white'/%3E%3Crect x='38' y='12' width='24' height='18' rx='6' fill='white'/%3E%3Crect x='32' y='42' width='36' height='6' rx='3'/%3E%3Crect x='32' y='56' width='36' height='6' rx='3'/%3E%3Crect x='32' y='70' width='24' height='6' rx='3'/%3E%3C/mask%3E%3Crect width='100' height='100' fill='white' mask='url(%23m)'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+<style>
+  .article-hero { padding: 56px 0 20px; border-bottom: 1px solid var(--border); margin-bottom: 40px; }
+  .article-hero .prose { max-width: 680px; margin: 0 auto; padding: 0 20px; }
+  .lead { font-size: 17.5px; color: var(--ink-soft); margin: 18px 0 0; }
+  .prose { max-width: 760px; margin: 0 auto; padding: 0 20px 40px; }
+  .prose h2 { font-size: 22px; font-weight: 800; margin: 48px 0 14px; }
+  .prose h2 .n { font-family: var(--font-mono); color: var(--muted); font-size: 0.6em; display: block; margin-bottom: 6px; letter-spacing: 0.08em; }
+  .prose h3 { font-size: 16.5px; font-weight: 800; margin: 28px 0 8px; }
+  .prose p { margin: 0 0 16px; }
+  .prose ul { padding-left: 1.3em; margin: 0 0 16px; }
+  .prose li { margin-bottom: 8px; }
+
+  /* 結論。ここだけ朱色を使う(サイト全体で朱は「押さえどころ」の印) */
+  .verdict {
+    background: var(--card); border: 2px solid var(--hanko); border-radius: var(--radius);
+    padding: 26px 26px 22px; margin: 8px 0 4px; box-shadow: var(--shadow);
+  }
+  .verdict .tag {
+    font-family: var(--font-mono); font-size: 11.5px; font-weight: 700; color: var(--hanko);
+    letter-spacing: 0.08em; display: block; margin-bottom: 10px;
+  }
+  .verdict p { font-size: 19px; font-weight: 700; line-height: 1.65; margin: 0 0 10px; }
+  .verdict p:last-child { font-size: 15px; font-weight: 400; color: var(--ink-soft); margin-bottom: 0; }
+
+  /* 表は幅が足りないとき、ページごと横に流れないよう表の中だけで送る */
+  .table-scroll { overflow-x: auto; margin: 18px 0 8px; -webkit-overflow-scrolling: touch; }
+  table.cmp {
+    border-collapse: collapse; width: 100%; min-width: 560px;
+    background: var(--card); border-radius: var(--radius); overflow: hidden;
+    box-shadow: var(--shadow); font-size: 14.5px;
+  }
+  table.cmp th, table.cmp td {
+    padding: 13px 15px; text-align: left; vertical-align: top;
+    border-bottom: 1px solid var(--border); line-height: 1.6;
+  }
+  table.cmp tr:last-child th, table.cmp tr:last-child td { border-bottom: none; }
+  table.cmp thead th { font-size: 13px; font-weight: 800; background: var(--paper-deep); white-space: nowrap; }
+  table.cmp tbody th { font-weight: 700; width: 30%; color: var(--ink); }
+  /* 「なし」を松(標準)、「あり」を金(おまけ)に。どちらも成り立つことを色で示す */
+  table.cmp .col-no { background: var(--pine-pale); }
+  table.cmp thead .col-no { color: var(--pine-deep); }
+  table.cmp .col-yes { background: var(--gold-pale); }
+  table.cmp thead .col-yes { color: var(--gold); }
+  table.cmp .num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .table-note { font-size: 13px; color: var(--muted); margin: 6px 0 0; }
+
+  .win-card { background: var(--pine-pale); border-radius: var(--radius); padding: 20px 22px; margin: 24px 0; }
+  .win-card .tag { font-family: var(--font-mono); font-size: 11.5px; font-weight: 700; color: var(--pine-deep); letter-spacing: 0.06em; display: block; margin-bottom: 8px; }
+  .win-card p:last-child { margin-bottom: 0; }
+
+  .warn-card { background: var(--hanko-pale); border-radius: var(--radius); padding: 20px 22px; margin: 24px 0; }
+  .warn-card .tag { font-family: var(--font-mono); font-size: 11.5px; font-weight: 700; color: var(--hanko); letter-spacing: 0.06em; display: block; margin-bottom: 8px; }
+  .warn-card p:last-child { margin-bottom: 0; }
+
+  .end-cta { text-align: center; padding: 50px 20px 10px; }
+  .end-cta p { color: var(--ink-soft); max-width: 46ch; margin: 14px auto 24px; }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html">
+      <span class="brand-mark"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><mask id="kb-mask-header"><rect x="5" y="5" width="14" height="15" rx="2" fill="white"/><rect x="9" y="2.2" width="6" height="4.4" rx="1.3" fill="white"/><rect x="7.5" y="10" width="9" height="1.4" rx="0.7"/><rect x="7.5" y="13.4" width="9" height="1.4" rx="0.7"/><rect x="7.5" y="16.8" width="6" height="1.4" rx="0.7"/></mask><rect width="24" height="24" fill="currentColor" mask="url(#kb-mask-header)"/></svg></span>
+      kairanban-app
+    </a>
+    <nav class="site-nav">
+      <a href="index.html">ホーム</a>
+      <a href="getting-started.html">はじめ方</a>
+      <a href="ai-required.html" aria-current="page">AIは要る？</a>
+      <a href="ai-coding-beginners.html">AI入門</a>
+      <a href="ai-story.html">AI開発の裏側</a>
+      <a href="press.html">報道の方へ</a>
+      <a href="https://github.com/jagyamamoto/kairanban-app">GitHub</a>
+      <a href="https://kairanban-demo.jagyamamoto.workers.dev">デモ</a>
+      <a href="press-en.html" lang="en" class="lang-switch">English</a>
+    </nav>
+  </div>
+</header>
+
+<div class="article-hero">
+  <div class="prose">
+    <span class="eyebrow hanko">導入を考えている方へ</span>
+    <h1>AIの契約は、<br>要りません。</h1>
+    <p class="lead">
+      「AIで作ったアプリ」と聞くと、使う側にもAIの契約が要るように思えます。要りません。
+      立ち上げも、日々の運営も、有料の契約なしで最後まで進みます。
+      では<strong>あると何が変わるのか</strong>を、正直に並べました。
+    </p>
+  </div>
+</div>
+
+<main class="prose">
+
+  <div class="verdict">
+    <span class="tag">結論</span>
+    <p>立ち上げ・運営とも、AIの有料契約は要りません。<br>
+    あると、<strong>つまずいたときに聞ける相手ができます。</strong></p>
+    <p>翻訳（やさしい日本語・英語・中国語・ベトナム語）は、Cloudflare に最初から付いてくる
+    無料の機能を使います。別の契約もAPIキーも要りません。</p>
+  </div>
+
+  <h2><span class="n">01</span>なにが違うか</h2>
+
+  <p>
+    立ち上げの作業そのものは、どちらもほとんど変わりません。
+    差が出るのは<strong>ごみの日の作り方</strong>と、<strong>詰まったときに誰に聞くか</strong>の2つです。
+  </p>
+
+  <div class="table-scroll">
+    <table class="cmp">
+      <thead>
+        <tr>
+          <th scope="col">やること</th>
+          <th scope="col" class="col-no">AIの契約なし</th>
+          <th scope="col" class="col-yes">AIの契約あり</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row">アプリが動くまで</th>
+          <td class="col-no">できます。手順書のとおり貼ってEnter。<span class="num">1〜2時間</span></td>
+          <td class="col-yes">同じ。<span class="num">30分〜1時間</span></td>
+        </tr>
+        <tr>
+          <th scope="row">町会名・会館の場所</th>
+          <td class="col-no">1つのファイルに自分で書きます</td>
+          <td class="col-yes">聞かれたことに答えると、AIが書きます</td>
+        </tr>
+        <tr>
+          <th scope="row">回覧・予約・出欠・写真</th>
+          <td class="col-no">全部使えます</td>
+          <td class="col-yes">同じ</td>
+        </tr>
+        <tr>
+          <th scope="row">多言語の翻訳</th>
+          <td class="col-no">自動。Cloudflareの無料の機能で訳します</td>
+          <td class="col-yes">同じ（訳文の下読みを頼めます）</td>
+        </tr>
+        <tr>
+          <th scope="row">ごみの日・防災</th>
+          <td class="col-no">管理画面に<strong>日本語で書いて</strong>「翻訳を更新」を押します</td>
+          <td class="col-yes">区の公式サイトを読ませて、表や言語別PDFごと作らせます</td>
+        </tr>
+        <tr>
+          <th scope="row">使い方ページの写真</th>
+          <td class="col-no">自分で撮って差し替えます</td>
+          <td class="col-yes">同じ（写真は人が撮ります）</td>
+        </tr>
+        <tr>
+          <th scope="row">つまずいたとき</th>
+          <td class="col-no">GitHubのIssueで聞きます。<strong>返事は遅いことがあります</strong></td>
+          <td class="col-yes"><strong>その場で聞けます</strong></td>
+        </tr>
+        <tr>
+          <th scope="row">町会に合わせた作り替え</th>
+          <td class="col-no">できません</td>
+          <td class="col-yes">できます</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="table-note">2026年9月時点。機能は更新のたびに変わります。</p>
+
+  <div class="win-card">
+    <span class="tag">いちばん大きい差</span>
+    <p>
+      表のいちばん下の2行です。立ち上げそのものではなく、
+      <strong>困ったときに聞ける相手がいるかどうか</strong>が実際の差になります。
+      このアプリにはサポート窓口がありません。そこは正直にお伝えしておきます。
+    </p>
+  </div>
+
+  <h2><span class="n">02</span>お金</h2>
+
+  <div class="table-scroll">
+    <table class="cmp">
+      <thead>
+        <tr>
+          <th scope="col">かかるもの</th>
+          <th scope="col" class="col-no">AIの契約なし</th>
+          <th scope="col" class="col-yes">AIの契約あり</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row">サーバー代（Cloudflare）</th>
+          <td class="col-no num">0円</td>
+          <td class="col-yes num">0円</td>
+        </tr>
+        <tr>
+          <th scope="row">翻訳</th>
+          <td class="col-no num">0円</td>
+          <td class="col-yes num">0円</td>
+        </tr>
+        <tr>
+          <th scope="row">アプリの値段</th>
+          <td class="col-no num">0円（MITライセンス）</td>
+          <td class="col-yes num">0円</td>
+        </tr>
+        <tr>
+          <th scope="row">独自ドメイン<br><span class="table-note">回覧をメールでも送る場合だけ</span></th>
+          <td class="col-no num">年 1,000〜2,000円</td>
+          <td class="col-yes num">年 1,000〜2,000円</td>
+        </tr>
+        <tr>
+          <th scope="row">AIの契約</th>
+          <td class="col-no num">0円</td>
+          <td class="col-yes num">月 3,000円前後</td>
+        </tr>
+        <tr>
+          <th scope="row">立ち上げのときの合計</th>
+          <td class="col-no num"><strong>0円</strong></td>
+          <td class="col-yes num"><strong>3,000円前後（1か月ぶん）</strong></td>
+        </tr>
+        <tr>
+          <th scope="row">2年目からの毎年</th>
+          <td class="col-no num"><strong>0円</strong>（メールを使うなら年1,000〜2,000円）</td>
+          <td class="col-yes num">同じ（<strong>AIは解約できます</strong>）</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="table-note">
+    2026年9月時点のおおよその額です。<strong>契約の前に、必ず各社の公式サイトでご確認ください。</strong>
+    メールの送信サービスは無料の範囲がありますが、会員数が多い町会では有料になることがあります。
+  </p>
+
+  <h2><span class="n">03</span>1か月だけ契約する、という手</h2>
+
+  <p>
+    立ち上げが終われば、運営にAIは要りません。
+    <strong>立ち上げの月だけ契約して、終わったら解約する</strong>という使い方ができます。
+    3,000円前後で、いちばん面倒なところを越えられます。
+  </p>
+  <p>
+    もちろん、契約せずに進めていただいて構いません。
+    そのために手順書を書き直し、<strong>ファイルを触らずにごみの日を載せられる</strong>ようにしました。
+  </p>
+
+  <h2><span class="n">04</span>AIなしでできないこと</h2>
+
+  <p>隠さずに書きます。次の2つは、AIなしでは難しいままです。</p>
+
+  <ul>
+    <li><strong>町会に合わせた作り替え。</strong>
+      「うちは班の呼び方が違う」程度なら設定で足りますが、
+      画面そのものを変えたい場合はコードを書くことになります。</li>
+    <li><strong>直らない不具合が出たとき。</strong>
+      GitHubのIssueでお受けしますが、私たちは少人数で、返事は早くありません。</li>
+  </ul>
+
+  <div class="warn-card">
+    <span class="tag">お願い</span>
+    <p>
+      AIに手伝ってもらう場合でも、<strong>会員名簿・電話番号・住所をAIに貼らないでください。</strong>
+      このアプリは電話番号でログインします。名簿が外に出ると、なりすましができてしまいます。
+    </p>
+  </div>
+
+  <div class="warn-card">
+    <span class="tag">もうひとつ</span>
+    <p>
+      AIが書いた<strong>地名や収集日は、必ず自治体の公式サイトと見比べてください。</strong>
+      AIは地名を、よその土地の実在する地名に置き換えることがあります。実際に起きました。
+      防災の案内では、行き先が変わると実害になります。
+    </p>
+  </div>
+
+  <h2><span class="n">05</span>次に読むもの</h2>
+
+  <ul>
+    <li><a href="getting-started.html">はじめ方</a> — AIなしで最後まで進む手順</li>
+    <li><a href="https://github.com/jagyamamoto/kairanban-app/blob/main/docs/AIに手伝ってもらう.md">AIに手伝ってもらう</a> — コピペできる指示文つき</li>
+    <li><a href="ai-coding-beginners.html">AI入門</a> — AIの道具そのものが初めての方へ</li>
+  </ul>
+
+  <div class="end-cta">
+    <p>まずは、架空の町会のデモをさわってみてください。登録は要りません。</p>
+    <div class="btn-row" style="justify-content: center;">
+      <a class="btn btn-primary" href="https://kairanban-demo.jagyamamoto.workers.dev">デモをさわる</a>
+      <a class="btn btn-ghost" href="getting-started.html">はじめ方を読む</a>
+    </div>
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-links">
+      <a href="index.html">サービス紹介</a>
+      <a href="https://kairanban-demo.jagyamamoto.workers.dev">デモサイト</a>
+      <a href="getting-started.html">はじめ方</a>
+      <a href="ai-required.html">AIの契約は要る？</a>
+      <a href="ai-coding-beginners.html">AI入門</a>
+      <a href="ai-story.html">AI開発の裏側</a>
+      <a href="press.html">報道関係の方へ</a>
+      <a href="press-en.html" lang="en">Press (English)</a>
+      <a href="https://jagyamamoto.github.io/pwa-install-guide/">PWAインストール案内(部品)</a>
+      <a href="https://github.com/jagyamamoto/kairanban-app/issues/1">ログイン方式の議論</a>
+      <a href="https://github.com/jagyamamoto/kairanban-app">GitHub</a>
+      <a href="https://github.com/jagyamamoto/kairanban-app/blob/main/LICENSE">MIT License</a>
+      <a href="https://www.jagproject.com/about">Jag Projectについて</a>
+    </div>
+    <p>kairanban-app は、Jag Project, LLC が生成AI時代の開発様式と「デジタル自治」の可能性を検証するフラッグシッププロジェクトとして開発・公開しているオープンソースプロジェクトです。</p>
+  </div>
+</footer>
+
+</body>
+</html>
