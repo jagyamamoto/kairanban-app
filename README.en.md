@@ -1,10 +1,10 @@
-# kairanban-app
+# Jag's Kairanban-app
 
 **A free, open-source web app (PWA) for Japan's neighborhood associations (chōnaikai).**
 
 *[日本語版 README はこちら](README.md)*
 
-kairanban-app digitizes the *kairanban* — the paper circular board passed from door to door
+Jag's Kairanban-app digitizes the *kairanban* — the paper circular board passed from door to door
 in Japanese neighborhoods for decades. Circulars, hall reservations, meeting RSVPs, disaster
 information, a members-only photo blog and membership applications, in five languages
 (Japanese, Easy Japanese, English, Chinese, Vietnamese). It runs from ¥0/month on
@@ -19,7 +19,7 @@ Cloudflare's free tier.
 ## Why it exists
 
 Electronic circular boards are becoming a market in Japan — mostly monthly subscriptions,
-which drain association fees out of the community. kairanban-app is designed the other way
+which drain association fees out of the community. Jag's Kairanban-app is designed the other way
 around: free infrastructure, open code, and maintenance that can be done by the
 association's own IT-literate members or local businesses, so money and know-how circulate
 inside the neighborhood. We call this **"digital self-governance"** — residents using

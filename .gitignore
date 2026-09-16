@@ -6,3 +6,6 @@
 dist/
 node_modules/
 wrangler.demo.jsonc
+
+# 開発補助（個人の設定。公開リポジトリには入れない）
+.claude/

@@ -1,4 +1,4 @@
-/* kairanban-app 紹介サイト 共通スタイル
+/* Jag's Kairanban-app 紹介サイト 共通スタイル
    実際のアプリの配色(緑 #0a7a3d)を引き継ぎつつ、回覧板らしい紙と朱印のモチーフを添える。 */
 
 :root {
@@ -119,6 +119,12 @@ a { color: var(--pine-deep); }
   font-weight: 800;
   font-size: 17px;
 }
+/* ⚠ ブランド名はハイフンの位置で折り返させない。
+   既定のままだと「Jag's Kairanban-」「app」に割れて、名前として読めなくなる。
+   折り返すなら「Jag's」の後ろだけ。 */
+.brand-name { display: inline; }
+.brand-name .nb { white-space: nowrap; }
+
 .brand-mark {
   width: 34px;
   height: 34px;

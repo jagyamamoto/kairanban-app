@@ -1,4 +1,4 @@
-# kairanban-app（回覧板）
+# Jag's Kairanban-app（回覧板）
 
 **町内会・自治会のための、無料で使えるスマホアプリです。**
 
