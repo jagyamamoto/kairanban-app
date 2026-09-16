@@ -6,6 +6,7 @@
 
 - [サービス紹介](https://kairanban.jagproject.com/): 何ができるか、ログイン方式のトレードオフ、コスト、育てていく方針
 - [はじめ方](https://kairanban.jagproject.com/getting-started.html): AIの契約なしで進む道と、AIコーディングツールに任せる道の2通りのセットアップ手順
+- [セットアップ ウィザード](https://kairanban.jagproject.com/setup-wizard.html): 町会名・会館などを入れると、書き換えるファイル2つ(org.ts / wrangler.jsonc)と Mac/Windows 別の手順、AIへの依頼文が出る。ブラウザ内だけで動き、AI契約不要
 - [AIの契約は要りますか](https://kairanban.jagproject.com/ai-required.html): 結論は「要りません」。AI契約の有無で何がどう変わるか、費用はいくらかの比較表
 - [AI開発の裏側](https://kairanban.jagproject.com/ai-story.html): 実機テストで見つかった不具合、PWA化の技術的な格闘、失敗の記録
 - [AIコーディング初心者向け](https://kairanban.jagproject.com/ai-coding-beginners.html): 最初に用意するアカウント、「AIに読ませる」の正体

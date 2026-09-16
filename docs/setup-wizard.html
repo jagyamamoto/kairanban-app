@@ -1,0 +1,508 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>セットアップ ウィザード — 自分の町内会用の設定ファイルを作る | Jag's Kairanban-app</title>
+<meta name="description" content="質問に答えるだけで、あなたの町内会用の設定ファイル2つと、MacかWindowsに合わせた手順、AIに聞くときの文章ができます。AIの契約は要りません。">
+<link rel="canonical" href="https://kairanban.jagproject.com/setup-wizard.html">
+<meta property="og:title" content="セットアップ ウィザード — 質問に答えるだけで設定ファイルができる">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://kairanban.jagproject.com/setup-wizard.html">
+<meta property="og:site_name" content="Jag's Kairanban-app">
+<meta property="og:description" content="町会の名前や会館の場所を入れると、設定ファイル2つと、あなたのパソコン用の手順ができます。AIの契約は要りません。">
+<meta property="og:image" content="https://kairanban.jagproject.com/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="ja_JP">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="セットアップ ウィザード — 質問に答えるだけで設定ファイルができる">
+<meta name="twitter:description" content="AIの契約は要りません。MacでもWindowsでも。">
+<meta name="twitter:image" content="https://kairanban.jagproject.com/assets/og-image.png">
+<meta name="theme-color" content="#0a7a3d">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230a7a3d'/%3E%3Cmask id='m'%3E%3Crect x='24' y='26' width='52' height='56' rx='8' fill='white'/%3E%3Crect x='38' y='12' width='24' height='18' rx='6' fill='white'/%3E%3Crect x='32' y='42' width='36' height='6' rx='3'/%3E%3Crect x='32' y='56' width='36' height='6' rx='3'/%3E%3Crect x='32' y='70' width='24' height='6' rx='3'/%3E%3C/mask%3E%3Crect width='100' height='100' fill='white' mask='url(%23m)'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+<style>
+  .article-hero { padding: 56px 0 20px; border-bottom: 1px solid var(--border); margin-bottom: 32px; }
+  .article-hero .prose { max-width: 720px; margin: 0 auto; padding: 0 20px; }
+  .lead { font-size: 17.5px; color: var(--ink-soft); margin: 18px 0 0; }
+  .prose { max-width: 720px; margin: 0 auto; padding: 0 20px 48px; }
+  .prose h2 { font-size: 21px; font-weight: 800; margin: 0 0 12px; }
+  .prose h2 .n { font-family: var(--font-mono); color: var(--muted); font-size: 0.6em; display: block; margin-bottom: 6px; letter-spacing: 0.08em; }
+  .prose p { margin: 0 0 14px; }
+  .prose ul { padding-left: 1.3em; margin: 0 0 14px; }
+  .prose li { margin-bottom: 6px; }
+
+  /* ───── 進み具合 ───── */
+  .progress { display: flex; gap: 6px; margin: 0 0 28px; }
+  .progress span { flex: 1; height: 6px; border-radius: 3px; background: var(--border); }
+  .progress span.done { background: var(--pine-solid); }
+  .progress span.now  { background: var(--gold); }
+
+  /* ───── 段 ───── */
+  .wz-step { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px 24px 20px; box-shadow: var(--shadow); margin: 0 0 18px; }
+  .wz-step[hidden] { display: none; }
+  .wz-nav { display: flex; justify-content: space-between; gap: 12px; margin-top: 22px; flex-wrap: wrap; }
+  .wz-nav .spacer { flex: 1; }
+
+  /* ───── 入力 ───── */
+  .field { margin: 0 0 18px; }
+  .field label { display: block; font-weight: 700; margin-bottom: 6px; }
+  .field .hint { font-size: 13px; color: var(--muted); margin: 4px 0 0; }
+  .field .hint code { font-family: var(--font-mono); background: var(--paper-deep); padding: 1px 6px; border-radius: 5px; }
+  .field input[type="text"], .field input[type="email"], .field textarea, .field select {
+    width: 100%; font: inherit; font-size: 16px; padding: 10px 12px;
+    border: 1.5px solid var(--border); border-radius: 10px; background: var(--paper); color: var(--ink);
+  }
+  .field input:focus-visible, .field textarea:focus-visible, .field select:focus-visible { outline: 3px solid var(--pine); outline-offset: 1px; border-color: var(--pine); }
+  .field input.bad { border-color: var(--hanko); background: var(--hanko-pale); }
+  .field .err { color: var(--hanko); font-size: 13px; margin-top: 4px; display: none; }
+  .field input.bad + .err, .field input.bad ~ .err { display: block; }
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 560px) { .row2 { grid-template-columns: 1fr; } }
+
+  /* 選択肢(はい/いいえ・Mac/Windows) */
+  .choices { display: flex; gap: 10px; flex-wrap: wrap; }
+  .choices label {
+    flex: 1 1 140px; cursor: pointer; display: flex; align-items: center; gap: 10px;
+    padding: 12px 14px; border: 2px solid var(--border); border-radius: 12px; background: var(--card); font-weight: 700;
+  }
+  .choices input { accent-color: var(--pine-solid); width: 18px; height: 18px; }
+  .choices label:has(input:checked) { border-color: var(--pine); background: var(--pine-pale); }
+  .choices label:has(input:focus-visible) { outline: 3px solid var(--pine); outline-offset: 2px; }
+
+  /* 表(区分の呼び名・対訳表) */
+  table.kv { width: 100%; border-collapse: collapse; font-size: 14.5px; }
+  table.kv th, table.kv td { padding: 6px 8px; text-align: left; vertical-align: middle; border-bottom: 1px solid var(--border); }
+  table.kv th { font-weight: 700; color: var(--ink-soft); white-space: nowrap; }
+  table.kv input { width: 100%; font: inherit; font-size: 15px; padding: 7px 10px; border: 1.5px solid var(--border); border-radius: 8px; background: var(--paper); color: var(--ink); }
+  table.kv .key { font-family: var(--font-mono); font-size: 12.5px; color: var(--muted); }
+  .kv-wrap { overflow-x: auto; }
+  .add-row { font: inherit; font-size: 14px; background: none; border: 1.5px dashed var(--border); border-radius: 10px; padding: 8px 14px; cursor: pointer; color: var(--pine-deep); margin-top: 8px; }
+  .add-row:hover { border-color: var(--pine); }
+  .del-row { font: inherit; font-size: 13px; background: none; border: none; color: var(--hanko); cursor: pointer; padding: 4px; }
+
+  .win-card { background: var(--pine-pale); border-radius: var(--radius); padding: 18px 20px; margin: 16px 0; }
+  .win-card .tag { font-family: var(--font-mono); font-size: 11.5px; font-weight: 700; color: var(--pine-deep); letter-spacing: 0.06em; display: block; margin-bottom: 8px; }
+  .win-card p:last-child, .win-card ol:last-child { margin-bottom: 0; }
+  .warn-card { background: var(--hanko-pale); border-radius: var(--radius); padding: 18px 20px; margin: 16px 0; }
+  .warn-card .tag { font-family: var(--font-mono); font-size: 11.5px; font-weight: 700; color: var(--hanko); letter-spacing: 0.06em; display: block; margin-bottom: 8px; }
+  .warn-card p:last-child { margin-bottom: 0; }
+  .gold-card { background: var(--gold-pale); border-radius: var(--radius); padding: 18px 20px; margin: 16px 0; }
+  .gold-card .tag { font-family: var(--font-mono); font-size: 11.5px; font-weight: 700; color: var(--gold); letter-spacing: 0.06em; display: block; margin-bottom: 8px; }
+  .gold-card p:last-child { margin-bottom: 0; }
+
+  /* コード枠 */
+  .code { position: relative; margin: 10px 0 14px; }
+  .code pre {
+    font-family: var(--font-mono); font-size: 12.5px; line-height: 1.7; margin: 0;
+    background: #1c1d16; color: #e8e4d4; border-radius: 12px; padding: 14px 16px;
+    white-space: pre-wrap; overflow-wrap: anywhere; overflow-x: auto;
+  }
+  .code pre.tall { max-height: 26em; overflow-y: auto; padding-top: 46px; }
+  .code .tools { position: absolute; top: 8px; right: 8px; display: flex; gap: 6px; z-index: 1; }
+  .mini { font: inherit; font-size: 12.5px; font-weight: 700; cursor: pointer; border: 1px solid #e8e4d4; border-radius: 999px; padding: 5px 12px; background: #2a2b22; color: #e8e4d4; }
+  .mini:hover { background: #3a3b30; }
+  .mini:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+  .mini[data-done="1"] { border-color: #7cd3a6; color: #7cd3a6; }
+  .fill { color: #ffd76b; }
+  .cmd-list { counter-reset: c; list-style: none; padding: 0; margin: 0; }
+  .cmd-list > li { position: relative; padding-left: 42px; margin: 0 0 18px; }
+  .cmd-list > li::before { counter-increment: c; content: counter(c); position: absolute; left: 0; top: 0; width: 30px; height: 30px; border-radius: 50%; background: var(--pine-solid); color: #fff; display: flex; align-items: center; justify-content: center; font-family: var(--font-mono); font-weight: 700; font-size: 13px; }
+  .cmd-list h4 { margin: 0 0 6px; font-size: 15.5px; font-weight: 800; }
+  .cmd-list p { font-size: 14.5px; color: var(--ink-soft); margin: 0 0 8px; }
+  .cmd-list .code { margin: 6px 0 8px; }
+  .cmd-list .code pre { padding: 10px 14px; }
+
+  /* 結果のタブ */
+  .tabs { display: flex; gap: 6px; flex-wrap: wrap; margin: 0 0 14px; }
+  .tabs button { font: inherit; font-size: 14px; font-weight: 700; cursor: pointer; padding: 8px 14px; border-radius: 999px; border: 1.5px solid var(--border); background: var(--card); color: var(--ink-soft); }
+  .tabs button[aria-selected="true"] { background: var(--pine-solid); color: #fff; border-color: var(--pine-solid); }
+  .tabs button:focus-visible { outline: 3px solid var(--pine); outline-offset: 2px; }
+  .panel[hidden] { display: none; }
+  .summary { font-size: 14.5px; color: var(--ink-soft); background: var(--paper-deep); border-radius: 12px; padding: 12px 16px; margin: 0 0 16px; }
+  .summary b { color: var(--ink); }
+  .end-cta { text-align: center; padding: 40px 20px 10px; }
+  .end-cta p { color: var(--ink-soft); max-width: 46ch; margin: 14px auto 24px; }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html">
+      <span class="brand-mark"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><mask id="kb-mask-header"><rect x="5" y="5" width="14" height="15" rx="2" fill="white"/><rect x="9" y="2.2" width="6" height="4.4" rx="1.3" fill="white"/><rect x="7.5" y="10" width="9" height="1.4" rx="0.7"/><rect x="7.5" y="13.4" width="9" height="1.4" rx="0.7"/><rect x="7.5" y="16.8" width="6" height="1.4" rx="0.7"/></mask><rect width="24" height="24" fill="currentColor" mask="url(#kb-mask-header)"/></svg></span>
+      <span class="brand-name">Jag's&#8202;<span class="nb">Kairanban-app</span></span>
+    </a>
+    <nav class="site-nav">
+      <a href="index.html">ホーム</a>
+      <a href="getting-started.html">はじめ方</a>
+      <a href="setup-wizard.html" aria-current="page">ウィザード</a>
+      <a href="ai-required.html">AIは要る？</a>
+      <a href="ai-coding-beginners.html">AI入門</a>
+      <a href="ai-story.html">AI開発の裏側</a>
+      <a href="press.html">報道の方へ</a>
+      <a href="https://github.com/jagyamamoto/kairanban-app">GitHub</a>
+      <a href="https://kairanban-demo.jagyamamoto.workers.dev">デモ</a>
+      <a href="press-en.html" lang="en" class="lang-switch">English</a>
+    </nav>
+  </div>
+</header>
+
+<div class="article-hero">
+  <div class="prose">
+    <span class="eyebrow hanko">質問に答えるだけ</span>
+    <h1>セットアップ<br>ウィザード</h1>
+    <p class="lead">
+      町会の名前や会館の場所を入れると、<strong>書き換える必要のある設定ファイル2つ</strong>と、
+      <strong>あなたのパソコン（Mac / Windows）に合わせた手順</strong>ができます。
+      <strong>AIの契約は要りません。</strong>入れた内容はこのブラウザにだけ残り、どこにも送られません。
+    </p>
+  </div>
+</div>
+
+<main class="prose">
+
+  <div class="progress" aria-hidden="true">
+    <span data-p="1"></span><span data-p="2"></span><span data-p="3"></span><span data-p="4"></span><span data-p="5"></span><span data-p="6"></span>
+  </div>
+
+  <noscript>
+    <div class="warn-card">
+      <span class="tag">JavaScriptが切れています</span>
+      <p>このウィザードは、ブラウザの中だけで動く仕組みです。JavaScriptを有効にしてください。
+      使えない場合は <a href="https://github.com/jagyamamoto/kairanban-app/blob/main/docs/%E3%82%BB%E3%83%83%E3%83%88%E3%82%A2%E3%83%83%E3%83%97%E6%89%8B%E9%A0%86.md">セットアップ手順</a> を上から順に進めてください。同じことができます。</p>
+    </div>
+  </noscript>
+
+  <!-- ============ 1 ============ -->
+  <section class="wz-step" data-step="1">
+    <h2><span class="n">1 / 6</span>あなたのパソコン</h2>
+    <p>手順のコマンドが少し違うので、先に選びます。<span id="os-guess" class="hint"></span></p>
+    <div class="field">
+      <div class="choices" role="radiogroup" aria-label="パソコンの種類">
+        <label><input type="radio" name="os" value="mac"> Mac</label>
+        <label><input type="radio" name="os" value="win"> Windows</label>
+      </div>
+    </div>
+    <div class="wz-nav"><span class="spacer"></span><button class="btn btn-primary" data-next>次へ →</button></div>
+  </section>
+
+  <!-- ============ 2 ============ -->
+  <section class="wz-step" data-step="2" hidden>
+    <h2><span class="n">2 / 6</span>用意するもの</h2>
+    <p>いま入っているかを確かめます。<strong>入っていなくても、ここで入れ方が出ます。</strong></p>
+
+    <div class="field">
+      <label>Node.js（アプリを組み立てる道具）は入っていますか</label>
+      <p class="hint">確かめ方: <span data-os="mac">「ターミナル」</span><span data-os="win">「コマンドプロンプト」</span>を開いて、次を貼ってEnter。<code>v20.x.x</code> のような数字が出れば入っています。</p>
+      <div class="code"><pre>node -v</pre><div class="tools"><button class="mini" data-copy-prev>コピー</button></div></div>
+      <div class="choices">
+        <label><input type="radio" name="hasNode" value="yes"> 数字が出た</label>
+        <label><input type="radio" name="hasNode" value="no"> エラーが出た／分からない</label>
+      </div>
+      <div class="win-card" data-show-if="hasNode=no">
+        <span class="tag">Node.js を入れる</span>
+        <ol>
+          <li><a href="https://nodejs.org/ja" target="_blank" rel="noopener">https://nodejs.org/ja</a> を開く</li>
+          <li>左側の<strong>「推奨版」</strong>のボタンを押してダウンロード</li>
+          <li>ダウンロードしたファイルを開き、そのまま「次へ」を押していく</li>
+          <li><span data-os="mac">ターミナル</span><span data-os="win">コマンドプロンプト</span>を<strong>いちど閉じて開き直し</strong>、もう一度 <code>node -v</code></li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="field" data-os="win">
+      <label>git（ファイルを取り寄せる道具）は入っていますか</label>
+      <p class="hint">Windowsには最初から入っていません。<strong>これが無いと最初のコマンドで止まります。</strong>確かめ方: 次を貼ってEnter。</p>
+      <div class="code"><pre>git --version</pre><div class="tools"><button class="mini" data-copy-prev>コピー</button></div></div>
+      <div class="choices">
+        <label><input type="radio" name="hasGit" value="yes"> 数字が出た</label>
+        <label><input type="radio" name="hasGit" value="no"> エラーが出た／分からない</label>
+      </div>
+      <div class="win-card" data-show-if="hasGit=no">
+        <span class="tag">git を入れる</span>
+        <ol>
+          <li><a href="https://git-scm.com/download/win" target="_blank" rel="noopener">https://git-scm.com/download/win</a> を開く</li>
+          <li>ダウンロードされたファイルを開く</li>
+          <li>画面が何度も出ますが、<strong>すべて何も変えずに「Next」</strong>。最後に「Install」</li>
+          <li>コマンドプロンプトを<strong>いちど閉じて開き直し</strong>、もう一度 <code>git --version</code></li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Cloudflare のアカウント（アプリを置く場所。無料）</label>
+      <div class="choices">
+        <label><input type="radio" name="hasCf" value="yes"> 持っている</label>
+        <label><input type="radio" name="hasCf" value="no"> まだ無い</label>
+      </div>
+      <div class="win-card" data-show-if="hasCf=no">
+        <span class="tag">アカウントを作る（クレジットカードは要りません）</span>
+        <ol>
+          <li><a href="https://dash.cloudflare.com/sign-up" target="_blank" rel="noopener">https://dash.cloudflare.com/sign-up</a> を開く</li>
+          <li>メールアドレスとパスワードを入れて「Sign Up」</li>
+          <li>届いたメールのリンクを押して、登録を完了する</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="wz-nav"><button class="btn btn-ghost" data-prev>← 戻る</button><span class="spacer"></span><button class="btn btn-primary" data-next>次へ →</button></div>
+  </section>
+
+  <!-- ============ 3 ============ -->
+  <section class="wz-step" data-step="3">
+    <h2><span class="n">3 / 6</span>町会の情報</h2>
+    <p>ここで入れたものが、そのまま設定ファイルになります。<strong>あとから直せます</strong>ので、分かるところから。</p>
+
+    <div class="field">
+      <label for="f-name">町会の正式名称 <span class="fill">＊必須</span></label>
+      <input type="text" id="f-name" placeholder="例: みどり町三丁目町会" autocomplete="organization">
+      <p class="err">町会の名前を入れてください</p>
+      <p class="hint">画面の見出しと、メールの差出人に出ます。</p>
+    </div>
+
+    <div class="row2">
+      <div class="field">
+        <label for="f-short">短い名前 <span class="fill">＊必須</span></label>
+        <input type="text" id="f-short" placeholder="例: みどり町会" maxlength="8">
+        <p class="err">6文字くらいまでにしてください</p>
+        <p class="hint">スマホのホーム画面で、アイコンの下に出ます。<strong>全角6文字まで</strong>。</p>
+      </div>
+      <div class="field">
+        <label for="f-appid">アプリのID（半角英数字） <span class="fill">＊必須</span></label>
+        <input type="text" id="f-appid" placeholder="例: midori-3" autocapitalize="off" autocorrect="off" spellcheck="false">
+        <p class="err">半角の小文字・数字・ハイフンだけ。先頭は文字で。</p>
+        <p class="hint">アプリのURLの一部になります（<code>https://<b id="appid-echo">midori-3</b>.〇〇.workers.dev</code>）。</p>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="f-area">会員になれる範囲の説明</label>
+      <input type="text" id="f-area" value="対象エリアにお住まいなら、あなたも会員になれます。ぜひご参加ください。">
+      <p class="hint">入会案内に出ます。そのままでも構いません。</p>
+    </div>
+
+    <h3 style="font-size:16px;font-weight:800;margin:26px 0 10px">会館（集会所）</h3>
+    <div class="row2">
+      <div class="field">
+        <label for="f-hall">会館の名前</label>
+        <input type="text" id="f-hall" placeholder="例: みどり町三丁目町会会館">
+      </div>
+      <div class="field">
+        <label for="f-hall-addr">会館の住所</label>
+        <input type="text" id="f-hall-addr" placeholder="例: みどり区みどり町3-1-1">
+      </div>
+    </div>
+    <div class="row2">
+      <div class="field">
+        <label for="f-lat">緯度（北緯）</label>
+        <input type="text" id="f-lat" placeholder="例: 35.681236" inputmode="decimal">
+        <p class="err">35.681236 のような数字で</p>
+      </div>
+      <div class="field">
+        <label for="f-lng">経度（東経）</label>
+        <input type="text" id="f-lng" placeholder="例: 139.767125" inputmode="decimal">
+        <p class="err">139.767125 のような数字で</p>
+      </div>
+    </div>
+    <div class="win-card">
+      <span class="tag">緯度・経度の調べ方（1分）</span>
+      <ol>
+        <li><a href="https://www.google.com/maps" target="_blank" rel="noopener">Googleマップ</a> で会館を探す</li>
+        <li>会館の場所を<strong>右クリック</strong>（スマホは長押し）</li>
+        <li>いちばん上に出る数字（例 <code>35.681236, 139.767125</code>）を押すとコピーされる</li>
+        <li>左の数字を「緯度」、右の数字を「経度」に貼る</li>
+      </ol>
+      <p style="margin-top:10px">分からなければ<strong>空のままで大丈夫です</strong>。地図の中心が東京駅になるだけで、ほかは動きます。あとから直せます。</p>
+    </div>
+    <div class="row2">
+      <div class="field">
+        <label for="f-open">使える時間（開始）</label>
+        <select id="f-open"></select>
+      </div>
+      <div class="field">
+        <label for="f-close">使える時間（終了）</label>
+        <select id="f-close"></select>
+      </div>
+    </div>
+
+    <h3 style="font-size:16px;font-weight:800;margin:26px 0 10px">会員の区分の呼び名</h3>
+    <p class="hint" style="margin-bottom:10px">地域の呼び方に合わせて直せます（「寿会」「松柏会」など）。<strong>使わない区分はそのままで構いません。</strong></p>
+    <div class="kv-wrap">
+      <table class="kv" id="roles">
+        <thead><tr><th>何の区分か</th><th>表示する呼び名</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <h3 style="font-size:16px;font-weight:800;margin:26px 0 10px">地名・施設名の対訳表</h3>
+    <div class="warn-card">
+      <span class="tag">ここは必ず入れてください</span>
+      <p>外国語に訳すとき、<strong>AIが地名をよその土地の実在する地名に置き換えることがあります</strong>。実際に起きました。防災の案内では行き先が変わるので実害になります。
+      <strong>町会名と会館名の2つだけでも</strong>入れてください。英語の書き方が分からなければ、ローマ字で構いません。</p>
+    </div>
+    <div class="kv-wrap">
+      <table class="kv" id="glossary">
+        <thead><tr><th>日本語</th><th>英語での書き方</th><th></th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <button type="button" class="add-row" id="add-gloss">＋ 行を足す</button>
+
+    <div class="wz-nav"><button class="btn btn-ghost" data-prev>← 戻る</button><span class="spacer"></span><button class="btn btn-primary" data-next>次へ →</button></div>
+  </section>
+
+  <!-- ============ 4 ============ -->
+  <section class="wz-step" data-step="4" hidden>
+    <h2><span class="n">4 / 6</span>使う機能</h2>
+
+    <div class="field">
+      <label>回覧を<strong>メールでも</strong>届けますか</label>
+      <p class="hint">アプリの通知だけなら要りません。あとから足せます。</p>
+      <div class="choices">
+        <label><input type="radio" name="useMail" value="no"> 今は使わない（おすすめ）</label>
+        <label><input type="radio" name="useMail" value="yes"> 使う</label>
+      </div>
+      <div data-show-if="useMail=yes">
+        <div class="warn-card">
+          <span class="tag">メールには独自ドメインが要ります</span>
+          <p>年1,000〜2,000円くらいのドメイン（例: <code>midori-chokai.jp</code>）と、その設定変更が要ります。
+          <strong>設定を間違えると町会のホームページやメールが止まることがあります。</strong>不安なら、あとから詳しい方と一緒に進めてください。ここは「使う」にしても、実際の設定は最後の段の「あとから」に出ます。</p>
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label for="f-mail-from">差出人のメールアドレス</label>
+            <input type="email" id="f-mail-from" placeholder="例: noreply@midori-chokai.jp">
+            <p class="hint">ドメインの認証が済んだアドレス</p>
+          </div>
+          <div class="field">
+            <label for="f-mail-reply">返信を受け取るアドレス</label>
+            <input type="email" id="f-mail-reply" placeholder="例: info@midori-chokai.jp">
+            <p class="hint">実在する受信箱にしてください</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="gold-card">
+      <span class="tag">ごみの日・防災は、ここでは聞きません</span>
+      <p>アプリができてから、<strong>管理画面の「ページ」に日本語で書いて「翻訳を更新」を押すだけ</strong>です。ファイルを触りません。5言語になります。</p>
+    </div>
+
+    <div class="wz-nav"><button class="btn btn-ghost" data-prev>← 戻る</button><span class="spacer"></span><button class="btn btn-primary" data-next>次へ →</button></div>
+  </section>
+
+  <!-- ============ 5 ============ -->
+  <section class="wz-step" data-step="5" hidden>
+    <h2><span class="n">5 / 6</span>コマンドの結果を貼る（あとでも構いません）</h2>
+    <p>設定ファイルには、<strong>コマンドを実行しないと分からない値</strong>が2つあります。
+    先に済ませておくと、設定ファイルが<strong>穴なしで完成</strong>します。まだなら飛ばして構いません。最後の手順の中で同じことをします。</p>
+
+    <div class="field">
+      <label>① データベースのID</label>
+      <p class="hint">Cloudflareにログイン済み（<code>npx wrangler login</code>）で、アプリのフォルダの中で次を実行し、<strong>出てきた文字を全部</strong>下に貼ってください。IDだけ拾います。</p>
+      <div class="code"><pre id="cmd-d1">npx wrangler d1 create <span class="fill" data-echo="appid">midori-3</span></pre><div class="tools"><button class="mini" data-copy="#cmd-d1">コピー</button></div></div>
+      <textarea id="f-d1out" rows="4" placeholder="ここに結果を貼る（例: database_id = &quot;1234abcd-…&quot; の行が含まれます）"></textarea>
+      <p class="hint" id="d1-status">まだ貼られていません</p>
+    </div>
+
+    <div class="field">
+      <label>② 通知の鍵（公開鍵）</label>
+      <p class="hint">同じフォルダで次を実行し、出てきた文字を全部貼ってください。<strong>2つ出る鍵のうち公開鍵だけ</strong>拾います。秘密鍵は設定ファイルには入れません（手順の中で別に登録します）。</p>
+      <div class="code"><pre>node tools/gen-vapid.mjs</pre><div class="tools"><button class="mini" data-copy-prev>コピー</button></div></div>
+      <textarea id="f-vapidout" rows="4" placeholder="ここに結果を貼る"></textarea>
+      <p class="hint" id="vapid-status">まだ貼られていません</p>
+    </div>
+
+    <div class="wz-nav"><button class="btn btn-ghost" data-prev>← 戻る</button><span class="spacer"></span><button class="btn btn-primary" data-next>できあがりを見る →</button></div>
+  </section>
+
+  <!-- ============ 6 ============ -->
+  <section class="wz-step" data-step="6" hidden>
+    <h2><span class="n">6 / 6</span>できあがり</h2>
+    <div class="summary" id="summary"></div>
+
+    <div class="tabs" role="tablist">
+      <button role="tab" aria-selected="true" data-tab="steps">あなたの手順</button>
+      <button role="tab" aria-selected="false" data-tab="org">org.ts</button>
+      <button role="tab" aria-selected="false" data-tab="wr">wrangler.jsonc</button>
+      <button role="tab" aria-selected="false" data-tab="ai">AIに頼む・聞く</button>
+    </div>
+
+    <!-- 手順 -->
+    <div class="panel" data-panel="steps">
+      <p>上から順に。<strong>1つずつ貼ってEnter</strong>。途中でやめても、あとから続けられます。</p>
+      <ol class="cmd-list" id="steps-list"></ol>
+    </div>
+
+    <!-- org.ts -->
+    <div class="panel" data-panel="org" hidden>
+      <p><code>src/shared/org.ts</code> の<strong>中身をこれで全部置き換え</strong>ます。「ダウンロード」で保存して、元のファイルに上書きしても構いません。</p>
+      <div class="code"><pre class="tall" id="out-org"></pre><div class="tools"><button class="mini" data-copy="#out-org">コピー</button><button class="mini" data-dl="#out-org" data-fn="org.ts">ダウンロード</button></div></div>
+    </div>
+
+    <!-- wrangler -->
+    <div class="panel" data-panel="wr" hidden>
+      <p><code>wrangler.jsonc</code>（アプリのフォルダの直下）の<strong>中身をこれで全部置き換え</strong>ます。</p>
+      <div id="wr-holes"></div>
+      <div class="code"><pre class="tall" id="out-wr"></pre><div class="tools"><button class="mini" data-copy="#out-wr">コピー</button><button class="mini" data-dl="#out-wr" data-fn="wrangler.jsonc">ダウンロード</button></div></div>
+    </div>
+
+    <!-- AI -->
+    <div class="panel" data-panel="ai" hidden>
+      <div class="gold-card">
+        <span class="tag">A ── コードを書けるAI（Claude Code / Codex など）を持っている方</span>
+        <p>下の文をそのまま貼ると、<strong>上の2つのファイルをAIが書き込み、手順の残りを進めてくれます</strong>。あなたの回答は文の中に入っています。</p>
+      </div>
+      <div class="code"><pre class="tall" id="out-ai-code"></pre><div class="tools"><button class="mini" data-copy="#out-ai-code">コピー</button></div></div>
+
+      <div class="win-card">
+        <span class="tag">B ── 無料のチャットAI（ChatGPT / Claude / Gemini の無料版）しか無い方</span>
+        <p>無料版は<strong>ファイルを書き換えたりコマンドを実行したりはできません</strong>。それは上の「あなたの手順」で自分でやります。
+        AIには<strong>詰まったときの相談役</strong>をしてもらいます。下の文の【】を埋めて貼ってください。</p>
+      </div>
+      <div class="code"><pre id="out-ai-chat"></pre><div class="tools"><button class="mini" data-copy="#out-ai-chat">コピー</button></div></div>
+    </div>
+
+    <div class="wz-nav"><button class="btn btn-ghost" data-prev>← 戻る</button><span class="spacer"></span><button class="btn btn-ghost" id="reset">最初からやり直す</button></div>
+  </section>
+
+  <div class="end-cta">
+    <p>入れた内容は、このブラウザの中にだけ保存されています。別のパソコンで続ける場合は、ファイルをダウンロードして持っていってください。</p>
+    <div class="btn-row" style="justify-content:center;">
+      <a class="btn btn-ghost" href="getting-started.html">はじめ方に戻る</a>
+      <a class="btn btn-ghost" href="ai-required.html">AIの契約は要る？</a>
+    </div>
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-links">
+      <a href="index.html">サービス紹介</a>
+      <a href="https://kairanban-demo.jagyamamoto.workers.dev">デモサイト</a>
+      <a href="getting-started.html">はじめ方</a>
+      <a href="setup-wizard.html">セットアップ ウィザード</a>
+      <a href="ai-required.html">AIの契約は要る？</a>
+      <a href="ai-coding-beginners.html">AI入門</a>
+      <a href="ai-story.html">AI開発の裏側</a>
+      <a href="press.html">報道関係の方へ</a>
+      <a href="press-en.html" lang="en">Press (English)</a>
+      <a href="https://jagyamamoto.github.io/pwa-install-guide/">Jag's PWA installer</a>
+      <a href="https://github.com/jagyamamoto/kairanban-app/issues/1">ログイン方式の議論</a>
+      <a href="https://github.com/jagyamamoto/kairanban-app">GitHub</a>
+      <a href="https://github.com/jagyamamoto/kairanban-app/blob/main/LICENSE">MIT License</a>
+      <a href="https://www.jagproject.com/about">Jag Projectについて</a>
+    </div>
+    <p>Jag's Kairanban-app は、Jag Project, LLC が生成AI時代の開発様式と「デジタル自治」の可能性を検証するフラッグシッププロジェクトとして開発・公開しているオープンソースプロジェクトです。動作の保証や導入代行は行っていません。</p>
+  </div>
+</footer>
+
+<script src="assets/setup-wizard.js"></script>
+</body>
+</html>

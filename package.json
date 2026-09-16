@@ -7,7 +7,7 @@
     "dev": "vite",
     "dev:worker": "wrangler dev --port 8787",
     "build": "vite build",
-    "check": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.server.json --noEmit && node tools/check-lifeinfo.mjs && node tools/check-site-nav.mjs",
+    "check": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.server.json --noEmit && node tools/check-lifeinfo.mjs && node tools/check-site-nav.mjs && node tools/check-wizard-sync.mjs",
     "icons": "node tools/gen-icons.mjs",
     "db:local": "wrangler d1 migrations apply kairanban --local",
     "db:remote": "wrangler d1 migrations apply kairanban --remote",
