@@ -25,6 +25,14 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/style.css">
+<script>
+// ⚠ ウィザードのJSが落ちたときに、白い画面のまま黙らないための受け皿。
+//   原因は window.__wzErr に控え、画面には平易な言葉で出す。
+window.addEventListener("error", function (e) {
+  window.__wzErr = (e.message || "") + " @ " + (e.filename || "").split("/").pop() + ":" + e.lineno + ":" + e.colno;
+  var n = document.getElementById("wz-broken"); if (n) { n.hidden = false; n.querySelector("code").textContent = window.__wzErr; }
+});
+</script>
 <style>
   .article-hero { padding: 56px 0 20px; border-bottom: 1px solid var(--border); margin-bottom: 32px; }
   .article-hero .prose { max-width: 720px; margin: 0 auto; padding: 0 20px; }
@@ -160,6 +168,7 @@
       町会の名前や会館の場所を入れると、<strong>書き換える必要のある設定ファイル2つ</strong>と、
       <strong>あなたのパソコン（Mac / Windows）に合わせた手順</strong>ができます。
       <strong>AIの契約は要りません。</strong>入れた内容はこのブラウザにだけ残り、どこにも送られません。
+      最後に「設定を保存」を押して、フォルダの中の <code>セットアップ.command</code>／<code>.bat</code> をダブルクリックすれば、<strong>コマンドを打たずに</strong>公開まで進めます。
     </p>
   </div>
 </div>
@@ -168,6 +177,14 @@
 
   <div class="progress" aria-hidden="true">
     <span data-p="1"></span><span data-p="2"></span><span data-p="3"></span><span data-p="4"></span><span data-p="5"></span><span data-p="6"></span>
+  </div>
+
+  <div class="warn-card" id="wz-broken" hidden>
+    <span class="tag">うまく動いていません</span>
+    <p>ページの部品が途中で止まりました。<strong>ページを再読み込み</strong>してください。直らない場合は、下の文字を添えて
+    <a href="https://github.com/jagyamamoto/kairanban-app/issues">GitHubのIssue</a> で知らせてください。
+    手順は <a href="https://github.com/jagyamamoto/kairanban-app/blob/main/docs/%E3%82%BB%E3%83%83%E3%83%88%E3%82%A2%E3%83%83%E3%83%97%E6%89%8B%E9%A0%86.md">セットアップ手順</a> でも同じことができます。</p>
+    <p><code></code></p>
   </div>
 
   <noscript>
@@ -254,7 +271,7 @@
   </section>
 
   <!-- ============ 3 ============ -->
-  <section class="wz-step" data-step="3">
+  <section class="wz-step" data-step="3" hidden>
     <h2><span class="n">3 / 6</span>町会の情報</h2>
     <p>ここで入れたものが、そのまま設定ファイルになります。<strong>あとから直せます</strong>ので、分かるところから。</p>
 
@@ -425,6 +442,7 @@
   <section class="wz-step" data-step="6" hidden>
     <h2><span class="n">6 / 6</span>できあがり</h2>
     <div class="summary" id="summary"></div>
+    <div class="win-card" id="local-card" hidden></div>
 
     <div class="tabs" role="tablist">
       <button role="tab" aria-selected="true" data-tab="steps">あなたの手順</button>
@@ -503,6 +521,8 @@
   </div>
 </footer>
 
-<script src="assets/setup-wizard.js"></script>
+<!-- ⚠ ?v= は古い版を配り続けさせないための印。JS を直したら数字を進める(GitHub Pages は10分、ブラウザはもっと長く覚える) -->
+<script src="assets/wizard-core.js?v=20260916c"></script>
+<script src="assets/setup-wizard.js?v=20260916c"></script>
 </body>
 </html>

@@ -9,3 +9,8 @@ wrangler.demo.jsonc
 
 # 開発補助（個人の設定。公開リポジトリには入れない）
 .claude/
+
+# ターミナル版セットアップの控え(合言葉は入っていないが、公開物ではない)
+.setup-state.json
+.setup-backup/
+kairanban-setup*.json

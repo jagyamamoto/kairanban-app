@@ -1,0 +1,2 @@
+# Windows のバッチは CRLF のまま配る（LF に変換しない）
+*.bat text eol=crlf
