@@ -227,7 +227,7 @@
       var fileName = (S.os || guess) === "win" ? "セットアップ.bat" : "セットアップ.command";
       lc.innerHTML = '<span class="tag">' + (LOCAL ? "いちばん楽な方法(このフォルダの中だけで済みます)" : "ZIPを解いたフォルダで進める方法") + '</span>' +
         '<p>①下の<strong>「設定を保存」</strong>を押す（<code>kairanban-setup.json</code> がダウンロードされます）。' +
-        '②' + (LOCAL ? "このフォルダ" : "ZIPを解いたフォルダ(kairanban-app)") + 'の中の <strong><code>' + fileName + '</code></strong> をダブルクリック。' +
+        '②' + (LOCAL ? "このフォルダ" : "ZIPを解いたフォルダ(kairanban-app-main)") + 'の中の <strong><code>' + fileName + '</code></strong> をダブルクリック。' +
         '③保存した設定を自動で見つけて、あとは<strong>質問に答えるだけ</strong>で公開まで進みます。合言葉は画面に出ず、ファイルにも残りません。</p>' +
         ((S.os || guess) === "win"
           ? '<p class="hint">⚠ Windowsで「WindowsによってPCが保護されました」と出たら、<strong>「詳細情報」→「実行」</strong>。</p>'

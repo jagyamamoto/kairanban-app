@@ -232,7 +232,7 @@
     if (S.local) {
       // ZIPを解いたフォルダの中で開いている。取り寄せは済んでいるので、フォルダに入る手順だけ。
       step(term + " を開いて、このフォルダに入る",
-        win ? "エクスプローラーでこのフォルダ（kairanban-app）を開き、<strong>空いているところを Shift＋右クリック</strong> →「ターミナルで開く」（または「PowerShell ウィンドウをここで開く」）。"
+        win ? "エクスプローラーでこのフォルダ（ZIPを解いた <code>kairanban-app-main</code>）を開き、<strong>空いているところを Shift＋右クリック</strong> →「ターミナルで開く」（または「PowerShell ウィンドウをここで開く」）。"
             : "「アプリケーション」→「ユーティリティ」→「ターミナル」を開き、<code>cd </code>（cdと空白）と打ってから、<strong>このフォルダをターミナルの窓にドラッグ＆ドロップ</strong>してEnter。");
       step("部品を取り込む", "数分かかります。", ["npm install"]);
     } else {
@@ -283,7 +283,7 @@
       "",
       "## 進め方",
       "",
-      (S.local ? "1. いま開いているこのフォルダ（ZIPを解いた kairanban-app）で作業する。`npm install` がまだなら実行する" : "1. まだなら `git clone https://github.com/jagyamamoto/kairanban-app.git` して、そのフォルダで作業する"),
+      (S.local ? "1. いま開いているこのフォルダ（ZIPを解いた kairanban-app-main）で作業する。`npm install` がまだなら実行する" : "1. まだなら `git clone https://github.com/jagyamamoto/kairanban-app.git` して、そのフォルダで作業する"),
       "2. `docs/セットアップ手順.md` を全部読む",
       "3. 上の2つのファイルを書き込む",
       "4. 手順書のステップ4（Cloudflareにログイン）から順に進める。ターミナルで実行するコマンドは、私がそのまま貼れる形で1つずつ出す",
